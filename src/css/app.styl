@@ -1,0 +1,189 @@
+@import 'themes/common.variables'
+@import 'base.styl'
+@import 'header.styl'
+@import 'login.styl'
+@import 'main.styl'
+.input-field{
+	color: green;
+}
+.AppHeader {
+    padding: 10px 0 0 0;
+    background: $white;
+    box-shadow: 0 1px 3px -1px rgba(0,0,0,0.2);
+
+    @media $mobile {
+        padding: 7px 0 7px 0;
+    }
+
+    @media $tab {
+        padding: 7px 0 7px 0;
+    }
+    
+    .q-toolbar {
+        background: none;
+        padding: 4px 12px 0 12px;
+
+        .q-toolbar-title {
+
+            .absolute-left {
+                margin-left: 20px;
+                margin-top: 10px;
+
+                @media $mobile {
+                    margin-top: 10px;
+                }
+
+                @media $tab {
+                    margin-top: 8px;
+                }
+
+                .logo{
+                    width: 180px;
+
+                    @media $tab {
+                        width: 125px;
+                    }
+
+                    @media $mobile {
+                        width: 125px;
+                    }
+                }
+            }
+        }
+
+        .topnav {
+            font-weight: 400;
+            
+            @media $mobile {
+                width: 100%
+            }
+
+            @media $tab {
+                width: 100%
+            }
+
+            .welcome-note {
+                text-align: right;
+                color: $light-text;
+                padding: 0px 16px;
+            }
+
+            .middle_pagename {
+                display: none;
+                color: #666666;
+                text-align: center;
+                font-weight: 600;
+                color: #9A5AB4;
+
+                @media $tab {
+                    display: block;
+                    font-size: 18px;
+                }
+
+                @media $mobile {
+                    display: block;
+                    font-size: 18px;
+                }
+            }
+            a {
+                float: left;
+                display: block;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+                position: relative;
+                font-size: 16px;
+
+                &.router-link-active {
+                    @media $desktop {
+                        border-bottom: 3px solid #9175B5;
+                    }
+                }
+
+                @media $tab {
+                    display: none;
+
+                    &.icon {
+                        margin-top: -10px;
+                        float: right;
+                        display: block;
+                        font-size: 30px;
+                        padding: 0px 10px;
+                        text-align: right;
+                        background: none;
+                    }
+                    &:hover {
+                      background-color: #fff;
+                      color: black;
+                    }
+                }
+
+                @media $mobile {
+                    display: none;
+
+                    &.icon {
+                        margin-top: -10px;
+                        float: right;
+                        display: block;
+                        font-size: 30px;
+                        padding: 0px 10px;
+                        text-align: right;
+                        background: none;
+                    }
+                    &:hover {
+                      background-color: #fff;
+                      color: black;
+                    }
+                }
+            }
+
+            .icon {
+                display: none;
+            }
+
+            &.responsive {
+                @media $mobile {
+                    position: relative;
+                    margin-top: 8px;
+                }
+                @media $tab {
+                    margin-top: 8px;
+                }
+                .icon {
+                    @media $tab {
+                        position: relative;
+                        right: 0;
+                        top: 0;
+                        font-size: 30px;
+                        padding: 0px 10px;
+                        text-align: right;
+                        background: none;
+                    }
+
+                    @media $mobile {
+                        position: relative;
+                        right: 0;
+                        top: 0;
+                        font-size: 30px;
+                        padding: 0px 10px;
+                        text-align: right;
+                        background: none;
+                    }
+                }
+                a {
+                    @media $tab {
+                        float: none;
+                        display: block;
+                        text-align: center;
+                    }
+
+                    @media $mobile {
+                        float: none;
+                        display: block;
+                        text-align: center;
+                    }
+                }
+            }
+        }
+    }
+}

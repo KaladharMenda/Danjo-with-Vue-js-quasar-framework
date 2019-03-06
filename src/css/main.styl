@@ -1,0 +1,1153 @@
+@import 'themes/common.variables'
+// app global css
+
+body {
+    font-size: 87.5%;
+    color: $thick-text;
+    font-weight: 600;
+    font-family: 'Lato', sans-serif, Arial, Helvetica;
+    background: $bg-landing
+}
+
+body,
+caption,
+th,
+td,
+input,
+textarea,
+select,
+option,
+legend,
+fieldset,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-size-adjust: 0.5;
+    font-weight: 400;
+}
+
+#scanpicktable .q-table-bottom{
+    display:none
+}
+
+.q-field {
+    margin-bottom: 15px;
+}
+
+#page {
+    font-size: 1em;
+    /* equivalent to 14px */
+    line-height: 1.25;
+    /* equivalent to 20px */
+}
+
+.xsmall {
+    font-size: 0.875em;
+    /* equivalent to 12px */
+    line-height: 1.1em;
+}
+
+.xxsmall {
+    font-size: 0.6em;
+    /* equivalent to 10px */
+    line-height: 1em;
+}
+
+a {
+    font-weight: 700;
+    color: $thick-text;
+    text-decoration: none;
+}
+
+a:visited {
+    color: $thick-text;
+    font-weight: 700;
+    text-decoration: underline;
+}
+
+#main-container {
+    width: 95%;
+    max-width: 960px;
+    margin: 0 auto;
+    padding-top: 0;
+    border-radius: 0 0 1em 1em;
+    box-shadow: 0 0 20px rgba(50, 50, 50, 0.5);
+    overflow: hidden;
+}
+
+@media (min-width: 43.75em) {
+    #main-container {
+        max-width: 960px;
+    }
+}
+
+@media (min-width: 56.25em) {
+    #main-container {
+        max-width: 1050px;
+    }
+}
+
+@media (min-width: 81.25em) {
+    #main-container {
+        max-width: 1200px;
+    }
+}
+
+@media (min-width: 43.75em) {
+    #page {
+        font-size: 1em;
+        /* equivalent to 14px */
+        line-height: 1.6;
+        /* equivalent to 22px */
+    }
+}
+
+h1 {
+    font-size: 2em;
+    /* 2x body copy size = 28px */
+    line-height: 1.25;
+    /* 45px / 36px */
+}
+
+@media (min-width: 43.75em) {
+    h1 {
+        font-size: 2.85em;
+        /* 2.85x body copy size = 40px */
+        line-height: 1.125;
+    }
+}
+
+@media (min-width: 56.25em) {
+    h1 {
+        font-size: 3.5em;
+        /* 3x body copy size = 48px */
+        line-height: 1.05;
+        /* keep to a multiple of the 20px line height and something more appropriate for display headings */
+    }
+}
+
+h2 {
+    font-size: 1.9em;
+    /* 1.9x body copy size = 26px */
+    line-height: 1.15384615;
+    /* 30px / 26px */
+}
+
+@media (min-width: 43.75em) {
+    h2 {
+        font-size: 2.6em;
+        /* 2x body copy size = 32px */
+        line-height: 1.25;
+    }
+}
+
+@media (min-width: 56.25em) {
+    h2 {
+        font-size: 2.25em;
+        /* 2.25x body copy size = 36px */
+        line-height: 1.25;
+    }
+}
+
+h3 {
+    font-size: 1.6em;
+    /* 1.6x body copy size = 22px */
+    line-height: 1.5;
+    /* 25px / 22px */
+}
+
+@media (min-width: 43.75em) {
+    h3 {
+        font-size: 1.7em;
+        /* 1.7x body copy size = 24px */
+        line-height: 1.2;
+    }
+}
+
+@media (min-width: 56.25em) {
+    h3 {
+        font-size: 2em;
+        /* 2x body copy size = 28px */
+        line-height: 1.25;
+    }
+}
+
+h4 {
+    font-size: 1.3em;
+    /* 1.3x body copy size = 18px */
+    line-height: 1.11111111;
+}
+
+@media (min-width: 43.75em) {
+    h4 {
+        line-height: 1.6;
+        /* (22px / 18px */
+    }
+}
+
+blockquote {
+    font-size: 1.3em;
+    /* 20px / 16px */
+    line-height: 1.25;
+    /* 25px / 20px */
+}
+
+@media (min-width: 43.75em) {
+    blockquote {
+        font-size: 1.7em;
+        /* 24px / 16px = */
+        line-height: 1;
+        /* 35px / 24px */
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| Index Page related Styles
+|--------------------------------------------------------------------------
+*/
+
+.banner-header {
+
+    .logo{
+        width: 180px;
+        margin-top: 20px;
+        margin-left: 50px;
+
+        @media $mobile {
+            width: 125px;
+            margin-left: 20px;
+        }
+
+        @media $tab {
+            width: 125px;
+            margin-left: 20px;
+        }
+    }
+
+    .login-btn {
+        margin-top: 20px;
+        margin-right: 50px;
+
+        @media $mobile {
+            margin-right: 20px;
+        }
+
+        &:hover {
+            background: $primary
+            color: $white
+        }
+    }
+}
+
+
+.banner-content {
+    padding-top: 70px;
+    padding: 1rem 4rem 0rem 4rem;
+
+    @media $mobile {
+        padding: 2.5rem 0.5rem;
+    }
+
+    .banner-text {
+        font-size: 32px;
+        word-spacing: 5px;
+        letter-spacing: 1.5px;
+
+        @media $mobile {
+            font-size: 22px;
+        }
+    }
+
+    .blue-text {
+        font-weight: 400;
+        color: $primary;
+    }
+
+    .contact-btn {
+        background: $primary;
+        color: $white;
+    }
+
+    .banner-image {
+        width: 100%;
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| Registration Page related Styles
+|--------------------------------------------------------------------------
+*/
+
+.register-page {
+    text-align: center
+
+    .row {
+
+        .left{
+            background: $white
+            color: #202C38
+
+            .logo {
+                width: 220px;
+            }
+        }
+
+        .right {
+            background: $bg-danger
+            color: $thick-text
+            text-align: left;
+
+            .logo {
+                width: 100px;
+            }
+
+            .getOtp {
+                float: right;
+            }
+
+            .caption {
+                margin-bottom: 0px;
+            }
+        }
+
+        .btn {
+            width: 270px
+            height: 40px;
+        }
+
+        .q-card-title {
+            h2 {
+                margin-bottom: 0px
+            }
+        }
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| Header Component related Styles
+|--------------------------------------------------------------------------
+*/
+
+.AppHeader {
+    padding-bottom: 10px;
+    background: white;
+    box-shadow: 0 1px 3px -1px rgba(0,0,0,0.2);
+
+    @media $mobile {
+        padding: 7px 0 7px 0;
+    }
+
+    @media $tab {
+        padding: 7px 0 7px 0;
+    }
+
+    .q-toolbar {
+        background: none;
+        padding: 4px 12px 0 12px;
+
+        .q-toolbar-title {
+
+            .absolute-left {
+                margin-left: 20px;
+                margin-top: 10px;
+
+                @media $mobile {
+                    margin-top: 10px;
+                }
+
+                @media $tab {
+                    margin-top: 8px;
+                }
+
+                .logo{
+                    width: 60px;
+
+                    @media $tab {
+                        width: 42px;
+                    }
+
+                    @media $mobile {
+                        width: 42px;
+                    }
+                }
+            }
+        }
+
+        .topnav {
+            font-weight: 400;
+
+            @media $mobile {
+                width: 100%
+            }
+
+            @media $tab {
+                width: 100%
+            }
+
+            .welcome-note {
+                text-align: right;
+                color: $light-text;
+                padding: 0px 16px;
+            }
+
+            .middle_pagename {
+                display: none;
+                color: #666666;
+                text-align: center;
+                font-weight: 600;
+                color: #9A5AB4;
+
+                @media $tab {
+                    display: block;
+                    font-size: 18px;
+                }
+
+                @media $mobile {
+                    display: block;
+                    font-size: 18px;
+                }
+            }
+            a {
+                float: left;
+                display: block;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+                position: relative;
+                font-size: 16px;
+
+                &.router-link-active {
+                    @media $desktop {
+                        border-bottom: 4px solid #62c346;
+                    }
+                }
+
+                @media $tab {
+                    display: none;
+
+                    &.icon {
+                        margin-top: -10px;
+                        float: right;
+                        display: block;
+                        font-size: 30px;
+                        padding: 0px 10px;
+                        text-align: right;
+                        background: none;
+                    }
+                    &:hover {
+                      background-color: #fff;
+                      color: black;
+                    }
+                }
+
+                @media $mobile {
+                    display: none;
+
+                    &.icon {
+                        margin-top: -10px;
+                        float: right;
+                        display: block;
+                        font-size: 30px;
+                        padding: 0px 10px;
+                        text-align: right;
+                        background: none;
+                    }
+                    &:hover {
+                      background-color: #fff;
+                      color: black;
+                    }
+                }
+            }
+
+            .icon {
+                display: none;
+            }
+
+            &.responsive {
+                @media $mobile {
+                    position: relative;
+                    margin-top: 8px;
+                }
+                @media $tab {
+                    margin-top: 8px;
+                }
+                .icon {
+                    @media $tab {
+                        position: relative;
+                        right: 0;
+                        top: 0;
+                        font-size: 30px;
+                        padding: 0px 10px;
+                        text-align: right;
+                        background: none;
+                    }
+
+                    @media $mobile {
+                        position: absolute;
+                        right: 0;
+                        top: 0;
+                        font-size: 30px;
+                        padding: 0px 10px;
+                        text-align: right;
+                        background: none;
+                    }
+                }
+                a {
+                    @media $tab {
+                        float: none;
+                        display: block;
+                        text-align: center;
+                    }
+
+                    @media $mobile {
+                        float: none;
+                        display: block;
+                        text-align: center;
+                    }
+                }
+            }
+        }
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| COmpany Component page COntent related Styles
+|--------------------------------------------------------------------------
+*/
+
+.layout-page-container {
+    background: #202C38;
+    font-weight: 400;
+    word-spacing: 2px;
+    min-height: 814px;
+    padding-top: 120px;
+
+    @media $mobile {
+        padding-top: 90px;
+    }
+
+    .HOME {
+        .welcome-note {
+            margin-bottom: 0px;
+            margin-top: 10px;
+            color: $thik-text;
+        }
+
+        .welcome-sub-note {
+            margin-top: 0px;
+        }
+
+        .advertising-slider {
+            margin-bottom: 30px;
+
+            .q-card {
+                background: $bg-danger;
+
+                .q-carousel {
+
+                    .sliding-part {
+                        padding: 5px;
+                    }
+
+                    .q-carousel-quick-nav {
+                        background: none;
+                    }
+                }
+            }
+        }
+
+        .stats-info {
+
+            &.last-card {
+                margin-top: 15px;
+
+                @meadi $tab {
+                    margin-top: 0px;
+                }
+
+                @meadi $mobile {
+                    margin-top: 0px;
+                }
+            }
+            .q-card {
+                background: $white;
+
+                @media $mobile {
+                    margin: 0 10px;
+                }
+
+                h4 {
+                    font-weight: 400;
+                }
+
+                h3 {
+                    margin: 15px 0;
+                }
+
+                .q-item {
+                    &:hover {
+                        background: none;
+                    }
+                }
+            }
+        }
+
+        .banner-image {
+            img {
+                width: 100%
+            }
+        }
+    }
+
+    .SURVEYS {
+        .q-card {
+            box-shadow: none;
+
+            .tab-summary {
+                color: $heading-color;
+
+                h2 {
+                    margin-bottom: 10px;
+                    font-weight: 400;
+                }
+                h4 {
+                    margin-top: 10px;
+                    font-weight: 400;
+                }
+                .text {
+                    font-size: 17px;
+                    line-height: 5px;
+                }
+            }
+
+            .points-circle {
+                height: 65px;
+                width: 65px;
+                float: right;
+                background-color: #6069C7;
+                border-radius: 50%;
+                display: inline-block;
+
+                .points-text {
+                    color:white;
+                    margin-top:10px;
+                    font-size: 11px;
+
+                    .survey-points {
+                        font-size: 16px;
+                    }
+                }
+            }
+
+            .survey-btn {
+                color:#9174b5;
+            }
+
+            p {
+                margin-bottom: 12px;
+            }
+        }
+    }
+
+    .INFO {
+
+        .product-list {
+            background: $white;
+            padding: 12px 15px;
+
+            .product-details {
+                padding: 10px 0px;
+                border-bottom: 1px dashed rgb(145, 117, 181);
+
+                .right {
+                    text-align: right;
+
+                    @media $mobile {
+                        text-align: left;
+                    }
+
+                    p {
+                        margin-bottom: 0px;
+                    }
+                }
+
+                .left {
+                    p{
+                        margin-bottom: 2px;
+                    }
+                }
+            }
+        }
+
+        .info-tabs {
+
+            .q-tabs-head {
+                justify-content: center;
+
+                .q-tabs-scroller {
+                    color: $heading-color;
+
+                    .q-tab {
+                        cursor: pointer;
+                        border-bottom: 3px solid $bg-danger;
+
+                        .q-tabs-bar {
+                            display: none;
+                        }
+
+                        .q-tab-label {
+                            text-transform: capitalize;
+                        }
+
+                        &.active {
+                            font-weight: 500;
+                            border-bottom: 3px solid $heading-color;
+                        }
+                    }
+                }
+            }
+
+            .q-tab-pane {
+                margin-top: 20px;
+                border: none;
+                padding: 0px;
+            }
+
+            .q-tabs-panes {
+                border-top: none;
+            }
+        }
+
+        .allinfo-content {
+
+            .all-info-text {
+                color: $heading-color;
+            }
+
+            p {
+                margin-bottom: 8px;
+            }
+        }
+
+        .promo-search {
+            width: 100%;
+            margin-bottom: 20px;
+            font-size: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: 'Lato', sans-serif, Arial, Helvetica;
+        }
+
+        .promos-content {
+
+            .promo-date {
+                color: $heading-color;
+            }
+
+            p {
+                margin-bottom: 8px;
+            }
+        }
+
+        .allinfo-content {
+
+        }
+
+        .total-companies {
+            width: 100%;
+            margin-right: 130px;
+        }
+
+        .company-list {
+            background: $white;
+            padding: 15px
+        }
+
+        .company-info {
+            text-align: left;
+            padding-top: 10px;
+
+            a {
+                color: $heading-color;
+            }
+        }
+
+        .dotted-line-company {
+            border-bottom: 4px dotted;
+            color: $heading-color;
+        }
+
+        .total-products {
+            width: 100%;
+            margin-right: 110px;
+        }
+
+        .product-info {
+            width: 100%;
+            font-size: 18px;
+        }
+
+        .show-more {
+            color: $heading-color;
+            font-size: 18px;
+            margin-left:10px;
+        }
+
+        .dotted-line-product {
+            border-bottom: 4px dotted;
+        }
+    }
+
+    .MYACCOUNT {
+
+        .q-card {
+            box-shadow: none;
+            margin-bottom: 10px;
+        }
+
+        .tab-summary {
+
+            h2 {
+                @media $mobile {
+                    margin-bottom: 0;
+                }
+            }
+
+            .text {
+                font-size: 14px;
+                line-height: 10px;
+
+                @media $mobile {
+                    margin: 10px 0;
+                }
+            }
+        }
+
+        .myaccount-tabs {
+
+            .q-tabs-head {
+                justify-content: center;
+                background-color:#62c346;
+
+                .q-tabs-scroller {
+                    color: $heading-color;
+
+                    .q-tab {
+                        cursor: pointer;
+                        border-bottom: 3px solid #62c346;
+
+                        .q-tabs-bar {
+                            display: none;
+                        }
+
+                        .q-tab-label {
+                            text-transform: capitalize;
+                        }
+
+                        &.active {
+                            font-weight: 500;
+                            border-bottom: 4px solid green;
+                        }
+                    }
+                }
+            }
+
+            .q-tabs-panes {
+                margin-top: 20px;
+                background: $white;
+
+                .points-info-content {
+                    @media $mobile {
+                        overflow: scroll;
+                    }
+                }
+
+                .surveys-done-content {
+                    @media $mobile {
+                        overflow: scroll;
+                    }
+                }
+
+                .profile-view-content {
+
+                    th {
+                        text-align: right;
+                    }
+
+                    td {
+                        text-align: left;
+                    }
+                }
+            }
+        }
+    }
+
+    .ANALYZE {
+        .analyze-search {
+            padding: 10px;
+            border-radius: 5px;
+            background: $white
+            height: 45px;
+            font-family: 'Lato', sans-serif, Arial, Helvetica;
+        }
+
+        .analyze_data {
+            margin-top: 15px;
+            padding: 5px;
+
+            .q-card {
+                border-radius:5px;
+
+                .title {
+                    font-size: 17px;
+                    padding-bottom: 15px;
+                    border-bottom: 1px dashed;
+                }
+
+                .last_line {
+                    padding-bottom: 15px;
+                    border-bottom: 1px solid;
+                }
+
+                .graph {
+                    cursor: pointer;
+                }
+
+                .downloadPdf {
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+
+    .PRINT {
+        padding-left: 140px;
+        padding-right: 140px;
+
+        .stats-info {
+
+            &.last-card {
+                margin-top: 15px;
+
+                @meadi $tab {
+                    margin-top: 0px;
+                }
+
+                @meadi $mobile {
+                    margin-top: 0px;
+                }
+            }
+            .q-card {
+                background: $white;
+
+                @media $mobile {
+                    margin: 0 10px;
+                }
+
+                h4 {
+                    font-weight: 400;
+                }
+
+                h3 {
+                    margin: 15px 0;
+                }
+
+                .q-item {
+                    &:hover {
+                        background: none;
+                    }
+                }
+            }
+        }
+    }
+
+    .COMPANY-MYACCOUNT {
+
+        .myaccount-tabs {
+            background-color: #62c346;
+
+            .q-tabs-head {
+                justify-content: center;
+                background-color: #202C38;
+
+                .q-tabs-scroller {
+                    color: $heading-color;
+
+                    .q-tab {
+                        cursor: pointer;
+                        border-bottom: 3px solid $bg-danger;
+
+                        .q-tabs-bar {
+                            display: none;
+                        }
+
+                        .q-tab-label {
+                            text-transform: none;
+                        }
+
+                        &.active {
+                            font-weight: 500;
+                            border-bottom: 3px solid #202C38;
+                        }
+                    }
+                }
+            }
+
+            .q-tabs-panes {
+                border: none;
+                margin-top: 20px;
+
+                .q-tab-pane {
+                    border: none;
+                    padding: 0;
+
+                    .BALANCE {
+                        .q-card {
+                            box-shadow: none;
+                            padding: 15px 20px;
+
+                            .tab-summary {
+                                h2 {
+                                    font-weight: 400;
+                                    margin: 5px 0px;
+                                    color: #9174b5;
+                                    font-size: 1.8em;
+                                }
+
+                                p {
+                                    margin-bottom: 3px;
+                                }
+
+                                .btn {
+                                    padding: 15px 30px;
+                                    margin-top: 15px;
+                                }
+                            }
+                        }
+                    }
+
+                    .BY_RESPONSE {
+                        .resposne_stats {
+                            color: #9175b5;
+                            margin: 20px 0px;
+
+                            h1 {
+                                margin: 0px;
+                                font-weight: 500;
+                            }
+                            p {
+                                font-size: 16px;
+                            }
+                        }
+
+                        .q-card {
+                            box-shadow: none;
+                            padding: 15px 20px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+/*
+|--------------------------------------------------------------------------
+| Event management related Styles
+|--------------------------------------------------------------------------
+*/
+     .p_head{
+        font-size: 20px;
+        color:green;
+        padding-left: 40px;
+     }
+
+     .button-style{
+        float:top-right;
+     }
+
+     .error_msg{
+        color:red !important;
+        font-size:14px;
+        padding-top:10px;
+     }
+
+     .image_close{
+        vertical-align: top;
+        margin-left: -25px;
+     }
+
+     .image_after{
+         display: inline;
+         padding-right: 10px;
+     }
+     .event_fields{
+        padding-right: 10px;
+     }
+
+     .event_afields{
+        padding-right: 15px;
+     }
+
+     .event_bfields{
+        padding-left: 15px;
+     }
+
+     .event_top{
+        padding-top: 10px;
+     }
+
+     .event_finish{
+        margin-left: 10px;
+     }
+
+     .event_agenda{
+        padding-right: 20px;
+     }
+
+     .event_file{
+        display: inline;
+     }
+
+     .event_fil{
+        width: fit-content;
+     }
+
+     .head_styl{
+        font-size:20px;
+        color: green;
+     }
+
+     .qbutton_styl{
+        display: inline-flex;
+     }
+
+     .border_fields{
+        border: 2px solid #c0c0c0 !important;
+        border-radius: 5px;
+        padding:30px;
+     }
+     /*
+|--------------------------------------------------------------------------
+| Group Management Styles
+|--------------------------------------------------------------------------
+*/
+   .tabs_h{
+       padding-left: 133px;
+       padding-right: 133px;
+   }
+   .header_tab{
+       padding-top: 20px;
+   }
+   .header_style{
+       margin-left: 25px;
+   }
+   .group_styl{
+       margin-right: 80px;
+   }
