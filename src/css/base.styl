@@ -20,21 +20,20 @@ body {
 	}
 
 	.q-layout-page-container {
-
-		padding-top: 30px !important;
+		padding-left: 250px!important;
 
 		@media $mobile {
-			padding-top: 35px !important;
+			padding-left: 0px!important;
 		}
 
 		@media $tab {
-			padding-top: 35px !important;
+			padding-left: 0px!important;
 		}
 	}
 	.q-card {
 		padding: 15px;
 		box-shadow: none;
-		min-height: 86vh;
+		min-height: 100vh;
 
 		.q-if-label {
 			font-size: 12px;
@@ -96,10 +95,10 @@ body {
     max-width:200px;
 		max-height:200px;
 	}
-	.q-btn {
+	/*.q-btn {
 		background: #69c07a !important;
 		color: white !important;
-	}
+	}*/
 	.mobile-avatar {
 	    vertical-align: middle;
 	    width: 54%;
@@ -124,15 +123,25 @@ body {
 .img_close{
 	margin-bottom:300px;
 }
-.header_font{
+.header_fontM{
 	color: white;
-	padding-top: 7px;
-	padding-bottom: 7px;
 	font-size: 17px;
 }
+.header_fontS{
+	color: white;
+	font-size: 15px;
+}
+.header_fontC{
+	color: white;
+	font-size: 13px;
+}
 .link-img{
-	width: 22px;
-	height: 22px;
+	width: 20px;
+	height: 20px;
+}
+.link-imgs{
+	width: 15px;
+	height: 12px;
 }
 .img_logo{
 	margin-left: 0px;
@@ -153,15 +162,15 @@ body {
 	background: rgba(16,32,51,0.871) !important
 }
 .backgroung_color{
-	background: rgb(16, 32, 51) !important;
+	background: #1D2B36 !important;
 }
 .header_text{
-	margin-left: 14px;
+	margin-left: 4px;
 }
 .card-styl{
-	margin-top: 45px;
-	margin-left: 10px;
-    margin-right: 10px;
+	/*margin-top: 45px;*/
+	/*margin-left: 10px;*/
+    /*margin-right: 10px;*/
 }
 .small-font{
 	font-size: 28px
@@ -191,9 +200,9 @@ body {
 }
 @media screen and (max-width: 600px) {
 	.card-styl{
-	margin-top: 38px;
-	margin-left: 10px;
-    margin-right: 10px;
+	/*margin-top: 38px;*/
+	/*margin-left: 10px;*/
+    /*margin-right: 10px;*/
   }
 }
 
@@ -267,4 +276,20 @@ body {
 	font-weight: 800px;
 	color: white;
 	text-transform: uppercase;
+}
+.toolbackground{
+	background: linear-gradient(60deg,#ffa726,#fb8c00)!important;
+}
+.toolgreen{
+	background: linear-gradient(60deg,#66bb6a,#43a047)!important;
+}
+.childnav{
+	border-radius: 4px;
+	min-height: 0px!important;
+}
+.toolblack{
+	background: linear-gradient(60deg, #466063, #0b4148) !important;
+}
+.tooldanger{
+	background: linear-gradient(60deg, #541a1a, #522929) !important;
 }

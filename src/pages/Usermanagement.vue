@@ -203,10 +203,10 @@ export default {
       var that = this
       that.loading = true
       that.tableData.length = 0
-      axios.get( baseUrlForBackend+'/rest_api/app_shipment_info_data/?manifest_number=448983599/1').then(function(result){
-        console.log(result)
-        debugger
-      })
+      // axios.get( baseUrlForBackend+'/rest_api/app_shipment_info_data/?manifest_number=448983599/1').then(function(result){
+      //   console.log(result)
+      //   debugger
+      // })
       firebase.database().ref('UserDetails').once('value', function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
           if (childSnapshot.val().usertype != 'Admin') {

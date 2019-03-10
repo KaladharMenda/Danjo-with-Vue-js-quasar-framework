@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf" class="layout-padding">
+  <q-layout view="lHh Lpr lFf" >
     <app-header></app-header>
     <q-page-container>
       <router-view />
