@@ -8,7 +8,7 @@
           </q-toolbar-title>
         </q-toolbar>
       </div>
-      <div class="row gutter-sm q-mb-md">
+      <div class="row gutter-sm" style="margin-top: 0px;">
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
           <q-field>
             <q-select
@@ -20,8 +20,28 @@
         </div>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
           <q-field>
-            <q-input  type="text" v-model="thismonth" float-label="MONTH " readonly/>
+            <q-input  type="text" v-model="month" float-label="MONTH " readonly/>
           </q-field>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+          <q-field>
+            <q-select
+              v-model="period"
+              :options="period_options"
+              float-label="PERIOD"
+            />
+          </q-field>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6" style="margin-top: -16px;">
+          <q-field>
+            <q-input  type="text" v-model="working_days" float-label="TOTAL COLLEGE WORKING DAYS"/>
+          </q-field>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-5 col-xs-12" align="center">
+          <q-btn color="purple" @click="checkpinexists()" :disabled="btnLoading">
+            <q-spinner-hourglass v-if="btnLoading" class="on-left" />
+            Verify and update
+          </q-btn>
         </div>
       </div>
     </q-card>
@@ -50,7 +70,8 @@ import {
   QLayout,
   QModalLayout,
   QToggle,
-  QInnerLoading
+  QInnerLoading,
+  QSpinnerHourglass
 } from 'quasar'
 export default {
   components: {
@@ -69,13 +90,18 @@ export default {
     QLayout,
     QModalLayout,
     QToggle,
-    QInnerLoading
+    QInnerLoading,
+    QSpinnerHourglass
   },
   data () {
     return {
-      thismonth: '',
+      month: '',
       year_sem: '',
-      year_sem_options: [{'label': '1YR', 'value': '1YR'},{'label': '2YR', 'value': '2YR'},{'label': '3SEM', 'value': '3SEM'},{'label': '4SEM', 'value': '4SEM'},{'label': '5SEM', 'value': '5SEM'},{'label': '6SEM', 'value': '6SEM'},{'label': '7SEM', 'value': '7SEM'}]
+      period: '',
+      year_sem_options: [{'label': '1YR', 'value': '1YR'},{'label': '2YR', 'value': '2YR'},{'label': '3SEM', 'value': '3SEM'},{'label': '4SEM', 'value': '4SEM'},{'label': '5SEM', 'value': '5SEM'},{'label': '6SEM', 'value': '6SEM'},{'label': '7SEM', 'value': '7SEM'}],
+      period_options: [{'label': '1st to 15 Days', 'value': 'first_period'},{'label': '16th to Month End', 'value': 'second_period'}],
+      btnLoading: false,
+      working_days: ''
     }
   },
   created () {
@@ -100,34 +126,42 @@ export default {
           that.loading = false
         })
     },
+    checkpinexists () {
+      let that = this
+      that.btnLoading = true
+      setTimeout(function () {
+        that.btnLoading = false
+      },2000)
+      that.alldivisionenable = true
+    },
     convertDate: function (date) {
       var that = this
       if ((date+1) == 1) {
-        that.thismonth = 'January'
+        that.month = 'January'
       }else if((date+1) == 2) {
-        that.thismonth = 'February'
+        that.month = 'February'
       }else if((date+1) == 3) {
-        that.thismonth = 'March'
+        that.month = 'March'
       }else if((date+1) == 4) {
-        that.thismonth = 'April'
+        that.month = 'April'
       }else if((date+1) == 5) {
-        that.thismonth = 'May'
+        that.month = 'May'
       }else if((date+1) == 6) {
-        that.thismonth = 'June'
+        that.month = 'June'
       }else if((date+1) == 7) {
-        that.thismonth = 'July'
+        that.month = 'July'
       }else if((date+1) == 8) {
-        that.thismonth = 'August'
+        that.month = 'August'
       }else if((date+1) == 9) {
-        that.thismonth = 'September'
+        that.month = 'September'
       }else if((date+1) == 10) {
-        that.thismonth = 'October'
+        that.month = 'October'
       }else if((date+1) == 11) {
-        that.thismonth = 'November'
+        that.month = 'November'
       }else if((date+1) == 12) {
-        that.thismonth = 'December'
+        that.month = 'December'
       }
-      console.log(that.thismonth)
+      console.log(that.month)
     },
   }
 }
