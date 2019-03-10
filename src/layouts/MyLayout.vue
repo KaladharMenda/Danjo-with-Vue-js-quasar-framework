@@ -58,7 +58,26 @@
                 <div class="navigation-text header_fontC header_text">Delete Student</div>
               </q-item>
             </q-collapsible>
-            <!-- <router-link class="navlink" > -->
+            <!-- <END THE STUDENT INFO DETAILS > -->
+            <q-collapsible class="box">
+              <template slot="header">
+                <img src="statics/attend.png" class="link-img" />
+                <div class="navigation-text header_fontS header_text">Attendence Details</div>
+              </template>
+              <q-item class="navlink childnav" :to="{ path: '/admin/addattendance'}">
+                <img src="statics/arrow.png" class="link-imgs">
+                <div class="navigation-text header_fontC header_text">Add Attendence</div>
+              </q-item>
+              <q-item class="navlink childnav" :to="{ path: '/admin/viewattendance'}">
+                <img src="statics/arrow.png" class="link-imgs">
+                <div class="navigation-text header_fontC header_text">View Attendence</div>
+              </q-item>
+              <q-item class="navlink childnav" :to="{ path: '/admin/transferstudent'}">
+                <img src="statics/arrow.png" class="link-imgs">
+                <div class="navigation-text header_fontC header_text">Confirm Attendence</div>
+              </q-item>
+            </q-collapsible>
+            <!-- <END THE STUDENT Attendance DETAILS > -->
           </q-collapsible>
         </a>
         <!-- <q-item v-if="$store.state.example.userType != 'Admin'" class="navlink" :to="{ path: '/admin/studentreccords'}">
