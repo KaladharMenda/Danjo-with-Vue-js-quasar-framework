@@ -1,6 +1,7 @@
 <template>
   <div class="About">
     <q-card class="bg-white card-styl">
+    <form>
       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" align="center">
         <q-toolbar color="orange" class="toolbackground">
           <q-toolbar-title>
@@ -14,30 +15,30 @@
       <div class="row gutter-sm q-mb-md">
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
           <q-field>
-            <q-input  type="text" :readonly="readonly" ref="pin" v-model="pin" float-label="PIN *"/>
+            <q-input  type="text" :readonly="readonly" ref="pin" v-model="studen_info.pin" float-label="PIN *"/>
           </q-field>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
           <q-field>
-            <q-input  type="text" v-model="name" float-label="NAME *"/>
+            <q-input  type="text" v-model="studen_info.student_name" float-label="NAME *"/>
           </q-field>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
           <q-field>
             <q-select
-              v-model="gender"
+              v-model="studen_info.gender"
               :options="genderOptions"
               float-label="Gender *"
             />
           </q-field>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
-          <q-datetime color="orange" v-model="dateofbirth" type="date" float-label="Date Of Birth *"/>
+          <q-datetime color="orange" v-model="studen_info.date_of_birth" type="date" float-label="Date Of Birth *"/>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
           <q-field>
             <q-select
-              v-model="relationShip"
+              v-model="studen_info.relation_ship"
               :options="relationOptions"
               float-label="Relation Ship "
             />
@@ -45,34 +46,34 @@
         </div>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
           <q-field>
-            <q-input  type="text" v-model="relativeName" float-label="Relative Name"/>
+            <q-input  type="text" v-model="studen_info.relative_name" float-label="Relative Name"/>
           </q-field>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
           <q-field>
             <q-select
-              v-model="category"
-              :options="categoryOptions"
-              float-label="Category"
+              v-model="studen_info.caste"
+              :options="casteOptions"
+              float-label="caste"
             />
           </q-field>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
           <q-field>
             <q-select
-              v-model="qualification"
+              v-model="studen_info.qualification"
               :options="qualificationOptions"
               float-label="Qualification"
             />
           </q-field>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
-          <q-datetime color="orange" v-model="joiningDate" type="date" float-label="Joining Date "/>
+          <q-datetime color="orange" v-model="studen_info.joining_date" type="date" float-label="Joining Date "/>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
           <q-field>
             <q-select
-              v-model="ph"
+              v-model="studen_info.ph"
               :options="phOptions"
               float-label="Is PH ?"
             />
@@ -80,28 +81,28 @@
         </div>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
           <q-field>
-            <q-input  type="text" v-model="mole1" float-label="Mole One "/>
+            <q-input  type="text" v-model="studen_info.mole_one" float-label="Mole One "/>
           </q-field>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
           <q-field>
-            <q-input  type="text" v-model="mole2" float-label="Mole Two "/>
+            <q-input  type="text" v-model="studen_info.mole_two" float-label="Mole Two "/>
           </q-field>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
           <q-field>
-            <q-input  type="text" v-model="tenpassyear" float-label="10th Class Passed Year "/>
+            <q-input  type="text" v-model="studen_info.tenth_passed_year" float-label="10th Class Passed Year "/>
           </q-field>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
           <q-field>
-            <q-input  type="text" v-model="tenhallticket" float-label="10th Class Hall TocketNo "/>
+            <q-input  type="text" v-model="studen_info.tenth_hallticket" float-label="10th Class Hall TocketNo "/>
           </q-field>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
           <q-field>
             <q-select
-              v-model="schemeCode"
+              v-model="studen_info.scheme_code"
               :options="schemeOptions"
               float-label="Scheme Code"
             />
@@ -110,8 +111,8 @@
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
           <q-field>
             <q-select
-              v-model="yearsem"
-              :options="yearsemOptions"
+              v-model="studen_info.year_sem"
+              :options="year_semOptions"
               float-label="Year / Semester"
             />
           </q-field>
@@ -119,7 +120,7 @@
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
           <q-field>
             <q-select
-              v-model="shift"
+              v-model="studen_info.shift"
               :options="shiftOptions"
               float-label="Shift"
             />
@@ -128,7 +129,7 @@
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
           <q-field>
             <q-select
-              v-model="section"
+              v-model="studen_info.section"
               :options="sectionOptions"
               float-label="Section"
             />
@@ -141,42 +142,42 @@
       <div class="row gutter-sm q-mb-md">
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
           <q-field>
-            <q-input  type="text" v-model="doorno" float-label="Door No"/>
+            <q-input  type="text" v-model="studen_info.door_num" float-label="Door No"/>
           </q-field>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
           <q-field>
-            <q-input  type="text" v-model="streetname" float-label="Street Name"/>
+            <q-input  type="text" v-model="studen_info.street_name" float-label="Street Name"/>
           </q-field>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
           <q-field>
-            <q-input  type="text" v-model="cityvillage" float-label="City / Village"/>
+            <q-input  type="text" v-model="studen_info.city" float-label="City / Village"/>
           </q-field>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
           <q-field>
-            <q-input  type="text" v-model="pincode" float-label="Pin Code"/>
+            <q-input  type="text" v-model="studen_info.pincode" float-label="Pin Code"/>
           </q-field>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
           <q-field>
-            <q-input  type="text" v-model="district" float-label="District"/>
+            <q-input  type="text" v-model="studen_info.district" float-label="District"/>
           </q-field>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
           <q-field>
-            <q-input  type="text" v-model="mandal" float-label="Mandal"/>
+            <q-input  type="text" v-model="studen_info.mandal" float-label="Mandal"/>
           </q-field>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
           <q-field>
-            <q-input  type="text" v-model="mobileno" float-label="Mobile No"/>
+            <q-input  type="text" v-model="studen_info.phone_number" float-label="Mobile No"/>
           </q-field>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
           <q-field>
-            <q-input  type="text" v-model="Email" float-label="Email"/>
+            <q-input  type="text" v-model="studen_info.email" float-label="Email"/>
           </q-field>
         </div>
       </div>
@@ -191,6 +192,7 @@
         <div class="col-lg-4 col-md-4 col-sm-2 col-xs-1">
         </div>
       </div>
+    </form>
     </q-card>
   </div>
 </template>
@@ -240,42 +242,44 @@ export default {
   },
   data () {
     return {
-      pin: '',
-      name:'',
+      studen_info:{
+        pin: '',
+        student_name:'',
+        ph: '',
+        gender:'',
+        date_of_birth: '',
+        relation_ship: '',
+        relative_name: '',
+        caste: '',
+        qualification: '',
+        joining_date: '',
+        mole_one: '',
+        mole_two: '',
+        tenth_passed_year: '',
+        tenth_hallticket: '',
+        scheme_code: '',
+        year_sem: '',
+        shift: '',
+        section: '',
+        door_num: '',
+        street_name: '',
+        city: '',
+        pincode: '',
+        district: '',
+        mandal: '',
+        phone_number: '',
+        email: '',
+      },
       readonly: false,
       genderOptions: [{'label': 'Male', 'value': 'Male'},{'label': 'Female', 'value': 'Female'}],
       relationOptions: [{'label': 'Father', 'value': 'Father'},{'label': 'Mother', 'value': 'Mother'}],
-      categoryOptions: [{'label': 'OC', 'value': 'OC'},{'label': 'BC', 'value': 'BC'},{'label': 'SC', 'value': 'SC'},{'label': 'ST', 'value': 'ST'},{'label': 'OTHERS', 'value': 'OTHERS'}],
+      casteOptions: [{'label': 'OC', 'value': 'OC'},{'label': 'BC', 'value': 'BC'},{'label': 'SC', 'value': 'SC'},{'label': 'ST', 'value': 'ST'},{'label': 'OTHERS', 'value': 'OTHERS'}],
       qualificationOptions: [{'label': '10th Class', 'value': '10thClass'},{'label': 'Intermediate', 'value': 'Intermediate'},{'label': 'Inter(vocational)', 'value': 'Inter(vocational)'},{'label': 'Degree', 'value': 'Degree'},{'label': 'OTHERS', 'value': 'OTHERS'}],
       phOptions: [{'label': 'Yes', 'value': 'Yes'},{'label': 'No', 'value': 'No'}],
       schemeOptions: [{'label': 'ER91', 'value': 'ER91'},{'label': 'C14', 'value': 'C14'},{'label': 'C16', 'value': 'C16'}],
-      yearsemOptions: [{'label': '1YR', 'value': '1YR'},{'label': '2YR', 'value': '2YR'},{'label': '3SEM', 'value': '3SEM'},{'label': '4SEM', 'value': '4SEM'},{'label': '5SEM', 'value': '5SEM'},{'label': '6SEM', 'value': '6SEM'},{'label': '7SEM', 'value': '7SEM'}],
+      year_semOptions: [{'label': '1YR', 'value': '1YR'},{'label': '2YR', 'value': '2YR'},{'label': '3SEM', 'value': '3SEM'},{'label': '4SEM', 'value': '4SEM'},{'label': '5SEM', 'value': '5SEM'},{'label': '6SEM', 'value': '6SEM'},{'label': '7SEM', 'value': '7SEM'}],
       shiftOptions: [{'label': '1', 'value': '1'},{'label': '2', 'value': '2'}],
       sectionOptions: [{'label': '1', 'value': '1'},{'label': '2', 'value': '2'}],
-      ph: '',
-      gender:'',
-      dateofbirth: '',
-      relationShip: '',
-      relativeName: '',
-      category: '',
-      qualification: '',
-      joiningDate: '',
-      mole1: '',
-      mole2: '',
-      tenpassyear: '',
-      tenhallticket: '',
-      schemeCode: '',
-      yearsem: '',
-      shift: '',
-      section: '',
-      doorno: '',
-      streetname: '',
-      cityvillage: '',
-      pincode: '',
-      district: '',
-      mandal: '',
-      mobileno: '',
-      Email: '',
     }
   },
   mounted () {
@@ -295,13 +299,14 @@ export default {
       }, 3000)
     },
     changeMessage () {
-      setTimeout(() => {
-        this.show({
-          spinner: QSpinnerGears,
-          spinnerColor: 'amber',
-          message: 'Processing ....'
-        })
-      }, 0)
+      axios.post(baseUrlForBackend+'govweb/student_details/', JSON.stringify(this.studen_info));
+      // setTimeout(() => {
+      //   this.show({
+      //     spinner: QSpinnerGears,
+      //     spinnerColor: 'amber',
+      //     message: 'Processing ....'
+      //   })
+      // }, 0)
     },
     getVendorLimit () {
       var that = this
@@ -321,31 +326,31 @@ export default {
     emtpyAllFields () {
       var that = this
       that.pin = ''
-      that.name = ''
+      that.student_name = ''
       that.ph = '',
       that.gender = '',
-      that.dateofbirth = '',
-      that.relationShip = '',
-      that.relativeName = '',
-      that.category = '',
+      that.date_of_birth = '',
+      that.relation_ship = '',
+      that.relative_name = '',
+      that.caste = '',
       that.qualification = '',
-      that.joiningDate = '',
-      that.mole1 = '',
-      that.mole2 = '',
-      that.tenpassyear = '',
-      that.tenhallticket = '',
-      that.schemeCode = '',
-      that.yearsem = '',
+      that.joining_date = '',
+      that.mole_one = '',
+      that.mole_two = '',
+      that.tenth_passed_year = '',
+      that.tenth_hallticket = '',
+      that.scheme_code = '',
+      that.year_sem = '',
       that.shift = '',
       that.section = '',
-      that.doorno = '',
-      that.streetname = '',
-      that.cityvillage = '',
+      that.door_num = '',
+      that.street_name = '',
+      that.city = '',
       that.pincode = '',
       that.district = '',
       that.mandal = '',
-      that.mobileno = '',
-      that.Email = ''
+      that.phone_number = '',
+      that.email = ''
     }
   }
 }
