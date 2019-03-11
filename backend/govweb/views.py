@@ -5,6 +5,8 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from models import *
+from datetime import datetime
+from dateutil.parser import parse
 import json
 
 def index(request):
@@ -12,13 +14,29 @@ def index(request):
 
 @csrf_exempt
 def student_details(request):
-    import pdb; pdb.set_trace()
     data_dict = json.loads(request.POST.keys()[0])
-    try:
-        Student_details.objects.create(**data_dict)
-    except Exception as e:
-        import traceback
-        return HttpResponse(e)
+    pin = data_dict['pin']
+    adding = data_dict.get('adding' ,'')
+    if adding:
+        del data_dict["adding"]
+        student_obj = Student_details.objects.filter(pin = pin)
+        if student_obj.exists() :
+            return HttpResponse("The Student PIN Already Exists")
+        try:
+            Student_details.objects.create(**data_dict)
+        except Exception as e:
+            import traceback
+            return HttpResponse(e)
+    else:
+        data_dict['date_of_birth']=  parse(data_dict['date_of_birth'])
+        data_dict['joining_date'] = parse(data_dict['joining_date'])
+
+        try:
+            Student_details.objects.update(**data_dict)
+        except Exception as e:
+            import traceback
+            return HttpResponse(e)
+
     return HttpResponse("Success")
 @csrf_exempt
 def get_student_details(request):
@@ -30,12 +48,12 @@ def get_student_details(request):
         data_dict['student_name'] = student_details.student_name
         data_dict['pin'] = student_details.pin
         data_dict['gender'] = student_details.gender
-        data_dict['date_of_birth'] = student_details.date_of_birth.strftime("%d %m %Y")
+        data_dict['date_of_birth'] = student_details.date_of_birth.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
         data_dict['relative_name'] =student_details.relative_name
         data_dict['relation_ship'] =student_details.relation_ship
         data_dict['caste'] = student_details.caste
         data_dict['qualification']  = student_details.qualification
-        data_dict['joining_date'] = student_details.joining_date.strftime("%d %m %Y")
+        data_dict['joining_date'] = student_details.joining_date.strftime('%Y-%m-%dT%H:%M:%S.%fZ')
         data_dict['ph'] = student_details.ph
         data_dict['mole_one'] = student_details.mole_one
         data_dict['mole_two'] = student_details.mole_two

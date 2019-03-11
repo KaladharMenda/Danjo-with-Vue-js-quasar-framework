@@ -198,7 +198,7 @@
       <div class="row gutter-sm q-mb-md" v-if="alldivisionenable">
         <div class="col-lg-4 col-md-4 col-sm-2 col-xs-1"></div>
         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-          <q-btn class="full-width toolgreen" text-color= "white" label="UPDATE" @click="changeMessage"/>
+          <q-btn class="full-width toolgreen" text-color= "white" label="UPDATE" @click="update_student"/>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-2 col-xs-1">
         </div>
@@ -339,14 +339,15 @@ export default {
         this.$q.loading.hide()
       }, 3000)
     },
-    changeMessage () {
-      setTimeout(() => {
-        this.show({
-          spinner: QSpinnerGears,
-          spinnerColor: 'amber',
-          message: 'Processing ....'
-        })
-      }, 0)
+    update_student () {
+      // setTimeout(() => {
+      //   this.show({
+      //     spinner: QSpinnerGears,
+      //     spinnerColor: 'amber',
+      //     message: 'Processing ....'
+      //   })
+      // }, 0)
+      axios.post(baseUrlForBackend+'govweb/student_details/', JSON.stringify(this.studen_info));
     },
     checkpinexists () {
       let that = this
