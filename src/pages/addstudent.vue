@@ -269,6 +269,7 @@ export default {
         mandal: '',
         phone_number: '',
         email: '',
+        adding:true,
       },
       readonly: false,
       genderOptions: [{'label': 'Male', 'value': 'Male'},{'label': 'Female', 'value': 'Female'}],
@@ -372,6 +373,7 @@ export default {
       that.phone_number = '',
       that.email = '',
       that.respdata = ''
+      that.adding = true
     }
   }
 }
