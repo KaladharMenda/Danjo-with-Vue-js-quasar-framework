@@ -74,3 +74,20 @@ def get_student_details(request):
         return HttpResponse(json.dumps(data_dict))
     else:
         return HttpResponse("Record NOT FOUND")
+
+@csrf_exempt
+def get_attendence_names(request):
+    student_details = []
+    attendence_dict = json.loads(request.POST.keys()[0])
+    if attendence_dict['year_sem'] :
+        students_obj = Student_details.objects.filter(year_sem = attendence_dict['year_sem'])
+        if students_obj.exists():
+            for student in students_obj :
+                student_dict ={}
+                student_dict ['student_name'] = student.student_name
+                student_dict['pin'] = student.pin
+                student_dict['scheme_code'] = student.scheme_code
+                student_dict['year_sem'] = attendence_dict['year_sem']
+                student_details.append(student_dict)
+
+    return HttpResponse(json.dumps(student_details))

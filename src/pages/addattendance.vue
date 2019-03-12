@@ -38,7 +38,7 @@
           </q-field>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-5 col-xs-12" align="center">
-          <q-btn color="purple" @click="checkpinexists()" :disabled="btnLoading">
+          <q-btn color="purple" @click="get_attendence_details()" :disabled="btnLoading">
             <q-spinner-hourglass v-if="btnLoading" class="on-left" />
             Verify and update
           </q-btn>
@@ -126,13 +126,20 @@ export default {
           that.loading = false
         })
     },
-    checkpinexists () {
+    get_attendence_details () {
       let that = this
-      that.btnLoading = true
-      setTimeout(function () {
-        that.btnLoading = false
-      },2000)
-      that.alldivisionenable = true
+      // that.btnLoading = true
+      // setTimeout(function () {
+      //   that.btnLoading = false
+      // },2000)
+      // that.alldivisionenable = true
+      var attendence_dict = {}
+      attendence_dict ['year_sem'] = that.year_sem
+      attendence_dict['month'] = that.month
+      axios.post(baseUrlForBackend+'govweb/get_attendence_names/',JSON.stringify(attendence_dict))
+      .then(function(resp){
+         console.log(resp)
+       })
     },
     convertDate: function (date) {
       var that = this
