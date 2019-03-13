@@ -14,6 +14,7 @@ def index(request):
 
 @csrf_exempt
 def student_details(request):
+    data_dict ={}
     data_dict = json.loads(request.POST.keys()[0])
     pin = data_dict['pin']
     adding = data_dict.get('adding' ,'')
@@ -91,3 +92,13 @@ def get_attendence_names(request):
                 student_details.append(student_dict)
 
     return HttpResponse(json.dumps(student_details))
+
+@csrf_exempt
+def delete_student_details(request):
+    pin = json.loads(request.POST.keys()[0])
+    student_details = Student_details.objects.filter(pin = pin)
+    if student_details.exists():
+        student_details = student_details[0]
+        student_details.status = False
+        student_details.save()
+    return HttpResponse("Success")
