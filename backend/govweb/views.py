@@ -14,6 +14,7 @@ def index(request):
 
 @csrf_exempt
 def student_details(request):
+    data_dict ={}
     data_dict = json.loads(request.POST.keys()[0])
     pin = data_dict['pin']
     adding = data_dict.get('adding' ,'')
@@ -32,7 +33,8 @@ def student_details(request):
         data_dict['joining_date'] = parse(data_dict['joining_date'])
 
         try:
-            Student_details.objects.update(**data_dict)
+            student_obj = Student_details.objects.filter(pin = pin)
+            student_obj.update(**data_dict)
         except Exception as e:
             import traceback
             return HttpResponse(e)
@@ -91,3 +93,42 @@ def get_attendence_names(request):
                 student_details.append(student_dict)
 
     return HttpResponse(json.dumps(student_details))
+
+@csrf_exempt
+def delete_student_details(request):
+    pin = json.loads(request.POST.keys()[0])
+    student_details = Student_details.objects.filter(pin = pin)
+    if student_details.exists():
+        student_details = student_details[0]
+        student_details.status = False
+        student_details.save()
+    return HttpResponse("Success")
+@csrf_exempt
+def attendece_update(request):
+    attendence_dict ={}
+    attendence_dict = json.loads(request.POST.keys()[0])
+    try:
+        for record in attendence_dict :
+            attendence_dict = {}
+            pin = record.get('pin','')
+            attendence_dict['year_sem'] = record.get('year_sem','')
+            attendence_dict['month'] = record.get('month','')
+            attendence_dict['period'] = record.get('period','')
+            attendence_dict['working_days'] = record.get('working_days','')
+            student_obj = Student_details.objects.filter(pin = pin)
+            if student_obj.exists():
+                attendence_dict['student_details'] = student_obj[0]
+            else:
+                return HttpResponse("Pin Does not exists")
+            existing_obj = Attendence_details.objects.filter(**attendence_dict)
+            if existing_obj.exists():
+                existing_obj = existing_obj[0]
+                existing_obj.attended_days = record.get('no_of_days_attend','')
+                existing_obj.save()
+            else:
+                attendence_dict['attended_days'] = record.get('no_of_days_attend','')
+                Attendence_details.objects.create(**attendence_dict)
+        return HttpResponse("Success")
+    except Exception as e:
+        import traceback
+        return HttpResponse("Some thing went wrong")

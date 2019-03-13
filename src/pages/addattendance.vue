@@ -57,8 +57,8 @@
           </thead>
           <tbody>
             <tr v-for="(data ,index) in student_attendance_details" :key="index">
-              <td style="border-top: 1px solid rgb(236, 236, 236);" class="text-center" data-th="PIN">{{ data.Pin }}</td>
-              <td style="border-top: 1px solid rgb(236, 236, 236);" class="text-center" data-th="Student Name">{{ data.StudentName }}</td>
+              <td style="border-top: 1px solid rgb(236, 236, 236);" class="text-center" data-th="PIN">{{ data.pin }}</td>
+              <td style="border-top: 1px solid rgb(236, 236, 236);" class="text-center" data-th="Student Name">{{ data.student_name }}</td>
               <td style="border-top: 1px solid rgb(236, 236, 236);" class="text-center" data-th="Academic Year">{{ data.year_sem }}</td>
               <td style="border-top: 1px solid rgb(236, 236, 236);" class="text-center" data-th="No of Days Attend">{{ data.working_days }}</td>
               <td style="border-top: 1px solid rgb(236, 236, 236);">
@@ -146,6 +146,11 @@ export default {
     send_attendence_details () {
       var that = this
       console.log(that.student_attendance_details)
+      axios.post(baseUrlForBackend+'govweb/attendece_update/',JSON.stringify(that.student_attendance_details))
+      .then(function(resp){
+        let respdata = resp.data
+        console.log(respdata)
+      })
     },
     get_attendence_details () {
       let that = this
@@ -160,11 +165,12 @@ export default {
         .then(function(resp){
           resp.data.forEach(function(record){
             that.student_attendance_details.push({
-              'Pin' : record.pin,
-              'StudentName': record.student_name,
+              'pin' : record.pin,
+              'student_name': record.student_name,
               'year_sem':record.year_sem,
               'period': that.period,
               'working_days': that.working_days,
+              'month':that.month,
               'no_of_days_attend': ''
             })
           })
