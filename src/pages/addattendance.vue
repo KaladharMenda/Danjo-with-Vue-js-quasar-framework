@@ -179,7 +179,7 @@ export default {
         })
       } else {
         that.btnLoading = false
-        that.$q.notify({color: 'negative', textColor: 'white', message: 'Please Select Required Fields', position: 'center', timeout: 1000 })
+        that.$q.notify({color: 'negative', textColor: 'white', message: 'Please Select Required Fields', position: 'center', timeout: 1000})
       }
     },
     convertDate: function (date) {
