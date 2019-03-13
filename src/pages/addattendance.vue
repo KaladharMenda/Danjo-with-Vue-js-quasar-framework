@@ -1,5 +1,5 @@
 <template>
-  <div class="HOME PAGE-CONTENT">
+  <div class="About">
     <q-card class="bg-white card-styl">
       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" align="center">
         <q-toolbar color="orange" class="toolblue">
@@ -9,7 +9,7 @@
         </q-toolbar>
       </div>
       <div class="row gutter-sm" style="margin-top: 0px;">
-        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
           <q-field>
             <q-select
               v-model="year_sem"
@@ -18,12 +18,12 @@
             />
           </q-field>
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
           <q-field>
             <q-input  type="text" v-model="month" float-label="MONTH " readonly/>
           </q-field>
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
           <q-field>
             <q-select
               v-model="period"
@@ -32,17 +32,49 @@
             />
           </q-field>
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6" style="margin-top: -16px;">
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
           <q-field>
             <q-input  type="text" v-model="working_days" float-label="TOTAL COLLEGE WORKING DAYS"/>
           </q-field>
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-5 col-xs-12" align="center">
-          <q-btn color="purple" @click="get_attendence_details()" :disabled="btnLoading">
-            <q-spinner-hourglass v-if="btnLoading" class="on-left" />
-            Verify and update
-          </q-btn>
-        </div>
+      </div>
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" align="center" style="padding-bottom: 15px;">
+        <q-btn color="purple" @click="get_attendence_details()" :disabled="btnLoading" style="background: linear-gradient(60deg, #66bb6a, #43a047) !important;">
+          <q-spinner-hourglass v-if="btnLoading" class="on-left"/>
+          GET STUDENT DETAILS
+        </q-btn>
+      </div>
+      <div class="row" v-if="alldivisionenable">
+        <table class="q-table responsive" style="width: 100%; text-align: center; border-color: white;" border="1" cellspacing="2">
+          <thead>
+            <tr>
+              <th style="font-family: sans-serif;"><b>PIN</b></th>
+              <th style="font-family: sans-serif;"><b>Student Name</b></th>
+              <th style="font-family: sans-serif;"><b>Academic Year</b></th>
+              <th style="font-family: sans-serif;"><b>Working Days</b></th>
+              <th style="font-family: sans-serif;"><b>No of Days Attend</b></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(data ,index) in student_attendance_details" :key="index">
+              <td style="border-top: 1px solid rgb(236, 236, 236);" class="text-center" data-th="PIN">{{ data.Pin }}</td>
+              <td style="border-top: 1px solid rgb(236, 236, 236);" class="text-center" data-th="Student Name">{{ data.StudentName }}</td>
+              <td style="border-top: 1px solid rgb(236, 236, 236);" class="text-center" data-th="Academic Year">{{ data.year_sem }}</td>
+              <td style="border-top: 1px solid rgb(236, 236, 236);" class="text-center" data-th="No of Days Attend">{{ data.working_days }}</td>
+              <td style="border-top: 1px solid rgb(236, 236, 236);">
+                <q-field>
+                  <q-input  type="text" v-model="data.no_of_days_attend"/>
+                </q-field>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" align="center" style="padding-top: 15px;" v-if="alldivisionenable">
+        <q-btn color="light-blue-7" icon-right="send" @click="send_attendence_details()" :disabled="btnLoading" style="    background: linear-gradient(60deg, rgb(27, 98, 204), rgb(8, 149, 249)) !important;">
+          <q-spinner-hourglass v-if="btnLoading" class="on-left"/>
+          CONFIRM
+        </q-btn>
       </div>
     </q-card>
   </div>
@@ -101,7 +133,9 @@ export default {
       year_sem_options: [{'label': '1YR', 'value': '1YR'},{'label': '2YR', 'value': '2YR'},{'label': '3SEM', 'value': '3SEM'},{'label': '4SEM', 'value': '4SEM'},{'label': '5SEM', 'value': '5SEM'},{'label': '6SEM', 'value': '6SEM'},{'label': '7SEM', 'value': '7SEM'}],
       period_options: [{'label': '1st to 15 Days', 'value': 'first_period'},{'label': '16th to Month End', 'value': 'second_period'}],
       btnLoading: false,
-      working_days: ''
+      working_days: '',
+      student_attendance_details: [],
+      alldivisionenable : false,
     }
   },
   created () {
@@ -109,37 +143,38 @@ export default {
     that.convertDate(new Date().getMonth())
   },
   methods: {
-    updateCreateCartonsDt () {
+    send_attendence_details () {
       var that = this
-      that.tableData = []
-      that.loading = true
-      firebase.database().ref('StudentDetails').once('value', function(data){
-        data.forEach(function(record){
-          that.tableData.push({
-            'id' : record.key,
-            'name': record.val().name,
-          })
-        })
-          // that.tableData = that.tableData.sort(function(a,b){
-          //   return new Date(b.date) - new Date(a.date);
-          // })
-          that.loading = false
-        })
+      console.log(that.student_attendance_details)
     },
     get_attendence_details () {
       let that = this
-      // that.btnLoading = true
-      // setTimeout(function () {
-      //   that.btnLoading = false
-      // },2000)
-      // that.alldivisionenable = true
+      that.btnLoading = true
       var attendence_dict = {}
+      that.student_attendance_details = []
       attendence_dict ['year_sem'] = that.year_sem
       attendence_dict['month'] = that.month
-      axios.post(baseUrlForBackend+'govweb/get_attendence_names/',JSON.stringify(attendence_dict))
-      .then(function(resp){
-         console.log(resp)
-       })
+      if (that.year_sem !='' && that.month != '' && that.working_days != '' && that.period != '') {
+        that.alldivisionenable = true
+        axios.post(baseUrlForBackend+'govweb/get_attendence_names/',JSON.stringify(attendence_dict))
+        .then(function(resp){
+          resp.data.forEach(function(record){
+            that.student_attendance_details.push({
+              'Pin' : record.pin,
+              'StudentName': record.student_name,
+              'year_sem':record.year_sem,
+              'period': that.period,
+              'working_days': that.working_days,
+              'no_of_days_attend': ''
+            })
+          })
+          that.btnLoading = false
+          console.log(that.student_attendance_details)
+        })
+      } else {
+        that.btnLoading = false
+        that.$q.notify({color: 'negative', textColor: 'white', message: 'Please Select Required Fields', position: 'center', timeout: 1000 })
+      }
     },
     convertDate: function (date) {
       var that = this

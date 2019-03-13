@@ -295,19 +295,28 @@ export default {
   methods: {
     show (options) {
       this.$q.loading.show(options)
-      setTimeout(() => {
-        this.$q.loading.hide()
-      }, 3000)
+      // setTimeout(() => {
+      //   this.$q.loading.hide()
+      // }, 3000)
     },
     changeMessage () {
-      axios.post(baseUrlForBackend+'govweb/student_details/', JSON.stringify(this.studen_info));
-      // setTimeout(() => {
-      //   this.show({
-      //     spinner: QSpinnerGears,
-      //     spinnerColor: 'amber',
-      //     message: 'Processing ....'
-      //   })
-      // }, 0)
+      var that = this
+      that.show({spinner: QSpinnerGears, spinnerColor: 'amber', message: 'Processing ....'})
+      axios.post(baseUrlForBackend+'govweb/student_details/', JSON.stringify(this.studen_info))
+      .then(function(resp){
+        let respdata = resp.data
+        if (respdata == 'The Student PIN Already Exists'){
+          that.$q.loading.hide()
+          that.$q.notify({color: 'negative', textColor: 'white', message: respdata, position: 'center', timeout: 1000 })
+        } else if (respdata == 'Success') {
+          that.emtpyAllFields()
+          that.$q.loading.hide()
+          that.$q.notify({color: 'positive', textColor: 'white', message: respdata, position: 'center', timeout: 1000 })
+        } else {
+          that.$q.loading.hide()
+          that.$q.notify({color: 'negative', textColor: 'white', message: respdata, position: 'center', timeout: 1000 })
+        }
+      })
     },
     getVendorLimit () {
       var that = this
@@ -326,6 +335,7 @@ export default {
     },
     emtpyAllFields () {
       var that = this
+      that.studen_info = {}
       that.pin = ''
       that.student_name = ''
       that.ph = '',
@@ -352,6 +362,7 @@ export default {
       that.mandal = '',
       that.phone_number = '',
       that.email = '',
+      that.respdata = ''
       that.adding = true
     }
   }
