@@ -120,17 +120,27 @@
             </q-collapsible>
             <q-item class="navlink childnav" :to="{ path: '/admin/encodedecode'}">
               <img src="statics/qr-code.png" class="link-imgs">
-              <div class="navigation-text header_fontC header_text">Encode / Decode</div>
+              <div class="navigation-text header_fontS header_text">Encode / Decode</div>
+            </q-item>
+            <q-item class="navlink childnav" :to="{ path: '/admin/detainedlist'}">
+              <img src="statics/delete.png" class="link-imgs">
+              <div class="navigation-text header_fontS header_text">Detained List</div>
+            </q-item>
+            <q-item class="navlink childnav" :to="{ path: '/admin/condonationlist'}">
+              <img src="statics/link.png" class="link-imgs">
+              <div class="navigation-text header_fontS header_text">Condonation List</div>
             </q-item>
             </q-collapsible>
+        </a>
+        <a href="javascript:void(0)">
             <q-collapsible class="box">
               <template slot="header">
-                <img src="statics/user.png" class="link-img" />
-                <div class="navigation-text header_fontS header_text">Reports</div>
+                <img src="statics/reports.png" class="link-img" />
+                <div class="navigation-text header_fontM header_text">Reports</div>
               </template>
             <q-collapsible class="box">
               <template slot="header">
-                <img src="statics/user.png" class="link-img" />
+                <img src="statics/studentsub.png" class="link-img" />
                 <div class="navigation-text header_fontS header_text">Student</div>
               </template>
               <q-item class="navlink childnav" :to="{ path: '/admin/DeletedStudentsReport'}">
@@ -140,7 +150,7 @@
             </q-collapsible>
             <q-collapsible class="box">
               <template slot="header">
-                <img src="statics/user.png" class="link-img" />
+                <img src="statics/attend.png" class="link-img" />
                 <div class="navigation-text header_fontS header_text">Sm Marks</div>
               </template>
               <q-item class="navlink childnav" :to="{ path: '/admin/smmarksreport'}">
@@ -150,7 +160,7 @@
             </q-collapsible>
             <q-collapsible class="box">
               <template slot="header">
-                <img src="statics/user.png" class="link-img" />
+                <img src="statics/attend.png" class="link-img" />
                 <div class="navigation-text header_fontS header_text">Pm Marks</div>
               </template>
               <q-item class="navlink childnav" :to="{ path: '/admin/pmmarksreport'}">
@@ -161,26 +171,6 @@
           </q-collapsible>
             <!-- <END THE STUDENT Attendance DETAILS > -->
         </a>
-        <!-- <q-item v-if="$store.state.example.userType != 'Admin'" class="navlink" :to="{ path: '/admin/studentreccords'}">
-           <img src="statics/primary.png" class="link-img">
-           <div class="navigation-text header_fontM header_text">Student Data</div>
-        </q-item>
-        <q-item class="navlink" :to="{ path: '/admin/sessionexams'}">
-           <img src="statics/primary.png" class="link-img">
-           <div class="navigation-text header_fontM header_text">Session Exams</div>
-         </q-item>
-         <q-item v-if="$store.state.example.userType != 'Admin'" class="navlink" :to="{ path: '/admin/Encode'}">
-           <img src="statics/primary.png" class="link-img">
-           <div class="navigation-text header_fontM header_text">Encode</div>
-         </q-item>
-         <q-item v-if="$store.state.example.userType != 'Admin'" class="navlink" :to="{ path: '/admin/Decode'}">
-           <img src="statics/primary.png" class="link-img">
-           <div class="navigation-text header_fontM header_text">Decode</div>
-         </q-item>
-         <q-item class="navlink" :to="{ path: '/admin/settings'}">
-           <img src="statics/settings.png" class="link-img">
-           <div class="navigation-text header_fontM header_text">Settings</div>
-         </q-item> -->
           <q-item class="navlink" @click.native="logout('logout')">
             <a href="#">
               <img src="statics/logout.png" class="link-img">

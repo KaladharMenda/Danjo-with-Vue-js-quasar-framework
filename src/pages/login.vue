@@ -7,7 +7,7 @@
            <q-card flat class="bigger qcard_s" style = "padding-top: 65px;">
              <q-card-title>
               <div class="row" align="center">
-                <img class = 'justify-center' srcset="statics/logo.jpg 3x" alt="…" style="width: 520px;height: 130px;margin-left: -130px;">
+                <img class = 'justify-center' srcset="statics/logo.jpg 3x" alt="…" style="width: 100%;height: 100%;">
               </div>
              </q-card-title>
              <q-card-main v-if="sendOtpDiv">
