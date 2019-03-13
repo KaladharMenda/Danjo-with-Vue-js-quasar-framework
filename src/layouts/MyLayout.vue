@@ -93,6 +93,26 @@
                 <div class="navigation-text header_fontC header_text">Deleted Students</div>
               </q-item>
             </q-collapsible>
+            <q-collapsible class="box">
+              <template slot="header">
+                <img src="statics/user.png" class="link-img" />
+                <div class="navigation-text header_fontS header_text">Sm Marks</div>
+              </template>
+              <q-item class="navlink childnav" :to="{ path: '/admin/smmarksreport'}">
+                <img src="statics/arrow.png" class="link-imgs">
+                <div class="navigation-text header_fontC header_text">Confirmed Report</div>
+              </q-item>
+            </q-collapsible>
+            <q-collapsible class="box">
+              <template slot="header">
+                <img src="statics/user.png" class="link-img" />
+                <div class="navigation-text header_fontS header_text">Pm Marks</div>
+              </template>
+              <q-item class="navlink childnav" :to="{ path: '/admin/pmmarksreport'}">
+                <img src="statics/arrow.png" class="link-imgs">
+                <div class="navigation-text header_fontC header_text">Confirmed Report</div>
+              </q-item>
+            </q-collapsible>
           </q-collapsible>
             <!-- <END THE STUDENT Attendance DETAILS > -->
 
