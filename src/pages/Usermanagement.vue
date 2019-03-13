@@ -4,7 +4,7 @@
      <div class="loader" v-if="spinner"></div>
       <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" align="right">
-            <q-btn @click="addUser()" slot="right">ADD USER</q-btn>
+            <q-btn class="toolgreen" style= "color: white" @click="addUser()" slot="right">ADD USER</q-btn>
         </div>
       </div>
        <q-table
@@ -93,7 +93,7 @@
                 <q-toggle v-model="checkStatus" color="green" label="Active" left-label />
               </div>
                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
-                   <q-btn class="full-width otp_send" :disabled="btnLoading" @click="submitUserData()">
+                   <q-btn style= "color: white" class="full-width otp_send toolgreen" :disabled="btnLoading" @click="submitUserData()">
                      <span class="otp_fs">SUBMIT</span>
                    </q-btn>
             </div>

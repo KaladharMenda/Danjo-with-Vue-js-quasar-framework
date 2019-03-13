@@ -61,7 +61,7 @@
             <!-- <END THE STUDENT INFO DETAILS > -->
             <q-collapsible class="box">
               <template slot="header">
-                <img src="statics/attend.png" class="link-img" />
+                <img src="statics/checklist.png" class="link-img" />
                 <div class="navigation-text header_fontS header_text">Attendence Details</div>
               </template>
               <q-item class="navlink childnav" :to="{ path: '/admin/addattendance'}">
@@ -72,12 +72,56 @@
                 <img src="statics/arrow.png" class="link-imgs">
                 <div class="navigation-text header_fontC header_text">View Attendence</div>
               </q-item>
-              <q-item class="navlink childnav" :to="{ path: '/admin/transferstudent'}">
-                <img src="statics/arrow.png" class="link-imgs">
-                <div class="navigation-text header_fontC header_text">Confirm Attendence</div>
-              </q-item>
             </q-collapsible>
             <!-- <END THE STUDENT Attendance DETAILS > -->
+            <q-collapsible class="box">
+              <template slot="header">
+                <img src="statics/attend.png" class="link-img" />
+                <div class="navigation-text header_fontS header_text">Unit Marks</div>
+              </template>
+              <q-item class="navlink childnav" :to="{ path: '/admin/addunitmarks'}">
+                <img src="statics/arrow.png" class="link-imgs">
+                <div class="navigation-text header_fontC header_text">Add Unit Marks</div>
+              </q-item>
+              <q-item class="navlink childnav" :to="{ path: '/admin/viewunitmarks'}">
+                <img src="statics/arrow.png" class="link-imgs">
+                <div class="navigation-text header_fontC header_text">View Unit Marks</div>
+              </q-item>
+            </q-collapsible>
+            <!-- <END THE UNIT MARKS > -->
+            <q-collapsible class="box">
+              <template slot="header">
+                <img src="statics/attend.png" class="link-img" />
+                <div class="navigation-text header_fontS header_text">SM Marks</div>
+              </template>
+              <q-item class="navlink childnav" :to="{ path: '/admin/addsmmarks'}">
+                <img src="statics/arrow.png" class="link-imgs">
+                <div class="navigation-text header_fontC header_text">Add SM Marks</div>
+              </q-item>
+              <q-item class="navlink childnav" :to="{ path: '/admin/viewsmmarks'}">
+                <img src="statics/arrow.png" class="link-imgs">
+                <div class="navigation-text header_fontC header_text">View SM Marks</div>
+              </q-item>
+            </q-collapsible>
+            <!-- <END THE SM MARKS > -->
+            <q-collapsible class="box">
+              <template slot="header">
+                <img src="statics/attend.png" class="link-img" />
+                <div class="navigation-text header_fontS header_text">PM Marks</div>
+              </template>
+              <q-item class="navlink childnav" :to="{ path: '/admin/addpmmarks'}">
+                <img src="statics/arrow.png" class="link-imgs">
+                <div class="navigation-text header_fontC header_text">Add PM Marks</div>
+              </q-item>
+              <q-item class="navlink childnav" :to="{ path: '/admin/viewpmmarks'}">
+                <img src="statics/arrow.png" class="link-imgs">
+                <div class="navigation-text header_fontC header_text">View PM Marks</div>
+              </q-item>
+            </q-collapsible>
+            <q-item class="navlink childnav" :to="{ path: '/admin/encodedecode'}">
+              <img src="statics/qr-code.png" class="link-imgs">
+              <div class="navigation-text header_fontC header_text">Encode / Decode</div>
+            </q-item>
           </q-collapsible>
         </a>
         <!-- <q-item v-if="$store.state.example.userType != 'Admin'" class="navlink" :to="{ path: '/admin/studentreccords'}">
