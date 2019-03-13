@@ -42,7 +42,7 @@ class Student_details(models.Model):
 
 class Attendence_details(models.Model):
      id = BigAutoField(primary_key=True)
-     pin = models.ForeignKey(Student_details, blank=True, null=True)
+     student_details= models.ForeignKey(Student_details, blank=True, null=True)
      year_sem = models.CharField(max_length=32 ,default ='')
      month = models.CharField(max_length=32 ,default ='')
      period = models.CharField(max_length=32 ,default ='')

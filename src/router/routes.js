@@ -26,6 +26,7 @@ const routes = [
       { path: 'sessionexams', component: () => genericImport('sessionexams') },
       { path: 'Encode', component: () => genericImport('Encode') },
       { path: 'Decode', component: () => genericImport('Decode') },
+      { path: 'DeletedStudentsReport', component: () => genericImport('deleted_student_reports') },
       { path: 'settings', component: () => genericImport('settings') },
       { path: 'picking', component: () => genericImport('picking') },
       { path: 'flushCarton', component: () => genericImport('flushCarton') },

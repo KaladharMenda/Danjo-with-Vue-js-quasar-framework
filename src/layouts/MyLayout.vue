@@ -77,8 +77,25 @@
                 <div class="navigation-text header_fontC header_text">Confirm Attendence</div>
               </q-item>
             </q-collapsible>
-            <!-- <END THE STUDENT Attendance DETAILS > -->
+            </q-collapsible>
+            <q-collapsible class="box">
+              <template slot="header">
+                <img src="statics/user.png" class="link-img" />
+                <div class="navigation-text header_fontS header_text">Reports</div>
+              </template>
+            <q-collapsible class="box">
+              <template slot="header">
+                <img src="statics/user.png" class="link-img" />
+                <div class="navigation-text header_fontS header_text">Student</div>
+              </template>
+              <q-item class="navlink childnav" :to="{ path: '/admin/DeletedStudentsReport'}">
+                <img src="statics/arrow.png" class="link-imgs">
+                <div class="navigation-text header_fontC header_text">Deleted Students</div>
+              </q-item>
+            </q-collapsible>
           </q-collapsible>
+            <!-- <END THE STUDENT Attendance DETAILS > -->
+
         </a>
         <!-- <q-item v-if="$store.state.example.userType != 'Admin'" class="navlink" :to="{ path: '/admin/studentreccords'}">
            <img src="statics/primary.png" class="link-img">
