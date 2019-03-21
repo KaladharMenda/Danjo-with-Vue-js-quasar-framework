@@ -1,20 +1,29 @@
 <template>
   <q-layout view="lHh Lpr lFf">
 
-    <!-- <q-layout-header style="left: 0px;">
+    <q-layout-header style="left: 0px;">
       <q-toolbar
         style="height: 57px;"
         color="primary"
         :inverted="$q.theme === 'ios'"
-        class="backgroung_color"
-      > -->
-
-        <!-- <q-toolbar-title>
+        class="backgroung_color top-headderr"
+      >
+        <q-btn
+          flat
+          dense
+          round
+          @click="leftDrawerOpen = !leftDrawerOpen"
+          aria-label="Menu"
+          style="background: #03d003;"
+        >
+          <q-icon name="menu" />
+        </q-btn>
+        <q-toolbar-title>
           <img src="statics/logo1.png" class="img_logo">
         </q-toolbar-title>
         <span class="textFont2"><b>{{$store.state.example.userName}}</b></span>
       </q-toolbar>
-    </q-layout-header> -->
+    </q-layout-header>
     <q-layout-drawer
       class ="backgroung_color vertical-scrollbar-demo"
       v-model="leftDrawerOpen"
