@@ -1,42 +1,63 @@
 <template>
-  <div class="About">
+  <div class="HOME PAGE-CONTENT">
     <q-card class="bg-white card-styl">
-      <div class="row">
-        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-            <h3 class="inner_head_styl">Encode</h3>
-        </div>
-        <!-- <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" align="right"> -->
-            <!-- <q-btn @click="getDownloadData()" slot="right">Current Sorted Items</q-btn> -->
-            <!-- <q-btn @click="getDownloadData(1)" slot="right">Globally Sorted Items</q-btn> -->
-        <!-- </div> -->
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" align="center">
+        <q-toolbar color="orange" class="toolgradientlightgreen">
+          <q-toolbar-title>
+            <b>Encode For Semester Exams</b>
+          </q-toolbar-title>
+        </q-toolbar>
       </div>
-      <!-- <div class="row">
-        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12"></div>
+      <div class="row gutter-sm q-mb-md toppadding">
         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
           <q-field>
-             <q-input type="text" id="scanFocus" ref="scannedItem" v-model="scannedItem" v-on:keyup="checkBinType" float-label="Scan Item *"/>
+            <q-select
+              v-model="semId"
+              :options="semOptions"
+              float-label="Semester *"
+              @input="getSubjectsData"
+            />
           </q-field>
-          <div v-if="binType && saveScannedItem && !loading">
-            <h1 v-bind:class="binClass" class="text-center big-font"><span class="small-font">{{ saveScannedItem }} &nbsp;&nbsp;:</span>&nbsp;&nbsp;{{ binType }}</h1>
-          </div>
-          <div class="text-center">
-            <h5 class="text-negative" v-if="noItemErr && saveScannedItem && !loading">Scanned item not available</h5>
-            <q-spinner color="green" v-if="loading" style="margin: 0 auto" size="40px" />
-          </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" v-if="semId">
+          <q-select
+            v-model="subId"
+            :options="subjectDropdownOpts"
+            float-label="Subject *"
+            @input="getUsersData"
+          />
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" v-if="subId">
+          <q-select
+            v-model="studentIDs"
+            :options="semOptionss"
+            float-label="Select Student *"
+            filter
+            @input="enableScanDiv"
+          />
+        </div>
+      </div>
+      <div class="row toppadding">
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12"></div>
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" v-if = "semId && subId && studentIDs">
+          <q-field>
+             <q-input type="text" id="scanFocus" ref="scannedItem" v-model="scannedItem" v-on:keyup.enter="checkBinType" float-label="Scan Sem Paper BarCode *"/>
+          </q-field>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12"></div>
-      </div> -->
+      </div>
     </q-card>
   </div>
 </template>
-<script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-database.js"></script>
-<script src="https://www.gstatic.com/firebasejs/5.3.0/firebase-firestore.js"></script>
+
+<script type="text/javascript" src="https://www.baqend.com/js-sdk/latest/baqend-realtime.js"></script>
+
 <script>
-import _ from 'lodash';
 import axios from 'axios'
+import { Notify } from 'quasar'
+
 import {
+  date,
   QTable,
   QTh,
   QTr,
@@ -53,9 +74,9 @@ import {
   QToggle,
   QInnerLoading
 } from 'quasar'
-
 export default {
   components: {
+    date,
     QTable,
     QTh,
     QTr,
@@ -74,62 +95,109 @@ export default {
   },
   data () {
     return {
-      location:[],
-      SettingsCollection: 'WareHouseSettings',
-      dwnloadData: [],
-      userModalAdd: true,
-      loading: false,
-      binType: '',
+      semId: '',
+      subId: '',
+      scannedItemDecode: '',
+      tempsessionvalue:'',
+      studentMark: '',
+      studentIDs: '',
       scannedItem: '',
-      totalVendors: {},
-      topVendors: [],
-      vendorLimit: 0,
-      temp_vendor: '',
-      noItemErr: false,
-      saveScannedItem: '',
-      binClass: '',
-      userStat: '',
-      htmlData: '',
-      currentSort: [],
-      VendorLimit: 0
+      subjectMarks: '',
+      subjectDropdownOpts: [],
+      studentmarkdetails: [],
+      semOptions: [{'label': 'I', 'value': 'I'},{'label': 'II', 'value': 'II'},{'label': 'III', 'value': 'III'},{'label': 'IV', 'value': 'IV'},{'label': 'V', 'value': 'V'},{'label': 'VI', 'value': 'VI'},{'label': 'VII', 'value': 'VII'}],
+      semOptionss: [{'label': '14341a0598', 'value': '14341a0598'},{'label': '14341a0599', 'value': '14341a0599'},{'label': '14341a05100', 'value': '14341a05100'},{'label': '14341a05101', 'value': '14341a05101'}],
+      tab: 'exam1'
     }
-  },
-  mounted () {
-    let that = this
   },
   created () {
     var that = this
   },
   methods: {
-    getVendorLimit () {
+    updatemarks () {
       var that = this
-      if (that.$store.state.example.userName !== "") {
-        window.app2.database().ref('WareHouseSettings/VendorLimit').on('value', function(vendors) {
-          if (vendors.val()) {
-            that.VendorLimit = vendors.val()
-          }
-          that.getAVendors()
+      if (that.subjectMarks) {
+        that.emtpyAllFields('ss2')
+        that.$q.notify({color: 'positive', textColor: 'white', message: 'Successfully Updated Subject Marks', position: 'center', timeout: 1000 })
+        setTimeout(function(){
+          that.$refs.scannedItemDecode.focus()
+        }, 500)
+      } else {
+        that.$q.notify({color: 'negative', textColor: 'white', message: 'please Enter Subject Marks', position: 'center', timeout: 1000 })
+        that.$refs.subjectMarks.focus()
+      }
+    },
+    enableScanDiv () {
+      var that = this
+      setTimeout(function(){
+        that.$refs.scannedItem.focus()
+      }, 500)
+    },
+    checkBinType (e) {
+      let that = this
+      that.$q.notify({color: 'positive', textColor: 'white', message: 'Successfully Added Barcode Number', position: 'center', timeout: 1000 })
+      that.emtpyAllFields('ss1')
+    },
+    getSubjectsData () {
+      var that = this
+      that.subjectDropdownOpts = []
+      firebase.database().ref('subjects/'+ that.semId).once('value', function(snapshot) {
+        snapshot.forEach(function (child) {
+          // if (child.val().active === true) {
+          that.subjectDropdownOpts.push({
+            'label': child.key,
+            'value': child.key,
+          })
+          // }
+        })
+      })
+    },
+    getUsersData () {
+      var that = this
+      that.loader = true
+      if(that.semId != '' && that.subId != '') {
+        that.studentmarkdetails =[]
+        firebase.database().ref('StudentDetails').once('value', function(snapshot) {
+          snapshot.forEach(function (child) {
+            that.studentmarkdetails.push({
+              'studentid':child.key,
+            });
+          })
+          that.loader = false
         })
       } else {
-        setTimeout(function(){
-            that.getVendorLimit()
-        },500)
+        that.showNotify('please select SEMESTER & SUBJECT')
       }
     },
-    convertDate: function (date) {
-      var myDate = new Date(date)
-      var month = myDate.getMonth() + 1
-      var day = myDate.getDate()
-      var year = myDate.getFullYear()
-      if (day < 10) {
-        day = '0' + day
-      }
-      if (month < 10) {
-        month = '0' + month
-      }
-      var formattedDate = day + '-' + month + '-' + year
-      return formattedDate
+    emtpyAllFields (val) {
+      var that = this
+      that.sessionvalue = val
+      that.userModalAdd = false
+      that.semId = ''
+      that.subId = ''
+      that.scannedItemDecode = ''
+      that.scannedItem = ''
+      that.studentIDs = ''
+      that.loader = false
+      that.loading = false
+      that.subjectMarks = ''
+      that.enableEditDiv = false
+      that.ediTablEnable = false
+      that.subjectDropdownOpts = []
+      that.studentmarkdetails = []
+      that.tempsessionvalue = ''
+      console.log(that.sessionvalue)
     },
+    showNotify (msg) {
+      let that = this
+      that.$q.notify({
+        color: 'green',
+        textColor: 'white',
+        message: msg,
+        position: 'bottom-right',
+        timeout: 1000
+      })
+    }
   }
 }
 </script>

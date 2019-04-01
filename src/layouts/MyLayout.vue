@@ -127,9 +127,13 @@
                 <div class="navigation-text header_fontC header_text">View PM Marks</div>
               </q-item>
             </q-collapsible>
-            <q-item class="navlink childnav" :to="{ path: '/admin/encodedecode'}">
+            <q-item class="navlink childnav" :to="{ path: '/admin/Encode'}">
               <img src="statics/qr-code.png" class="link-imgs">
-              <div class="navigation-text header_fontS header_text">Encode / Decode</div>
+              <div class="navigation-text header_fontS header_text">Encode</div>
+            </q-item>
+            <q-item class="navlink childnav" :to="{ path: '/admin/Decode'}">
+              <img src="statics/qr-code.png" class="link-imgs">
+              <div class="navigation-text header_fontS header_text">Decode</div>
             </q-item>
             <q-item class="navlink childnav" :to="{ path: '/admin/detainedlist'}">
               <img src="statics/delete.png" class="link-imgs">
