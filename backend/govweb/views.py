@@ -82,15 +82,28 @@ def get_attendence_names(request):
     student_details = []
     attendence_dict = json.loads(request.POST.keys()[0])
     if attendence_dict['year_sem'] :
+        existing_pin = []
+        attendence_obj = Attendence_details.objects.filter(year_sem = attendence_dict['year_sem'],period =attendence_dict['period'] ,month = attendence_dict['month'])
+        if attendence_obj.exists() :
+            for student in attendence_obj:
+                student_dict ={}
+                student_dict ['student_name'] = student.student_details.student_name
+                student_dict['pin'] = student.student_details.pin
+                student_dict['scheme_code'] = student.student_details.scheme_code
+                student_dict['year_sem'] = attendence_dict['year_sem']
+                student_dict['attended_days'] = student.attended_days
+                student_details.append(student_dict)
+                existing_pin.append(student_dict['pin'])
         students_obj = Student_details.objects.filter(year_sem = attendence_dict['year_sem'])
         if students_obj.exists():
             for student in students_obj :
-                student_dict ={}
-                student_dict ['student_name'] = student.student_name
-                student_dict['pin'] = student.pin
-                student_dict['scheme_code'] = student.scheme_code
-                student_dict['year_sem'] = attendence_dict['year_sem']
-                student_details.append(student_dict)
+                if student.pin not in existing_pin :
+                    student_dict ={}
+                    student_dict ['student_name'] = student.student_name
+                    student_dict['pin'] = student.pin
+                    student_dict['scheme_code'] = student.scheme_code
+                    student_dict['year_sem'] = attendence_dict['year_sem']
+                    student_details.append(student_dict)
 
     return HttpResponse(json.dumps(student_details))
 
@@ -132,3 +145,55 @@ def attendece_update(request):
     except Exception as e:
         import traceback
         return HttpResponse("Some thing went wrong")
+@csrf_exempt
+def all_attendence(request):
+    attendence_dict ={}
+    student_details = []
+    attendence_dict = json.loads(request.POST.keys()[0])
+    try:
+        if attendence_dict['period'] == 'complete':
+            attendence_obj = Attendence_details.objects.filter(year_sem = attendence_dict['year_sem'],month = attendence_dict['month']).order_by('-student_details')
+        else:
+            attendence_obj = Attendence_details.objects.filter(year_sem = attendence_dict['year_sem'],period =attendence_dict['period'] ,month = attendence_dict['month'])
+        if attendence_obj.exists() :
+            for attendence in attendence_obj:
+                student_dict ={}
+                student_dict ['student_name'] = attendence.student_details.student_name
+                student_dict['pin'] = attendence.student_details.pin
+                student_dict['scheme_code'] = attendence.student_details.scheme_code
+                student_dict['year_sem'] = attendence_dict['year_sem']
+                student_dict['attended_days'] = attendence.attended_days
+                student_dict['working_days'] = attendence.working_days
+                if attendence.period == 'second_period' :
+                    student_dict ['period'] = '16 to Month End'
+                else:
+                    student_dict ['period'] = '1 to 15 days'
+
+                student_details.append(student_dict)
+
+        return HttpResponse(json.dumps(student_details))
+    except Exception as e:
+        import traceback
+        return HttpResponse("Some thing went wrong")
+
+
+
+
+@csrf_exempt
+def get_sm_marks(request):
+    import pdb; pdb.set_trace()
+    student_details =[]
+    sm_marks_dict = json.loads(request.POST.keys()[0])
+    subject = sm_marks_dict['subject']
+    year_sem = sm_marks_dict['year_sem']
+    schemecode = sm_marks_dict['scheme_code']
+    students_obj = Student_details.objects.filter(year_sem = sm_marks_dict['year_sem'],scheme_code =sm_marks_dict['scheme_code'])
+    if students_obj.exists():
+        for student in students_obj :
+            student_dict ={}
+            student_dict ['student_name'] = student.student_name
+            student_dict['pin'] = student.pin
+            student_dict['scheme_code'] = student.scheme_code
+            student_dict['year_sem'] = sm_marks_dict['year_sem']
+            student_details.append(student_dict)
+    return HttpResponse(json.dumps(student_details))

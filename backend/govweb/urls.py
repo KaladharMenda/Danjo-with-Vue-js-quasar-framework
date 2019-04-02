@@ -10,8 +10,8 @@ urlpatterns = [
     url(r'^get_attendence_names/$', get_attendence_names),
     url(r'^delete_student_details/$', delete_student_details),
     url(r'^attendece_update/$', attendece_update),
-
-
+    url(r'^get_sm_marks/$', get_sm_marks),
+    url(r'^all_attendence/$', all_attendence),
 
 
 
