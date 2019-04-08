@@ -157,9 +157,10 @@ export default {
       that.btnLoading = true
       var attendence_dict = {}
       that.student_attendance_details = []
-      attendence_dict ['year_sem'] = that.year_sem
-      attendence_dict['month'] = that.month
       if (that.year_sem !='' && that.month != '' && that.working_days != '' && that.period != '') {
+        attendence_dict ['year_sem'] = that.year_sem
+        attendence_dict['month'] = that.month
+        attendence_dict['period'] = that.period
         that.alldivisionenable = true
         axios.post(baseUrlForBackend+'govweb/get_attendence_names/',JSON.stringify(attendence_dict))
         .then(function(resp){
@@ -171,7 +172,7 @@ export default {
               'period': that.period,
               'working_days': that.working_days,
               'month':that.month,
-              'no_of_days_attend': ''
+              'no_of_days_attend': record.attended_days,
             })
           })
           that.btnLoading = false

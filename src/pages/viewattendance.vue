@@ -163,17 +163,20 @@ export default {
       attendence_dict ['year_sem'] = that.year_sem
       attendence_dict['month'] = that.month
       if (that.year_sem !='' && that.month != '' && that.period != '') {
+        attendence_dict ['year_sem'] = that.year_sem
+        attendence_dict['month'] = that.month
+        attendence_dict['period'] = that.period
         that.alldivisionenable = true
-        axios.post(baseUrlForBackend+'govweb/get_attendence_names/',JSON.stringify(attendence_dict))
+        axios.post(baseUrlForBackend+'govweb/all_attendence/',JSON.stringify(attendence_dict))
         .then(function(resp){
           resp.data.forEach(function(record){
             that.student_attendance_details.push({
               'Pin' : record.pin,
               'StudentName': record.student_name,
               'year_sem':record.year_sem,
-              'period': that.period,
-              'CollegeWorkingDays': '',
-              'StudentAttendDays': ''
+              'period': record.period,
+              'CollegeWorkingDays': record.working_days,
+              'StudentAttendDays': record.attended_days
             })
           })
           that.btnLoading = false
