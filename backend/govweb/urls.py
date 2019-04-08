@@ -12,6 +12,8 @@ urlpatterns = [
     url(r'^attendece_update/$', attendece_update),
     url(r'^get_sm_marks/$', get_sm_marks),
     url(r'^all_attendence/$', all_attendence),
+    url(r'^get_unit_marks/$', get_unit_marks),
+    url(r'^unit_marks_update/$', unit_marks_update),
 
 
 

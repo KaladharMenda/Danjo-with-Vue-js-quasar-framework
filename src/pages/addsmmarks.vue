@@ -100,8 +100,9 @@ export default {
       total_marks: '',
       year_sem_options: [{'label': '1YR', 'value': '1YR'},{'label': '2YR', 'value': '2YR'},{'label': '3SEM', 'value': '3SEM'},{'label': '4SEM', 'value': '4SEM'},{'label': '5SEM', 'value': '5SEM'},{'label': '6SEM', 'value': '6SEM'},{'label': '7SEM', 'value': '7SEM'}],
       scheme_code_options: [{'label': 'C05', 'value': 'C05'},{'label': 'C09', 'value': 'C09'},{'label': 'C014', 'value': 'C014'},{'label': 'C016', 'value': 'C016'},{'label': 'ER91', 'value': 'ER91'}],
-      subject_options: [{'label': 'x', 'value': 'x'},{'label': 'y', 'value': 'y'}],
+      subject_options: [{'label': '1', 'value': '1'},{'label': '2', 'value': '2'}],
       btnLoading: false,
+      student_sm_details :[],
     }
   },
   created () {
@@ -110,13 +111,33 @@ export default {
   methods: {
     get_student_details () {
       var that = this
+      var sm_dict = {}
       if (that.scheme_code != '' && that.year_sem != '' && that.subject != '') {
-        that.$q.notify({color: 'negative', textColor: 'white', message: 'DATABASE NOT FOUND, contact to Admin Please.. ', position: 'center', timeout: 1000 })
+        sm_dict ['year_sem'] = that.year_sem
+        sm_dict['scheme_code'] = that.scheme_code
+        sm_dict ['subject'] = that.subject
+        axios.post(baseUrlForBackend+'govweb/get_sm_marks/',JSON.stringify(sm_dict))
+        .then(function(resp){
+          resp.data.forEach(function(record){
+            that.student_sm_details.push({
+              'pin' : record.pin,
+              'student_name': record.student_name,
+              'year_sem':record.year_sem,
+              'period': that.period,
+              'working_days': that.working_days,
+              'month':that.month,
+              'no_of_days_attend': record.attended_days,
+            })
+          })
+          that.btnLoading = false
+          console.log(that.student_attendance_details)
+        })
       } else {
-        that.$q.notify({color: 'negative', textColor: 'white', message: 'Please select the Required Fields', position: 'center', timeout: 1000 })
+        that.btnLoading = false
+        that.$q.notify({color: 'negative', textColor: 'white', message: 'Please Select Required Fields', position: 'center', timeout: 1000})
       }
     },
-  }
+    },
 }
 </script>
 

@@ -50,3 +50,14 @@ class Attendence_details(models.Model):
      attended_days = models.CharField(max_length=32 ,default ='')
      class Meta:
          db_table = 'ATTENDENCE_DETAILS'
+class Unit_marks(models.Model):
+    id = BigAutoField(primary_key=True)
+    student_details= models.ForeignKey(Student_details, blank=True, null=True)
+    year_sem = models.CharField(max_length=32 ,default ='')
+    subject = models.CharField(max_length=64 ,default ='')
+    unit_exam = models.CharField(max_length = 64 ,default = '')
+    exam_date = models.DateTimeField(auto_now_add=True)
+    total_marks = models.CharField(max_length=32 ,default ='')
+    marks = models.CharField(max_length=32 ,default ='')
+    class Meta:
+        db_table = 'UNIT_DETAILS'
