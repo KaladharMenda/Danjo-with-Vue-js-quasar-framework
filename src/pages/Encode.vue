@@ -105,7 +105,7 @@ export default {
       subjectMarks: '',
       subjectDropdownOpts: [],
       studentmarkdetails: [],
-      semOptions: [{'label': 'I', 'value': 'I'},{'label': 'II', 'value': 'II'},{'label': 'III', 'value': 'III'},{'label': 'IV', 'value': 'IV'},{'label': 'V', 'value': 'V'},{'label': 'VI', 'value': 'VI'},{'label': 'VII', 'value': 'VII'}],
+      semOptions: [{'label': '1SEM', 'value': '1SEM'},{'label': '2SEM', 'value': '2SEM'},{'label': '3SEM', 'value': '3SEM'},{'label': '4SEM', 'value': '4SEM'},{'label': '5SEM', 'value': '5SEM'},{'label': '6SEM', 'value': '6SEM'},{'label': '7SEM', 'value': '7SEM'},{'label': '8SEM', 'value': '8SEM'}],
       semOptionss: [{'label': '14341a0598', 'value': '14341a0598'},{'label': '14341a0599', 'value': '14341a0599'},{'label': '14341a05100', 'value': '14341a05100'},{'label': '14341a05101', 'value': '14341a05101'}],
       tab: 'exam1'
     }
