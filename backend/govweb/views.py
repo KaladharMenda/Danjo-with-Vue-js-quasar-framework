@@ -29,8 +29,10 @@ def student_details(request):
             import traceback
             return HttpResponse(e)
     else:
-        data_dict['date_of_birth']=  parse(data_dict['date_of_birth'])
-        data_dict['joining_date'] = parse(data_dict['joining_date'])
+        if data_dict['date_of_birth'] :
+            data_dict['date_of_birth']=  parse(data_dict['date_of_birth'])
+        if data_dict['joining_date'] :
+            data_dict['joining_date'] = parse(data_dict['joining_date'])
 
         try:
             student_obj = Student_details.objects.filter(pin = pin)

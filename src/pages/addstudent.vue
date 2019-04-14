@@ -302,6 +302,7 @@ export default {
     changeMessage () {
       var that = this
       that.show({spinner: QSpinnerGears, spinnerColor: 'amber', message: 'Processing ....'})
+      this.studen_info['adding'] = true;
       axios.post(baseUrlForBackend+'govweb/student_details/', JSON.stringify(this.studen_info))
       .then(function(resp){
         let respdata = resp.data
