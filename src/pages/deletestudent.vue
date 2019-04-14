@@ -352,15 +352,14 @@ export default {
     },
     delete_student(){
        let that = this
-       axios.post(baseUrlForBackend+'govweb/delete_student_details/', JSON.stringify(that.firstpin));
+       axios.post(baseUrlForBackend+'govweb/delete_student_details/', JSON.stringify(that.firstpin))
+       .then(function(resp){
+          console.log(resp)
+           that.$q.notify({color: 'green', textColor: 'white', message:resp.data, position: 'center', timeout: 1000})
+        })
     },
     checkpinexists () {
       let that = this
-      // that.btnLoading = true
-      // setTimeout(function () {
-      //   that.btnLoading = false
-      // },2000)
-      // that.alldivisionenable = true
       console.log(this.firstpin)
       axios.post(baseUrlForBackend+'govweb/get_student_details/',JSON.stringify(that.firstpin))
       .then(function(resp){

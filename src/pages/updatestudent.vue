@@ -359,8 +359,11 @@ export default {
       console.log(this.firstpin)
       axios.post(baseUrlForBackend+'govweb/get_student_details/',JSON.stringify(that.firstpin))
       .then(function(resp){
-         console.log(resp)
          that.studen_info = resp.data
+         if (that.studen_infstuden_info == 'Student Record Deleted' || that.studen_info == 'Record NOT FOUND')
+         {
+         that.$q.notify({color: 'negative', textColor: 'white', message:that.studen_info, position: 'center', timeout: 1000})
+         }
        })
     .catch(function(){
              console.log('FAILURE!!')

@@ -17,6 +17,7 @@ def student_details(request):
     data_dict ={}
     data_dict = json.loads(request.POST.keys()[0])
     pin = data_dict['pin']
+    import pdb; pdb.set_trace()
     adding = data_dict.get('adding' ,'')
     if adding:
         del data_dict["adding"]
@@ -48,6 +49,8 @@ def get_student_details(request):
     student_details = Student_details.objects.filter(pin = pin)
     if student_details.exists():
         student_details = student_details[0]
+        if not student_details.status :
+            return HttpResponse("Student Record Deleted")
         data_dict ={}
         data_dict['student_name'] = student_details.student_name
         data_dict['pin'] = student_details.pin
@@ -117,7 +120,9 @@ def delete_student_details(request):
         student_details = student_details[0]
         student_details.status = False
         student_details.save()
-    return HttpResponse("Success")
+        return HttpResponse("Success")
+    else:
+        return HttpResponse("Student Record Not Found")
 
 @csrf_exempt
 def attendece_update(request):
