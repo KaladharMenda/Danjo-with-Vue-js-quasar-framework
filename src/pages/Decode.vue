@@ -12,7 +12,7 @@
         <div class="col-lg-4 col-md-4"></div>
         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
           <q-field v-if="!enableEditDiv">
-             <q-input type="text" ref="scannedItemDecode" v-model="scannedItemDecode" v-on:keyup.enter="checkBinTypeA" float-label="Scan Sem Paper BarCode *"/>
+             <q-input type="text" ref="scannedItemDecode" v-model="scannedItemDecode" v-on:keyup.enter="checkBinTypeA('get')" float-label="Scan Sem Paper BarCode *"/>
           </q-field>
           <q-chip v-if="enableEditDiv" avatar="statics/boy-avatar.png" small color="teal" align="center">{{  scannedItemDecode}}</q-chip>
         </div>
@@ -27,9 +27,10 @@
                   v-model="subjectMarks"
                   ref="subjectMarks"
                   float-label="Enter the Subject Marks"
+                  v-on:keyup.enter="checkBinTypeA('save')"
                   />
               </q-field>
-              <q-btn class="toolgreen" style="width:100%;color: aliceblue;" label="Update Sem Subject Marks" @click="updatemarks()"/>
+              <q-btn class="toolgreen" style="width:100%;color: aliceblue;" label="Update Sem Subject Marks" @click="checkBinTypeA('save')"/>
           </div>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12"></div>
       </div>
@@ -39,23 +40,31 @@
           <table class="q-table">
             <tr>
               <th class="text-left">Year / Semester:</th>
-              <td class="text-right">II</td>
+              <td class="text-right">{{years}}</td>
+            </tr>
+             <tr>
+              <th class="text-left">Scheme Code:</th>
+              <td class="text-right">{{scheme_codes}}</td>
             </tr>
             <tr>
               <th class="text-left">Subject:</th>
-              <td class="text-right">Engineering Physics</td>
+              <td class="text-right">{{subjectss}}</td>
             </tr>
             <tr>
               <th class="text-left">Student PIN:</th>
-              <td class="text-right">14341a0598</td>
+              <td class="text-right">{{students}}</td>
             </tr>
             <tr>
               <th class="text-left">Sem paper Barcode ID:</th>
-              <td class="text-right">{{scannedItemDecode}}</td>
+              <td class="text-right">{{barcodes}}</td>
+            </tr>
+            <tr>
+              <th class="text-left">Total Marks:</th>
+              <td class="text-right">{{total_marks}}</td>
             </tr>
             <tr>
               <th class="text-left">Marks Posted By:</th>
-              <td class="text-right">User Name</td>
+              <td class="text-right">{{users}}</td>
             </tr>
           </table>
         </div>
@@ -109,6 +118,13 @@ export default {
   },
   data () {
     return {
+      years: '',
+      scheme_codes: '',
+      subjectss: '',
+      students: '',
+      barcodes: '',
+      total_marks: '',
+      users: '',
       scannedItemDecode: '',
       tempsessionvalue:'',
       studentMark: '',
@@ -132,26 +148,6 @@ export default {
     }, 200)
   },
   methods: {
-    updatemarks () {
-      var that = this
-      if (that.subjectMarks) {
-        that.$q.notify({color: 'positive', textColor: 'white', message: 'Successfully Updated Subject Marks', position: 'center', timeout: 1000 })
-        that.emtpyAllFields()
-        setTimeout(function(){
-          that.$refs.scannedItemDecode.focus()
-        }, 500)
-      } else {
-        that.$q.notify({color: 'negative', textColor: 'white', message: 'please Enter Subject Marks', position: 'center', timeout: 1000 })
-        that.$refs.subjectMarks.focus()
-      }
-    },
-    get_decode_data () {
-      var that = this
-      that.emtpyAllFields('ss2')
-      setTimeout(function(){
-        that.$refs.scannedItemDecode.focus()
-      }, 500)
-    },
     enableScanDiv () {
       var that = this
       setTimeout(function(){
@@ -159,13 +155,70 @@ export default {
       }, 500)
     },
     checkBinTypeA (e) {
-      let that = this
-      that.enableEditDiv = true
-      setTimeout(function(){
-        that.$refs.subjectMarks.focus()
-      }, 500)
-      // that.$q.notify({color: 'positive', textColor: 'white', message: 'Successfully Added Barcode Number', position: 'center', timeout: 1000 })
-      // that.emtpyAllFields()
+      var that = this
+      if (e == 'get') {
+        if (that.scannedItemDecode) {
+          var sem_obj = {
+            'barcode': that.scannedItemDecode,
+            'flag': e
+          }
+          axios.post(baseUrlForBackend+'govweb/get_semester_marks_update/', JSON.stringify(sem_obj))
+          .then(function(resp){
+            if (resp.data != 'Scanned Barcode Not Exists' && resp.data) {
+              console.log(resp.data)
+              that.enableEditDiv = true
+              setTimeout(function(){
+                that.$refs.subjectMarks.focus()
+              }, 200)
+              that.years = resp.data[0].year
+              that.scheme_codes = resp.data[0].scheme
+              that.subjectss = resp.data[0].subject
+              that.students = resp.data[0].student
+              that.barcodes = resp.data[0].barcode
+              that.total_marks = resp.data[0].totalmarks
+              that.users = localStorage.getItem('username')
+            } else if(resp.data == 'Scanned Barcode Not Exists') {
+              that.showNotify(resp.data)
+            } else {
+              that.showNotify('something went Wrong !!!')
+            }
+          })
+        } else {
+          that.$q.notify({color: 'negative', textColor: 'white', message: 'Successfully Added Barcode Number', position: 'center', timeout: 1000 })
+        }
+      } else if (e == 'save') {
+        if (that.subjectMarks) {
+          var sem_obj = {
+            'barcode': that.barcodes,
+            'marks': that.subjectMarks,
+            'posted_by': localStorage.getItem('username'),
+            'flag': e
+          }
+          axios.post(baseUrlForBackend+'govweb/get_semester_marks_update/', JSON.stringify(sem_obj))
+          .then(function(resp){
+            if (resp.data == 'Success') {
+              that.enableEditDiv = false
+              that.years = ''
+              that.scheme_codes = ''
+              that.subjectss = ''
+              that.students = ''
+              that.barcodes = ''
+              that.total_marks = ''
+              that.users = ''
+              that.subjectMarks = ''
+              that.scannedItemDecode = ''
+              that.$q.notify({color: 'positive', textColor: 'white', message: resp.data, position: 'center', timeout: 1000 })
+              setTimeout(function(){
+                that.$refs.scannedItemDecode.focus()
+              }, 20)
+            } else {
+              that.$q.notify({color: 'negative', textColor: 'white', message: resp.data, position: 'center', timeout: 1000 })
+            }
+          })
+        } else {
+          that.$q.notify({color: 'negative', textColor: 'white', message: 'Successfully Added Barcode Number', position: 'center', timeout: 1000 })
+        }
+      }
     },
     enableresultsdiv () {
       let that = this

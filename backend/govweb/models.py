@@ -61,6 +61,31 @@ class Unit_marks(models.Model):
     marks = models.CharField(max_length=32 ,default ='')
     class Meta:
         db_table = 'UNIT_DETAILS'
+class sem_subjects(models.Model):
+    id = BigAutoField(primary_key=True)
+    year_sem = models.CharField(max_length=32 ,default ='')
+    subject = models.CharField(max_length=64 ,default ='')
+    class Meta:
+        db_table = 'SEM_SUBJECTS'
+class sem_schemecode(models.Model):
+    id = BigAutoField(primary_key=True)
+    year_sem = models.CharField(max_length=32 ,default ='')
+    scheme_code = models.CharField(max_length=64 ,default ='')
+    class Meta:
+        db_table = 'SEM_SCHEME_CODE'
+class semester_marks(models.Model):
+    id = BigAutoField(primary_key=True)
+    student_detail= models.ForeignKey(Student_details, blank=True, null=True)
+    student_pin = models.CharField(max_length=32 ,default ='')
+    year_sem = models.CharField(max_length=32 ,default ='')
+    scheme_code = models.CharField(max_length=32 ,default ='')
+    sem_subject = models.CharField(max_length=32 ,default ='')
+    paper_barcode = models.CharField(max_length=64 ,default ='')
+    total_marks = models.CharField(max_length=32 ,default ='')
+    marks = models.CharField(max_length=32 ,default ='')
+    posted_by = models.CharField(max_length=32 ,default ='')
+    class Meta:
+        db_table = 'SEMESTER_MARKS'
 
 class Project_marks(models.Model):
     id = BigAutoField(primary_key=True)
