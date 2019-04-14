@@ -21,7 +21,7 @@ def student_details(request):
     adding = data_dict.get('adding' ,'')
     if adding:
         del data_dict["adding"]
-        student_obj = Student_details.objects.filter(pin = pin)
+        student_obj = Student_details.objects.filter(pin = pin,status = True)
         if student_obj.exists() :
             return HttpResponse("The Student PIN Already Exists")
         try:
@@ -46,7 +46,7 @@ def student_details(request):
 @csrf_exempt
 def get_student_details(request):
     pin = json.loads(request.POST.keys()[0])
-    student_details = Student_details.objects.filter(pin = pin)
+    student_details = Student_details.objects.filter(pin = pin,status = True)
     if student_details.exists():
         student_details = student_details[0]
         if not student_details.status :
@@ -99,7 +99,7 @@ def get_attendence_names(request):
                 student_dict['attended_days'] = student.attended_days
                 student_details.append(student_dict)
                 existing_pin.append(student_dict['pin'])
-        students_obj = Student_details.objects.filter(year_sem = attendence_dict['year_sem'])
+        students_obj = Student_details.objects.filter(year_sem = attendence_dict['year_sem'],status = True)
         if students_obj.exists():
             for student in students_obj :
                 if student.pin not in existing_pin :
@@ -135,8 +135,7 @@ def attendece_update(request):
             attendence_dict['year_sem'] = record.get('year_sem','')
             attendence_dict['month'] = record.get('month','')
             attendence_dict['period'] = record.get('period','')
-            attendence_dict['working_days'] = record.get('working_days','')
-            student_obj = Student_details.objects.filter(pin = pin)
+            student_obj = Student_details.objects.filter(pin = pin ,status = True)
             if student_obj.exists():
                 attendence_dict['student_details'] = student_obj[0]
             else:
@@ -145,6 +144,7 @@ def attendece_update(request):
             if existing_obj.exists():
                 existing_obj = existing_obj[0]
                 existing_obj.attended_days = record.get('no_of_days_attend','')
+                existing_obj.working_days   = record.get('working_days','')
                 existing_obj.save()
             else:
                 attendence_dict['attended_days'] = record.get('no_of_days_attend','')
@@ -194,7 +194,7 @@ def get_sm_marks(request):
     subject = sm_marks_dict['subject']
     year_sem = sm_marks_dict['year_sem']
     schemecode = sm_marks_dict['scheme_code']
-    students_obj = Student_details.objects.filter(year_sem = sm_marks_dict['year_sem'],scheme_code =sm_marks_dict['scheme_code'])
+    students_obj = Student_details.objects.filter(year_sem = sm_marks_dict['year_sem'],scheme_code =sm_marks_dict['scheme_code'],status = True)
     if students_obj.exists():
         for student in students_obj :
             student_dict ={}
@@ -221,7 +221,7 @@ def get_unit_marks(request):
             student_details.append(student_dict)
             existing_pin.append(student_dict['pin'])
     if not unit_dict.get('view','') :
-        students_obj = Student_details.objects.filter(year_sem = unit_dict['year_sem'])
+        students_obj = Student_details.objects.filter(year_sem = unit_dict['year_sem'],status = True)
         if students_obj.exists():
             for student in students_obj :
                 if student.pin not in existing_pin :
@@ -251,7 +251,7 @@ def unit_marks_update(request):
             unit_dict = {}
             pin = record.get('pin','')
             unit_dict['year_sem'] = record.get('year_sem','')
-            student_obj = Student_details.objects.filter(pin = pin)
+            student_obj = Student_details.objects.filter(pin = pin,status = True)
             unit_dict['unit_exam'] = unit_exam
             unit_dict['subject'] = subject
             if student_obj.exists():
@@ -414,7 +414,7 @@ def update_semester_marks(request):
     sem_obj = semester_marks.objects.filter(paper_barcode = data_dict.get('barcode'))
     try:
         if not sem_obj:
-            student_obj = Student_details.objects.filter(pin = data_dict.get('student', ''))
+            student_obj = Student_details.objects.filter(pin = data_dict.get('student', ''),status = True)
             if student_obj.exists():
                 sem_marks['student_detail'] = student_obj[0]
                 sem_master = semester_marks(**sem_marks)
@@ -492,7 +492,7 @@ def get_pm_marks(request):
             student_details.append(student_dict)
             existing_pin.append(student_dict['pin'])
     if not view :
-        students_obj = Student_details.objects.filter(year_sem = pm_dict['year_sem'] ,scheme_code = pm_dict['scheme_code'])
+        students_obj = Student_details.objects.filter(year_sem = pm_dict['year_sem'] ,scheme_code = pm_dict['scheme_code'],status = True)
         if students_obj.exists():
             for student in students_obj :
                 if student.pin not in existing_pin :
@@ -521,7 +521,7 @@ def pm_marks_update(request):
             pm_dict = {}
             pin = record.get('pin','')
             pm_dict['year_sem'] = record.get('year_sem','')
-            student_obj = Student_details.objects.filter(pin = pin)
+            student_obj = Student_details.objects.filter(pin = pin,status = True)
             pm_dict['project_title'] = project_title
             pm_dict['scheme_code'] = scheme_code
             if student_obj.exists():
