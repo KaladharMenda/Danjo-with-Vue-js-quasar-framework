@@ -161,6 +161,7 @@ export default {
           that.alldivisionenable = true
           axios.post(baseUrlForBackend+'govweb/get_unit_marks/',JSON.stringify(unit_dict))
           .then(function(resp){
+            that.student_unit_details = []
             resp.data.forEach(function(record){
               that.student_unit_details.push({
                 'pin' : record.pin,

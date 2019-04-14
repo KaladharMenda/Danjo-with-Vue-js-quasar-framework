@@ -152,6 +152,7 @@ export default {
         axios.post(baseUrlForBackend+'govweb/get_semester_viewtable/', JSON.stringify(sem_obj))
         .then(function(resp){
           if (resp.data != 'No Data Found !!' && resp.data) {
+            that.final_semester_marks = []
             resp.data.forEach(function(record){
               that.final_semester_marks.push({
                 'Pin' : record.student_id,

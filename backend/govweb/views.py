@@ -218,6 +218,7 @@ def get_unit_marks(request):
             student_dict['pin'] = unit.student_details.pin
             student_dict['marks'] = unit.marks
             student_dict['total_marks'] = unit.total_marks
+            student_dict['year_sem'] = unit.year_sem
             student_details.append(student_dict)
             existing_pin.append(student_dict['pin'])
     if not unit_dict.get('view','') :
@@ -488,6 +489,7 @@ def get_pm_marks(request):
             student_dict['pin'] = pm.student_details.pin
             student_dict['project_name'] = pm.project_title
             student_dict['marks'] = pm.marks
+            student_dict['year_sem'] = pm.year_sem
             student_dict['total_marks'] = pm.total_marks
             student_details.append(student_dict)
             existing_pin.append(student_dict['pin'])
@@ -522,16 +524,17 @@ def pm_marks_update(request):
             pin = record.get('pin','')
             pm_dict['year_sem'] = record.get('year_sem','')
             student_obj = Student_details.objects.filter(pin = pin,status = True)
-            pm_dict['project_title'] = project_title
             pm_dict['scheme_code'] = scheme_code
             if student_obj.exists():
                 pm_dict['student_details'] = student_obj[0]
             else:
                 return HttpResponse("Pin Does not exists")
             existing_obj = Project_marks.objects.filter(**pm_dict)
+            pm_dict['project_title'] = project_title
             pm_dict['total_marks'] = total_marks
             if existing_obj.exists():
                 existing_obj = existing_obj[0]
+                existing_obj.project_title = project_title
                 existing_obj.marks = record.get('marks','')
                 existing_obj.total_marks = total_marks
                 existing_obj.save()

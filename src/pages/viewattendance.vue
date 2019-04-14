@@ -169,6 +169,7 @@ export default {
         that.alldivisionenable = true
         axios.post(baseUrlForBackend+'govweb/all_attendence/',JSON.stringify(attendence_dict))
         .then(function(resp){
+          that.student_attendance_details = []
           resp.data.forEach(function(record){
             that.student_attendance_details.push({
               'Pin' : record.pin,
