@@ -185,6 +185,7 @@ export default {
       axios.post(baseUrlForBackend+'govweb/unit_marks_update/',JSON.stringify(that.student_unit_details))
       .then(function(resp){
         let respdata = resp.data
+        that.$q.notify({color: 'green', textColor: 'white', message:respdata, position: 'center', timeout: 1000})
         console.log(respdata)
       })
     },

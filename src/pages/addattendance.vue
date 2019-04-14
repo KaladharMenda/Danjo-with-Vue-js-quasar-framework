@@ -150,6 +150,8 @@ export default {
       .then(function(resp){
         let respdata = resp.data
         console.log(respdata)
+        that.$q.notify({color: 'green', textColor: 'white', message:respdata, position: 'center', timeout: 1000})
+
       })
     },
     get_attendence_details () {

@@ -229,7 +229,6 @@ def get_unit_marks(request):
 
 @csrf_exempt
 def unit_marks_update(request):
-    import pdb; pdb.set_trace()
     unit_marks_dict = json.loads(request.POST.keys()[0])
     unit_exam = unit_marks_dict[0].get('unit_exam','')
     if not unit_exam :
@@ -262,6 +261,79 @@ def unit_marks_update(request):
             else:
                 unit_dict['marks'] = record.get('marks','')
                 Unit_marks.objects.create(**unit_dict)
+        return HttpResponse("Success")
+    except Exception as e:
+        import traceback
+        return HttpResponse("Some thing went wrong")
+
+@csrf_exempt
+def get_pm_marks(request):
+    student_details =[]
+    pm_dict = json.loads(request.POST.keys()[0])
+    existing_pin = []
+    view = False
+    if pm_dict.get('view','') :
+        view = True
+        pm_obj = Project_marks.objects.filter(year_sem = pm_dict['year_sem'],scheme_code =pm_dict['scheme_code'])
+    else:
+        pm_obj = Project_marks.objects.filter(year_sem = pm_dict['year_sem'],scheme_code =pm_dict['scheme_code'],project_title = pm_dict['project_title'])
+    if pm_obj.exists() :
+        for pm in pm_obj:
+            student_dict ={}
+            student_dict ['student_name'] = pm.student_details.student_name
+            student_dict['pin'] = pm.student_details.pin
+            student_dict['project_name'] = pm.project_title
+            student_dict['marks'] = pm.marks
+            student_dict['total_marks'] = pm.total_marks
+            student_details.append(student_dict)
+            existing_pin.append(student_dict['pin'])
+    if not view :
+        students_obj = Student_details.objects.filter(year_sem = pm_dict['year_sem'] ,scheme_code = pm_dict['scheme_code'])
+        if students_obj.exists():
+            for student in students_obj :
+                if student.pin not in existing_pin :
+                    student_dict ={}
+                    student_dict ['student_name'] = student.student_name
+                    student_dict['pin'] = student.pin
+                    student_dict['marks'] = ''
+                    student_dict['year_sem'] = pm_dict['year_sem']
+                    student_details.append(student_dict)
+    return HttpResponse(json.dumps(student_details))
+
+@csrf_exempt
+def pm_marks_update(request):
+    pm_marks_dict = json.loads(request.POST.keys()[0])
+    scheme_code = pm_marks_dict[0].get('scheme_code','')
+    if not scheme_code :
+        return HttpResponse("Scheme Code  Does not Exists")
+    project_title = pm_marks_dict[0].get('project_title','')
+    if not project_title:
+        return HttpResponse("Project Title is Empty")
+    total_marks =pm_marks_dict[0].get('total_marks','')
+    if not total_marks :
+        return HttpResponse("Total Marks is Empty")
+    try:
+        for record in pm_marks_dict :
+            pm_dict = {}
+            pin = record.get('pin','')
+            pm_dict['year_sem'] = record.get('year_sem','')
+            student_obj = Student_details.objects.filter(pin = pin)
+            pm_dict['project_title'] = project_title
+            pm_dict['scheme_code'] = scheme_code
+            if student_obj.exists():
+                pm_dict['student_details'] = student_obj[0]
+            else:
+                return HttpResponse("Pin Does not exists")
+            existing_obj = Project_marks.objects.filter(**pm_dict)
+            pm_dict['total_marks'] = total_marks
+            if existing_obj.exists():
+                existing_obj = existing_obj[0]
+                existing_obj.marks = record.get('marks','')
+                existing_obj.total_marks = total_marks
+                existing_obj.save()
+            else:
+                pm_dict['marks'] = record.get('marks','')
+                Project_marks.objects.create(**pm_dict)
         return HttpResponse("Success")
     except Exception as e:
         import traceback

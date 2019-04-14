@@ -14,7 +14,8 @@ urlpatterns = [
     url(r'^all_attendence/$', all_attendence),
     url(r'^get_unit_marks/$', get_unit_marks),
     url(r'^unit_marks_update/$', unit_marks_update),
-
+    url(r'^get_pm_marks/$', get_pm_marks),
+    url(r'^pm_marks_update/$', pm_marks_update),
 
 
 ]

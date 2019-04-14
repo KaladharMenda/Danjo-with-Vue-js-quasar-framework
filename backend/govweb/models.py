@@ -61,3 +61,14 @@ class Unit_marks(models.Model):
     marks = models.CharField(max_length=32 ,default ='')
     class Meta:
         db_table = 'UNIT_DETAILS'
+
+class Project_marks(models.Model):
+    id = BigAutoField(primary_key=True)
+    student_details= models.ForeignKey(Student_details, blank=True, null=True)
+    year_sem = models.CharField(max_length=32 ,default ='')
+    scheme_code = models.CharField(max_length=64 ,default ='')
+    project_title = models.CharField(max_length = 64 ,default = '')
+    total_marks = models.CharField(max_length=32 ,default ='')
+    marks = models.CharField(max_length=32 ,default ='')
+    class Meta:
+        db_table = 'PROJECT_MAARKS'
