@@ -535,3 +535,27 @@ def pm_marks_update(request):
     except Exception as e:
         import traceback
         return HttpResponse("Some thing went wrong")
+
+@csrf_exempt
+def get_semester_viewtable(request):
+    student_details =[]
+    semester_dict = {}
+    semester_dict = json.loads(request.POST.keys()[0])
+    semester_markss = semester_marks.objects.filter(year_sem = semester_dict.get('sem'), sem_subject = semester_dict.get('subject'), scheme_code= semester_dict.get('scheme'))
+    try:
+        if semester_markss.exists() :
+            for sem in semester_markss:
+                student_dict ={}
+                student_dict ['student_id'] = sem.student_pin
+                student_dict ['student_name'] = sem.student_detail.student_name
+                student_dict['subject'] = sem.sem_subject
+                student_dict['scheme'] = sem.scheme_code
+                student_dict['total_marks'] = sem.total_marks
+                student_dict['marks'] = sem.marks
+                student_details.append(student_dict)
+            return HttpResponse(json.dumps(student_details))
+        else:
+            return HttpResponse('No Data Found !!')
+    except Exception as e:
+        import traceback
+        return HttpResponse("Some thing went wrong")

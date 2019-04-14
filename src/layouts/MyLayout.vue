@@ -43,10 +43,6 @@
            <img src="statics/usermanagement.png" class="link-img">
            <div class="navigation-text header_fontM header_text">Masters</div>
         </q-item>
-        <q-item class="navlink" :to="{ path: '/admin/settings'}">
-           <img src="statics/usermanagement.png" class="link-img">
-           <div class="navigation-text header_fontM header_text">SETTINGS</div>
-        </q-item>
         <a href="javascript:void(0)">
           <q-collapsible class="box">
             <template slot="header">
@@ -111,10 +107,6 @@
                 <img src="statics/attend.png" class="link-img" />
                 <div class="navigation-text header_fontS header_text">SM Marks</div>
               </template>
-              <q-item class="navlink childnav" :to="{ path: '/admin/addsmmarks'}">
-                <img src="statics/arrow.png" class="link-imgs">
-                <div class="navigation-text header_fontC header_text">Add SM Marks</div>
-              </q-item>
               <q-item class="navlink childnav" :to="{ path: '/admin/viewsmmarks'}">
                 <img src="statics/arrow.png" class="link-imgs">
                 <div class="navigation-text header_fontC header_text">View SM Marks</div>
