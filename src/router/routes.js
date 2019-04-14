@@ -15,6 +15,7 @@ const routes = [
     component: () => import('layouts/MyLayout'),
     children: [
       { path: 'dashboard', component: () => genericImport('dashboard') },
+      { path: 'encodedecode', component: () => genericImport('encodedecode') },
       { path: 'Usermanagement', component: () => genericImport('Usermanagement') },
       { path: 'events', component: () => genericImport('events') },
       { path: 'addstudent', component: () => genericImport('addstudent') },
@@ -35,7 +36,7 @@ const routes = [
       { path: 'DeletedStudentsReport', component: () => genericImport('deleted_student_reports') },
       { path: 'smmarksreport', component: () => genericImport('smmarks_report') },
       { path: 'pmmarksreport', component: () => genericImport('pmmarks_report') },
-      { path: 'settings', component: () => genericImport('settings') },
+      // { path: 'settings', component: () => genericImport('settings') },
       { path: 'Encode', component: () => genericImport('Encode') },
       { path: 'Decode', component: () => genericImport('Decode') },
       { path: 'flushCarton', component: () => genericImport('flushCarton') },

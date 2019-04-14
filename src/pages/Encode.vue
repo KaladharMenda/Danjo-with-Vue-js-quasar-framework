@@ -1,25 +1,44 @@
 <template>
   <div class="HOME PAGE-CONTENT">
     <q-card class="bg-white card-styl">
-      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" align="center">
-        <q-toolbar color="orange" class="toolgradientlightgreen">
-          <q-toolbar-title>
-            <b>Encode For Semester Exams</b>
-          </q-toolbar-title>
-        </q-toolbar>
+      <div class="row" align="center">
+        <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11" align="center">
+          <q-toolbar color="orange" class="toolgradientlightgreen">
+            <q-toolbar-title>
+              <b>Encode For Semester Exams</b>
+            </q-toolbar-title>
+          </q-toolbar>
+        </div>
+        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" align="center" style="background: linear-gradient(155deg, rgb(91, 216, 89), rgb(133, 255, 0)) !important">
+          <q-btn flat round icon="refresh" @click="emtpyAllFields" style="float:right;"/>
+        </div>
       </div>
       <div class="row gutter-sm q-mb-md toppadding">
         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+          <q-field>
+             <q-input type="text" id="scanFocus" ref="totalmarks" v-model="totalmarks"  float-label="Enter Total Marks *"/>
+          </q-field>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" v-if="totalmarks">
           <q-field>
             <q-select
               v-model="semId"
               :options="semOptions"
               float-label="Semester *"
-              @input="getSubjectsData"
+              @input="getSubjects_scheme_Data"
             />
           </q-field>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" v-if="semId">
+          <q-field>
+            <q-select
+              v-model="schemeCode"
+              :options="schemeDropdownOpts"
+              float-label="SchemeCode *"
+            />
+          </q-field>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" v-if="schemeCode">
           <q-select
             v-model="subId"
             :options="subjectDropdownOpts"
@@ -30,7 +49,7 @@
         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" v-if="subId">
           <q-select
             v-model="studentIDs"
-            :options="semOptionss"
+            :options="studentOptionss"
             float-label="Select Student *"
             filter
             @input="enableScanDiv"
@@ -97,6 +116,8 @@ export default {
     return {
       semId: '',
       subId: '',
+      schemeCode: '',
+      totalmarks: '',
       scannedItemDecode: '',
       tempsessionvalue:'',
       studentMark: '',
@@ -104,29 +125,20 @@ export default {
       scannedItem: '',
       subjectMarks: '',
       subjectDropdownOpts: [],
+      schemeDropdownOpts: [],
       studentmarkdetails: [],
-      semOptions: [{'label': '1SEM', 'value': '1SEM'},{'label': '2SEM', 'value': '2SEM'},{'label': '3SEM', 'value': '3SEM'},{'label': '4SEM', 'value': '4SEM'},{'label': '5SEM', 'value': '5SEM'},{'label': '6SEM', 'value': '6SEM'},{'label': '7SEM', 'value': '7SEM'},{'label': '8SEM', 'value': '8SEM'}],
-      semOptionss: [{'label': '14341a0598', 'value': '14341a0598'},{'label': '14341a0599', 'value': '14341a0599'},{'label': '14341a05100', 'value': '14341a05100'},{'label': '14341a05101', 'value': '14341a05101'}],
+      semOptions: [{'label': '1YR', 'value': '1YR'},{'label': '2YR', 'value': '2YR'},{'label': '3SEM', 'value': '3SEM'},{'label': '4SEM', 'value': '4SEM'},{'label': '5SEM', 'value': '5SEM'},{'label': '6SEM', 'value': '6SEM'},{'label': '7SEM', 'value': '7SEM'},{'label': '8SEM', 'value': '8SEM'}],
+      studentOptionss: [],
       tab: 'exam1'
     }
   },
   created () {
     var that = this
+    setTimeout(function(){
+      that.$refs.totalmarks.focus()
+    }, 500)
   },
   methods: {
-    updatemarks () {
-      var that = this
-      if (that.subjectMarks) {
-        that.emtpyAllFields('ss2')
-        that.$q.notify({color: 'positive', textColor: 'white', message: 'Successfully Updated Subject Marks', position: 'center', timeout: 1000 })
-        setTimeout(function(){
-          that.$refs.scannedItemDecode.focus()
-        }, 500)
-      } else {
-        that.$q.notify({color: 'negative', textColor: 'white', message: 'please Enter Subject Marks', position: 'center', timeout: 1000 })
-        that.$refs.subjectMarks.focus()
-      }
-    },
     enableScanDiv () {
       var that = this
       setTimeout(function(){
@@ -135,46 +147,100 @@ export default {
     },
     checkBinType (e) {
       let that = this
-      that.$q.notify({color: 'positive', textColor: 'white', message: 'Successfully Added Barcode Number', position: 'center', timeout: 1000 })
-      that.emtpyAllFields('ss1')
+      if (that.totalmarks && that.semId && that.schemeCode && that.subId && that.studentIDs && that.scannedItem) {
+        var sem_obj = {
+          'total_marks': that.totalmarks, 'sem': that.semId, 'scheme': that.schemeCode,
+          'subject': that.subId, 'student': that.studentIDs, 'barcode': that.scannedItem
+        }
+        axios.post(baseUrlForBackend+'govweb/update_semester_marks/', JSON.stringify(sem_obj))
+        .then(function(resp){
+          if (resp.data == 'Success') {
+            that.scannedItem = ''
+            that.$q.notify({color: 'positive', textColor: 'white', message: resp.data, position: 'center', timeout: 1000 })
+          } else if(resp.data == 'Already this barcode Available') {
+            that.$q.notify({color: 'negative', textColor: 'white', message: resp.data, position: 'center', timeout: 1000 })
+          } else {
+            that.$q.notify({color: 'negative', textColor: 'white', message: resp.data, position: 'center', timeout: 1000 })
+          }
+        })
+      } else {
+        that.$q.notify({color: 'negative', textColor: 'white', message: 'INPUT MISMATCH !!!', position: 'center', timeout: 1000 })
+      }
+    },
+    getSubjects_scheme_Data () {
+      var that = this
+      that.schemeDropdownOpts = []
+      var sem_obj = {
+        'sem': that.semId
+      }
+      axios.post(baseUrlForBackend+'govweb/get_sem_schemes/', JSON.stringify(sem_obj))
+      .then(function(resp){
+        if (resp.data != 'SchemeCode Details Not Available for this Semester' && resp.data) {
+          resp.data.forEach(function(item){
+            that.schemeDropdownOpts.push({
+              'label': item.scheme,
+              'value' : item.scheme,
+            })
+          });
+          that.getSubjectsData()
+        } else if(resp.data == 'SchemeCode Details Not Available for this Semester') {
+          that.showNotify(resp.data)
+        } else {
+          that.showNotify('something went Wrong !!!')
+        }
+      })
     },
     getSubjectsData () {
       var that = this
       that.subjectDropdownOpts = []
-      firebase.database().ref('subjects/'+ that.semId).once('value', function(snapshot) {
-        snapshot.forEach(function (child) {
-          // if (child.val().active === true) {
-          that.subjectDropdownOpts.push({
-            'label': child.key,
-            'value': child.key,
-          })
-          // }
-        })
+      var sem_obj = {
+        'sem': that.semId
+      }
+      axios.post(baseUrlForBackend+'govweb/get_sem_subjects/', JSON.stringify(sem_obj))
+      .then(function(resp){
+        if (resp.data != 'Subject Details Not Available for this Semester' && resp.data) {
+          resp.data.forEach(function(item){
+            that.subjectDropdownOpts.push({
+              'label': item.subject,
+              'value' : item.subject,
+            })
+          });
+        } else if(resp.data == 'Subject Details Not Available for this Semester') {
+          that.showNotify(resp.data)
+        } else {
+          that.showNotify('something went Wrong !!!')
+        }
       })
     },
     getUsersData () {
       var that = this
-      that.loader = true
-      if(that.semId != '' && that.subId != '') {
-        that.studentmarkdetails =[]
-        firebase.database().ref('StudentDetails').once('value', function(snapshot) {
-          snapshot.forEach(function (child) {
-            that.studentmarkdetails.push({
-              'studentid':child.key,
-            });
-          })
-          that.loader = false
-        })
-      } else {
-        that.showNotify('please select SEMESTER & SUBJECT')
+      that.studentOptionss = []
+      var sem_obj = {
+        'sem': that.semId
       }
+      axios.post(baseUrlForBackend+'govweb/get_student_names/', JSON.stringify(sem_obj))
+      .then(function(resp){
+        if (resp.data != 'NO Students are Found' && resp.data) {
+          resp.data.forEach(function(item){
+            that.studentOptionss.push({
+              'label': item.pin,
+              'value' : item.pin,
+            })
+          });
+        } else if(resp.data == 'NO Students are Found') {
+          that.showNotify(resp.data)
+        } else {
+          that.showNotify('something went Wrong !!!')
+        }
+      })
     },
-    emtpyAllFields (val) {
+    emtpyAllFields () {
       var that = this
-      that.sessionvalue = val
       that.userModalAdd = false
       that.semId = ''
+      that.totalmarks =  ''
       that.subId = ''
+      that.schemeCode = ''
       that.scannedItemDecode = ''
       that.scannedItem = ''
       that.studentIDs = ''
@@ -186,7 +252,6 @@ export default {
       that.subjectDropdownOpts = []
       that.studentmarkdetails = []
       that.tempsessionvalue = ''
-      console.log(that.sessionvalue)
     },
     showNotify (msg) {
       let that = this

@@ -39,6 +39,14 @@
            <img src="statics/usermanagement.png" class="link-img">
            <div class="navigation-text header_fontM header_text">User Management</div>
         </q-item>
+        <q-item class="navlink" :to="{ path: '/admin/encodedecode'}">
+           <img src="statics/usermanagement.png" class="link-img">
+           <div class="navigation-text header_fontM header_text">Masters</div>
+        </q-item>
+        <q-item class="navlink" :to="{ path: '/admin/settings'}">
+           <img src="statics/usermanagement.png" class="link-img">
+           <div class="navigation-text header_fontM header_text">SETTINGS</div>
+        </q-item>
         <a href="javascript:void(0)">
           <q-collapsible class="box">
             <template slot="header">

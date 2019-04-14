@@ -266,3 +266,200 @@ def unit_marks_update(request):
     except Exception as e:
         import traceback
         return HttpResponse("Some thing went wrong")
+
+
+
+@csrf_exempt
+def update_sem_subjects(request):
+    data_dict ={}
+    data_dict = json.loads(request.POST.keys()[0])
+    sem_sub = {'year_sem': data_dict.get('sem' ,''), 'subject': data_dict.get('subject', '')}
+    sem_obj = sem_subjects.objects.filter(year_sem = data_dict.get('sem'), subject =data_dict.get('subject'))
+    try:
+        if not sem_obj:
+            sem_master = sem_subjects(**sem_sub)
+            sem_master.save()
+            return HttpResponse("Success")
+        else:
+            return HttpResponse("Already this Subject Available")
+    except Exception as e:
+        import traceback
+        return HttpResponse("Some thing went wrong")
+
+
+@csrf_exempt
+def get_sem_subjects(request):
+    sem_details =[]
+    data_dict ={}
+    data_dict = json.loads(request.POST.keys()[0])
+    year_sems = data_dict.get('sem' ,'')
+    sem_obj = sem_subjects.objects.filter(year_sem = year_sems)
+    try:
+        if sem_obj:
+            for data in sem_obj:
+                semester_data ={}
+                semester_data['semester'] = data.year_sem
+                semester_data['subject'] = data.subject
+                sem_details.append(semester_data)
+            return HttpResponse(json.dumps(sem_details))
+        else:
+            return HttpResponse("Subject Details Not Available for this Semester")
+    except Exception as e:
+        import traceback
+        return HttpResponse("Some thing went wrong")
+
+@csrf_exempt
+def delete_sem_subjects(request):
+    data_dict ={}
+    data_dict = json.loads(request.POST.keys()[0])
+    year_sems = data_dict.get('sem' ,'')
+    subject = data_dict.get('subject', '')
+    try:
+        if subject and year_sems:
+            sem_subjects.objects.filter(year_sem = year_sems, subject =subject).delete()
+            return HttpResponse('Deleted')
+        else:
+            return HttpResponse('Deletion Failed')
+    except Exception as e:
+        import traceback
+        return HttpResponse("Some thing went wrong")
+
+@csrf_exempt
+def update_sem_scheme_code(request):
+    data_dict ={}
+    data_dict = json.loads(request.POST.keys()[0])
+    sem_sub = {'year_sem': data_dict.get('sem' ,''), 'scheme_code': data_dict.get('scheme', '')}
+    sem_obj = sem_schemecode.objects.filter(year_sem = data_dict.get('sem'), scheme_code =data_dict.get('scheme'))
+    try:
+        if not sem_obj:
+            sem_master = sem_schemecode(**sem_sub)
+            sem_master.save()
+            return HttpResponse("Success")
+        else:
+            return HttpResponse("Already this SchemeCode Available")
+    except Exception as e:
+        import traceback
+        return HttpResponse("Some thing went wrong")
+
+
+@csrf_exempt
+def get_sem_schemes(request):
+    sem_details =[]
+    data_dict ={}
+    data_dict = json.loads(request.POST.keys()[0])
+    year_sems = data_dict.get('sem' ,'')
+    sem_obj = sem_schemecode.objects.filter(year_sem = year_sems)
+    try:
+        if sem_obj:
+            for data in sem_obj:
+                semester_data ={}
+                semester_data['semester'] = data.year_sem
+                semester_data['scheme'] = data.scheme_code
+                sem_details.append(semester_data)
+            return HttpResponse(json.dumps(sem_details))
+        else:
+            return HttpResponse("SchemeCode Details Not Available for this Semester")
+    except Exception as e:
+        import traceback
+        return HttpResponse("Some thing went wrong")
+
+@csrf_exempt
+def delete_sem_scheme_code(request):
+    data_dict ={}
+    data_dict = json.loads(request.POST.keys()[0])
+    year_sems = data_dict.get('sem' ,'')
+    scheme = data_dict.get('scheme', '')
+    try:
+        if scheme and year_sems:
+            sem_schemecode.objects.filter(year_sem = year_sems, scheme_code = scheme).delete()
+            return HttpResponse('Deleted')
+        else:
+            return HttpResponse('Deletion Failed')
+    except Exception as e:
+        import traceback
+        return HttpResponse("Some thing went wrong")
+
+@csrf_exempt
+def get_student_names(request):
+    student_pins =[]
+    data_dict ={}
+    data_dict = json.loads(request.POST.keys()[0])
+    year_sems = data_dict.get('sem' ,'')
+    student_obj = Student_details.objects.filter(year_sem = year_sems, status = 1).values_list('pin', flat=True)
+    try:
+        if student_obj:
+            for dat in student_obj:
+                student_data ={}
+                student_data['pin'] = dat
+                student_pins.append(student_data)
+            return HttpResponse(json.dumps(student_pins))
+        else:
+            return HttpResponse('NO Students are Found')
+    except Exception as e:
+        import traceback
+        return HttpResponse("Some thing went wrong")
+
+@csrf_exempt
+def update_semester_marks(request):
+    data_dict ={}
+    data_dict = json.loads(request.POST.keys()[0])
+    sem_marks = {'total_marks': data_dict.get('total_marks', ''), 'year_sem': data_dict.get('sem' ,''), 'scheme_code': data_dict.get('scheme', ''), 
+                'sem_subject': data_dict.get('subject', ''), 'student_pin': data_dict.get('student', ''), 'paper_barcode': data_dict.get('barcode', '')}
+    sem_obj = semester_marks.objects.filter(paper_barcode = data_dict.get('barcode'))
+    try:
+        if not sem_obj:
+            student_obj = Student_details.objects.filter(pin = data_dict.get('student', ''))
+            if student_obj.exists():
+                sem_marks['student_detail'] = student_obj[0]
+                sem_master = semester_marks(**sem_marks)
+                sem_master.save()
+                return HttpResponse("Success")
+        else:
+            return HttpResponse("Already this barcode Available")
+    except Exception as e:
+        import traceback
+        return HttpResponse("Some thing went wrong")
+
+@csrf_exempt
+def get_semester_marks_update(request):
+    data_dict ={}
+    final_details = []
+    data_dict = json.loads(request.POST.keys()[0])
+    flag = data_dict.get('flag', '')
+    try:
+        if flag == 'get':
+            semester_markss = semester_marks.objects.filter(paper_barcode = data_dict.get('barcode'))
+            try:    
+                if semester_markss.exists():
+                    student_sem_data ={}
+                    semester_details = semester_markss[0]
+                    student_sem_data['year'] = semester_details.year_sem
+                    student_sem_data['scheme'] = semester_details.scheme_code
+                    student_sem_data['subject'] = semester_details.sem_subject
+                    student_sem_data['student'] = semester_details.student_pin
+                    student_sem_data['totalmarks'] = semester_details.total_marks
+                    student_sem_data['barcode'] = semester_details.paper_barcode
+                    final_details.append(student_sem_data)
+                    return HttpResponse(json.dumps(final_details))
+                else:
+                    return HttpResponse("Scanned Barcode Not Exists")
+            except Exception as e:
+                import traceback
+                return HttpResponse("Some thing went wrong")
+        elif flag == 'save':
+            semester_markss = semester_marks.objects.filter(paper_barcode = data_dict.get('barcode'))
+            try:
+                if semester_markss.exists():
+                    semester_details = semester_markss[0]
+                    semester_details.marks = data_dict.get('marks', '')
+                    semester_details.posted_by = data_dict.get('posted_by', '')
+                    semester_details.save()
+                    return HttpResponse("Success")
+                else:
+                    return HttpResponse("Fail !!!")
+            except Exception as e:
+                import traceback
+                return HttpResponse("Some thing went wrong")
+    except Exception as e:
+        import traceback
+        return HttpResponse("Some thing went wrong")
