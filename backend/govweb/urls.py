@@ -25,4 +25,5 @@ urlpatterns = [
     url(r'^get_semester_marks_update/$', get_semester_marks_update),
     url(r'^get_pm_marks/$', get_pm_marks),
     url(r'^pm_marks_update/$', pm_marks_update),
+    url(r'^get_semester_viewtable/$', get_semester_viewtable),
 ]
