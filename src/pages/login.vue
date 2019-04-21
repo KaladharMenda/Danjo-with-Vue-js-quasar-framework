@@ -2,9 +2,9 @@
  <q-layout>
    <div class="register-page regist_s">
      <div class="window-height window-width row justify-center items-center">
-       <div class="col-md-12 right window-height items-center justify-center">
+       <div class="col-md-12 right window-height items-center justify-center" style="    background:linear-gradient(12deg, rgba(55, 41, 109, 0.5) -8%, rgba(0, 0, 0, 0.78) 100%), url(../statics/blogin.jpg) center center no-repeat scroll">
          <div class="row window-height items-center justify-center">
-           <q-card flat class="bigger qcard_s" style = "padding-top: 65px;">
+           <q-card flat class="bigger qcard_s loginbackgrod logintabback" style = "padding-top: 65px;     background: rgba(0, 0, 0, 0.52);">
              <q-card-title>
               <div class="row" align="center">
                 <img class = 'justify-center' srcset="statics/logo.jpg 3x" alt="…" style="width: 100%;height: 100%;">

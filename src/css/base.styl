@@ -162,7 +162,8 @@ body {
 	background: rgba(16,32,51,0.871) !important
 }
 .backgroung_color{
-	background: #1D2B36 !important;
+	/*background: #1D2B36 !important;*/
+	background: linear-gradient( 320deg, rgb(0, 0, 0) 30%, rgba(0, 0, 0, 0.77) 100%), url(../statics/mbk.jpg) no-repeat scroll center center;
 }
 .header_text{
 	margin-left: 4px;
@@ -330,5 +331,15 @@ body {
 .width_typesss {
 	@media $mobile {
 		width: fit-content !important;
+	}
+}
+.loginbackgrod {
+	@media $desktop {
+		min-height: fit-content !important;
+	}
+}
+.logintabback {
+	@media $tab {
+		min-height: fit-content !important;
 	}
 }
