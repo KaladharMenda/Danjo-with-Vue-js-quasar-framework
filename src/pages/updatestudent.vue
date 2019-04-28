@@ -198,7 +198,13 @@
       <div class="row gutter-sm q-mb-md" v-if="alldivisionenable">
         <div class="col-lg-4 col-md-4 col-sm-2 col-xs-1"></div>
         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-          <q-btn class="full-width toolgreen" text-color= "white" label="UPDATE" @click="update_student"/>
+          <!-- <q-btn color="purple" @click="checkpinexists()" :disabled="btnLoading">
+            <q-spinner-hourglass v-if="btnLoading" class="on-left" />
+            Verify and update
+          </q-btn> -->
+          <q-btn class="full-width toolgreen" text-color= "white" :disabled="btnLoadings" @click="update_student">
+            <q-spinner-hourglass v-if="btnLoadings" class="on-left" /> UPDATE
+          </q-btn>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-2 col-xs-1">
         </div>
@@ -259,6 +265,7 @@ export default {
       name:'',
       readonly: false,
       btnLoading: false,
+      btnLoadings: false,
       genderOptions: [{'label': 'Male', 'value': 'Male'},{'label': 'Female', 'value': 'Female'}],
       relationOptions: [{'label': 'Father', 'value': 'Father'},{'label': 'Mother', 'value': 'Mother'}],
       casteOptions: [{'label': 'OC', 'value': 'OC'},{'label': 'BC', 'value': 'BC'},{'label': 'SC', 'value': 'SC'},{'label': 'ST', 'value': 'ST'},{'label': 'OTHERS', 'value': 'OTHERS'}],
@@ -340,25 +347,27 @@ export default {
       }, 3000)
     },
     update_student () {
-      // setTimeout(() => {
-      //   this.show({
-      //     spinner: QSpinnerGears,
-      //     spinnerColor: 'amber',
-      //     message: 'Processing ....'
-      //   })
-      // }, 0)
-      axios.post(baseUrlForBackend+'govweb/student_details/', JSON.stringify(this.studen_info));
+      var that = this
+      that.btnLoadings = true
+      axios.post(baseUrlForBackend+'govweb/student_details/', JSON.stringify(this.studen_info))
+      .then(function(resp){
+       if (resp.data == 'Success') {
+        that.btnLoadings = false
+        that.$q.notify({color: 'positive', textColor: 'white', message: resp.data, position: 'center', timeout: 1000 })
+       }
+      })
+      .catch(function(){
+        that.btnLoadings = false
+         that.$q.notify({color: 'negative', textColor: 'white', message: 'something went wrong', position: 'center', timeout: 1000 })
+       });
     },
     checkpinexists () {
       let that = this
-      // that.btnLoading = true
-      // setTimeout(function () {
-      //   that.btnLoading = false
-      // },2000)
-      // that.alldivisionenable = true
-      console.log(this.firstpin)
+      that.btnLoading = true
       axios.post(baseUrlForBackend+'govweb/get_student_details/',JSON.stringify(that.firstpin))
       .then(function(resp){
+         that.alldivisionenable = true
+         that.btnLoading = false
          that.studen_info = resp.data
          if (that.studen_infstuden_info == 'Student Record Deleted' || that.studen_info == 'Record NOT FOUND')
          {
@@ -366,10 +375,10 @@ export default {
          }
        })
     .catch(function(){
-             console.log('FAILURE!!')
-             that.spinnerLoad = false
-           });
-      that.alldivisionenable = true
+       console.log('FAILURE!!')
+       that.btnLoading = false
+       that.spinnerLoad = false
+     });
     },
     getVendorLimit () {
       var that = this
