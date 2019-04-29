@@ -175,16 +175,16 @@ export default {
     get_attendence_details () {
       let that = this
       that.btnLoading = true
-      var attendence_dict = {}
+      var attendenceDict = {}
       that.student_attendance_details = []
-      attendence_dict['year_sem'] = that.year_sem
-      attendence_dict['month'] = that.month
+      attendenceDict['year_sem'] = that.year_sem
+      attendenceDict['month'] = that.month
       if (that.year_sem !== '' && that.month !== '' && that.period !== '') {
-        attendence_dict['year_sem'] = that.year_sem
-        attendence_dict['month'] = that.month
-        attendence_dict['period'] = that.period
+        attendenceDict['year_sem'] = that.year_sem
+        attendenceDict['month'] = that.month
+        attendenceDict['period'] = that.period
         that.alldivisionenable = true
-        axios.post(baseUrlForBackend+'govweb/all_attendence/', JSON.stringify(attendence_dict))
+        axios.post(baseUrlForBackend + 'govweb/all_attendence/', JSON.stringify(attendenceDict))
           .then(function (resp) {
             that.student_attendance_details = []
             resp.data.forEach(function (record) {
