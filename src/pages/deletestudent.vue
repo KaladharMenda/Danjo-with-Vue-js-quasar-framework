@@ -364,7 +364,11 @@ export default {
       axios.post(baseUrlForBackend+'govweb/get_student_details/',JSON.stringify(that.firstpin))
       .then(function(resp){
          console.log(resp)
-         that.studen_info = resp.data
+         if (resp.data == 'Record NOT FOUND'){
+            that.$q.notify({color: 'negative', textColor: 'white', message:'No Student Record Available', position: 'center', timeout: 1000})
+         } else {
+           that.studen_info = resp.data
+         }
        })
     .catch(function(){
              console.log('FAILURE!!')

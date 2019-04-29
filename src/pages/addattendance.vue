@@ -1,6 +1,6 @@
 <template>
   <div class="About">
-    <q-card class="bg-white card-styl">
+    <q-card class="bg-white card-styl width_typesss">
       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" align="center">
         <q-toolbar color="orange" class="toolblue">
           <q-toolbar-title>
@@ -71,8 +71,8 @@
         </table>
       </div>
       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" align="center" style="padding-top: 15px;" v-if="alldivisionenable">
-        <q-btn color="light-blue-7" icon-right="send" @click="send_attendence_details()" :disabled="btnLoading" style="    background: linear-gradient(60deg, rgb(27, 98, 204), rgb(8, 149, 249)) !important;">
-          <q-spinner-hourglass v-if="btnLoading" class="on-left"/>
+        <q-btn color="light-blue-7" icon-right="send" @click="send_attendence_details()" :disabled="btnLoadings" style="    background: linear-gradient(60deg, rgb(27, 98, 204), rgb(8, 149, 249)) !important;">
+          <q-spinner-hourglass v-if="btnLoadings" class="on-left"/>
           CONFIRM
         </q-btn>
       </div>
@@ -133,6 +133,7 @@ export default {
       year_sem_options: [{'label': '1YR', 'value': '1YR'},{'label': '2YR', 'value': '2YR'},{'label': '3SEM', 'value': '3SEM'},{'label': '4SEM', 'value': '4SEM'},{'label': '5SEM', 'value': '5SEM'},{'label': '6SEM', 'value': '6SEM'},{'label': '7SEM', 'value': '7SEM'}],
       period_options: [{'label': '1st to 15 Days', 'value': 'first_period'},{'label': '16th to Month End', 'value': 'second_period'}],
       btnLoading: false,
+      btnLoadings: false,
       working_days: '',
       student_attendance_details: [],
       alldivisionenable : false,
@@ -145,13 +146,14 @@ export default {
   methods: {
     send_attendence_details () {
       var that = this
+      that.btnLoadings = true
       console.log(that.student_attendance_details)
       axios.post(baseUrlForBackend+'govweb/attendece_update/',JSON.stringify(that.student_attendance_details))
       .then(function(resp){
         let respdata = resp.data
         console.log(respdata)
         that.$q.notify({color: 'green', textColor: 'white', message:respdata, position: 'center', timeout: 1000})
-
+        that.btnLoadings = false
       })
     },
     get_attendence_details () {
