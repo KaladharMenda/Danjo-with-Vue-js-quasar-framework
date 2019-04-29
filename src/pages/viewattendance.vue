@@ -98,7 +98,6 @@
 
 <script>
 import axios from 'axios'
-import { Notify } from 'quasar'
 
 import {
   date,
@@ -147,9 +146,9 @@ export default {
       month: '',
       year_sem: '',
       period: '',
-      month_options: [{'label': 'January', 'value': 'January'},{'label': 'February', 'value': 'February'},{'label': 'March', 'value': 'March'},{'label': 'April', 'value': 'April'},{'label': 'May', 'value': 'May'},{'label': 'June', 'value': 'June'},{'label': 'July', 'value': 'July'},{'label': 'August', 'value': 'August'},{'label': 'September', 'value': 'September'},{'label': 'October', 'value': 'October'},{'label': 'November', 'value': 'November'},{'label': 'December', 'value': 'December'}],
-      year_sem_options: [{'label': '1YR', 'value': '1YR'},{'label': '2YR', 'value': '2YR'},{'label': '3SEM', 'value': '3SEM'},{'label': '4SEM', 'value': '4SEM'},{'label': '5SEM', 'value': '5SEM'},{'label': '6SEM', 'value': '6SEM'},{'label': '7SEM', 'value': '7SEM'}],
-      period_options: [{'label': '1st to 15 Days', 'value': 'first_period'},{'label': '16th to Month End', 'value': 'second_period'},{'label': '1st to Month End', 'value': 'complete'}],
+      month_options: [{'label': 'January', 'value': 'January'}, {'label': 'February', 'value': 'February'}, {'label': 'March', 'value': 'March'}, {'label': 'April', 'value': 'April'}, {'label': 'May', 'value': 'May'}, {'label': 'June', 'value': 'June'}, {'label': 'July', 'value': 'July'}, {'label': 'August', 'value': 'August'}, {'label': 'September', 'value': 'September'}, {'label': 'October', 'value': 'October'}, {'label': 'November', 'value': 'November'}, {'label': 'December', 'value': 'December'}],
+      year_sem_options: [{'label': '1YR', 'value': '1YR'}, {'label': '2YR', 'value': '2YR'}, {'label': '3SEM', 'value': '3SEM'}, {'label': '4SEM', 'value': '4SEM'}, {'label': '5SEM', 'value': '5SEM'}, {'label': '6SEM', 'value': '6SEM'}, {'label': '7SEM', 'value': '7SEM'}],
+      period_options: [{'label': '1st to 15 Days', 'value': 'first_period'}, {'label': '16th to Month End', 'value': 'second_period'}, {'label': '1st to Month End', 'value': 'complete'}],
       btnLoading: false,
       student_attendance_details: [],
       columns: [
@@ -171,91 +170,73 @@ export default {
     }
   },
   created () {
-    var that = this
   },
   methods: {
-    updateCreateCartonsDt () {
-      var that = this
-      that.tableData = []
-      that.loading = true
-      firebase.database().ref('StudentDetails').once('value', function(data){
-        data.forEach(function(record){
-          that.tableData.push({
-            'id' : record.key,
-            'name': record.val().name,
-          })
-        })
-          // that.tableData = that.tableData.sort(function(a,b){
-          //   return new Date(b.date) - new Date(a.date);
-          // })
-          that.loading = false
-        })
-    },
     get_attendence_details () {
       let that = this
       that.btnLoading = true
       var attendence_dict = {}
       that.student_attendance_details = []
-      attendence_dict ['year_sem'] = that.year_sem
+      attendence_dict['year_sem'] = that.year_sem
       attendence_dict['month'] = that.month
-      if (that.year_sem !='' && that.month != '' && that.period != '') {
-        attendence_dict ['year_sem'] = that.year_sem
+      if (that.year_sem !== '' && that.month !== '' && that.period !== '') {
+        attendence_dict['year_sem'] = that.year_sem
         attendence_dict['month'] = that.month
         attendence_dict['period'] = that.period
         that.alldivisionenable = true
-        axios.post(baseUrlForBackend+'govweb/all_attendence/',JSON.stringify(attendence_dict))
-        .then(function(resp){
-          that.student_attendance_details = []
-          resp.data.forEach(function(record){
-            that.student_attendance_details.push({
-              'Pin' : record.pin,
-              'StudentName': record.student_name,
-              'year_sem':record.year_sem,
-              'period': record.period,
-              'CollegeWorkingDays': record.working_days,
-              'StudentAttendDays': record.attended_days
+        axios.post(baseUrlForBackend+'govweb/all_attendence/', JSON.stringify(attendence_dict))
+          .then(function (resp) {
+            that.student_attendance_details = []
+            resp.data.forEach(function (record) {
+              that.student_attendance_details.push({
+                'Pin': record.pin,
+                'StudentName': record.student_name,
+                'year_sem': record.year_sem,
+                'period': record.period,
+                'CollegeWorkingDays': record.working_days,
+                'StudentAttendDays': record.attended_days
+              })
             })
+            that.btnLoading = false
+            console.log(that.student_attendance_details)
           })
-          that.btnLoading = false
-          console.log(that.student_attendance_details)
-        })
       } else {
         that.btnLoading = false
         that.$q.notify({color: 'negative', textColor: 'white', message: 'Please Select Required Fields', position: 'center', timeout: 1000})
       }
     },
-    downloadCsv(title) {
+    downloadCsv (title) {
       this.JSONToCSVConvertor(this.student_attendance_details, 'okay', 1)
     },
-    JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {
-      var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
-      var CSV = '';
+    JSONToCSVConvertor (JSONData, ReportTitle, ShowLabel) {
+      var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData
+      var CSV = ''
       CSV += ReportTitle + '\r\n\n'
       if (ShowLabel) {
-          var row = ""
-          for (var index in arrData[0]) {
-              row += index + ','
-          }
-          row = row.slice(0, -1)
-          CSV += row + '\r\n'
+        var row = ''
+        for (var index in arrData[0]) {
+          row += index + ','
+        }
+        row = row.slice(0, -1)
+        CSV += row + '\r\n'
       }
       for (var i = 0; i < arrData.length; i++) {
-          var row = ""
-          for (var index in arrData[i]) {
-              row += '"' + arrData[i][index] + '",'
-          }
-          row.slice(0, row.length - 1)
-          CSV += row + '\r\n'
+        var row = ''
+        for (var index in arrData[i]) {
+          row += '"' + arrData[i][index] + '",'
+        }
+        row.slice(0, row.length - 1)
+        CSV += row + '\r\n'
       }
       if (CSV == '') {
-          alert("Invalid data")
-          return
+        alert('Invalid data')
+        return
       }
-      var fileName = ReportTitle.replace(/ /g,"_")
-      var blobdata = new Blob([CSV],{type : 'text/csv'})
-      var link = document.createElement("a")
-      link.setAttribute("href", window.URL.createObjectURL(blobdata))
-      link.setAttribute("download", "Data.csv")
+      // var fileName = ReportTitle.replace(/ /g, '_')
+      var blobdata = new Blob([CSV], {type: 'text/csv'})
+      var link = document.createElement('a')
+      link.setAttribute('href', window.URL.createObjectURL(blobdata))
+      link.setAttribute('download', 'Data.csv')
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
