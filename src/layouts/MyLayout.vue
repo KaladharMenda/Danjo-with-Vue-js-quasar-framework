@@ -6,7 +6,7 @@
         style="height: 57px;"
         color="primary"
         :inverted="$q.theme === 'ios'"
-        class="backgroung_color top-headderr"
+        class="backgroung_colors top-headderr"
       >
         <q-btn
           flat
@@ -62,10 +62,10 @@
                 <img src="statics/arrow.png" class="link-imgs">
                 <div class="navigation-text header_fontC header_text">Update Student Info</div>
               </q-item>
-              <q-item class="navlink childnav" :to="{ path: '/admin/transferstudent'}">
+              <!-- <q-item class="navlink childnav" :to="{ path: '/admin/transferstudent'}">
                 <img src="statics/arrow.png" class="link-imgs">
                 <div class="navigation-text header_fontC header_text">Transfer Student</div>
-              </q-item>
+              </q-item> -->
               <q-item class="navlink childnav" :to="{ path: '/admin/deletestudent'}">
                 <img src="statics/arrow.png" class="link-imgs">
                 <div class="navigation-text header_fontC header_text">Delete Student</div>
