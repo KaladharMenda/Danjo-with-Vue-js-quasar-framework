@@ -8,7 +8,7 @@
           </q-toolbar-title>
         </q-toolbar>
       </div>
-      <div class="row" style="padding-top: 10px;" align="center" >
+      <div class="row" style="padding-top: 10px;" align="center">
         <div class="col-lg-2 col-md-2 col-sm-1 col-xs-1"></div>
         <div class="col-lg-4 col-md-4 col-sm-5 col-xs-12" align="center">
           <q-field>
@@ -365,16 +365,19 @@ export default {
       .then(function(resp){
          console.log(resp)
          if (resp.data == 'Record NOT FOUND'){
+            that.alldivisionenable = false
             that.$q.notify({color: 'negative', textColor: 'white', message:'No Student Record Available', position: 'center', timeout: 1000})
          } else {
+           that.alldivisionenable = true
            that.studen_info = resp.data
+
          }
        })
     .catch(function(){
              console.log('FAILURE!!')
              that.spinnerLoad = false
            });
-      that.alldivisionenable = true
+
     },
     getVendorLimit () {
       var that = this
@@ -394,8 +397,8 @@ export default {
     },
     emtpyAllFields () {
       var that = this
-      that.pin = ''
-      that.name = ''
+      that.pin = '',
+      that.name = '',
       that.ph = '',
       that.gender = '',
       that.dateofbirth = '',
