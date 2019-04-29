@@ -43,7 +43,7 @@
           </q-btn>
         </div>
       </div>
-      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" align="center">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" v-if="csv" align="center">
         <q-btn color="purple" @click="downloadCsv('tableTitle')" :disabled="btnLoading" style="background: linear-gradient(60deg, rgb(95, 105, 96), rgb(113, 113, 113)) !important;">
             <img src="statics/excel.png" style="height: 25px;width: auto" class="on-left">
             Download CSV
@@ -150,6 +150,7 @@ export default {
       year_sem_options: [{'label': '1YR', 'value': '1YR'}, {'label': '2YR', 'value': '2YR'}, {'label': '3SEM', 'value': '3SEM'}, {'label': '4SEM', 'value': '4SEM'}, {'label': '5SEM', 'value': '5SEM'}, {'label': '6SEM', 'value': '6SEM'}, {'label': '7SEM', 'value': '7SEM'}],
       period_options: [{'label': '1st to 15 Days', 'value': 'first_period'}, {'label': '16th to Month End', 'value': 'second_period'}, {'label': '1st to Month End', 'value': 'complete'}],
       btnLoading: false,
+      csv: false,
       student_attendance_details: [],
       columns: [
         {
@@ -199,6 +200,7 @@ export default {
               })
             })
             that.btnLoading = false
+            that.csv = true
             console.log(that.student_attendance_details)
           })
       } else {
