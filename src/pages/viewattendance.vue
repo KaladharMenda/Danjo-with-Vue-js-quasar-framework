@@ -49,8 +49,27 @@
             Download CSV
         </q-btn>
       </div>
-      <div class="row">
-        <table class="q-table responsive" style="width: 100%; text-align: center; border-color: white;">
+      <!-- <div class="row"> -->
+        <q-table
+         :data="student_attendance_details"
+         :columns="columns"
+         color="black"
+         :filter="filter"
+         :separator="separator"
+         row-key="name"
+         :loading="loading"
+         >
+       <template slot="top-right" slot-scope="props">
+         <q-search class="col-12" v-model="filter" />
+       </template>
+
+       <q-tr slot="body" slot-scope="props" :props="props" class="cursor-pointer">
+         <q-td v-for="col in props.cols" :key="col.name" :props="props">
+           {{ col.value }}
+         </q-td>
+       </q-tr>
+      </q-table>
+        <!-- <table class="q-table responsive" style="width: 100%; text-align: center; border-color: white;">
           <thead>
             <tr>
               <th style="font-family: sans-serif;"><b>PIN</b></th>
@@ -71,13 +90,11 @@
               <td style="border-top: 1px solid rgb(236, 236, 236);" class="text-center" data-th="Student Attend Days">{{ data.StudentAttendDays }}</td>
             </tr>
           </tbody>
-        </table>
-      </div>
+        </table> -->
+      <!-- </div> -->
     </q-card>
   </div>
 </template>
-
-<script type="text/javascript" src="https://www.baqend.com/js-sdk/latest/baqend-realtime.js"></script>
 
 <script>
 import axios from 'axios'
@@ -124,6 +141,9 @@ export default {
   },
   data () {
     return {
+      loading: false,
+      separator: 'cell',
+      filter: '',
       month: '',
       year_sem: '',
       period: '',
@@ -132,6 +152,22 @@ export default {
       period_options: [{'label': '1st to 15 Days', 'value': 'first_period'},{'label': '16th to Month End', 'value': 'second_period'},{'label': '1st to Month End', 'value': 'complete'}],
       btnLoading: false,
       student_attendance_details: [],
+      columns: [
+        {
+          name: 'Pin',
+          required: true,
+          label: 'PIN',
+          align: 'center',
+          field: 'Pin',
+          sortable: true,
+          descending: true
+        },
+        { name: 'StudentName', label: 'Student Name', align: 'center', field: 'StudentName', sortable: true },
+        { name: 'year_sem', label: 'year/ Sem', align: 'center', field: 'year_sem', sortable: true },
+        { name: 'period', label: 'Period', align: 'center', field: 'period', sortable: true },
+        { name: 'CollegeWorkingDays', label: 'College Working Days', align: 'center', field: 'CollegeWorkingDays', sortable: true },
+        { name: 'StudentAttendDays', label: 'Student Attend Days', align: 'center', field: 'StudentAttendDays', sortable: true }
+      ]
     }
   },
   created () {
