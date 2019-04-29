@@ -259,7 +259,7 @@ export default {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-    },
+    }
   }
 }
 </script>
