@@ -175,6 +175,7 @@ export default {
     get_attendence_details () {
       let that = this
       that.btnLoading = true
+      var baseUrlForBackend = 'http://3.82.197.239:8000/'
       var attendenceDict = {}
       that.student_attendance_details = []
       attendenceDict['year_sem'] = that.year_sem
@@ -209,26 +210,27 @@ export default {
       this.JSONToCSVConvertor(this.student_attendance_details, 'okay', 1)
     },
     JSONToCSVConvertor (JSONData, ReportTitle, ShowLabel) {
-      var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData
+      var arrData = typeof JSONData !== 'object' ? JSON.parse(JSONData) : JSONData
       var CSV = ''
+      var index = ''
       CSV += ReportTitle + '\r\n\n'
       if (ShowLabel) {
         var row = ''
-        for (var index in arrData[0]) {
+        for (index in arrData[0]) {
           row += index + ','
         }
         row = row.slice(0, -1)
         CSV += row + '\r\n'
       }
       for (var i = 0; i < arrData.length; i++) {
-        var row = ''
-        for (var index in arrData[i]) {
+        // var row = ''
+        for (index in arrData[i]) {
           row += '"' + arrData[i][index] + '",'
         }
         row.slice(0, row.length - 1)
         CSV += row + '\r\n'
       }
-      if (CSV == '') {
+      if (CSV === '') {
         alert('Invalid data')
         return
       }
