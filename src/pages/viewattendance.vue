@@ -207,24 +207,23 @@ export default {
       }
     },
     downloadCsv (title) {
-      this.JSONToCSVConvertor(this.student_attendance_details, 'okay', 1)
+      this.JSONToCSVConvertor(this.student_attendance_details, '', 1)
     },
     JSONToCSVConvertor (JSONData, ReportTitle, ShowLabel) {
       var arrData = typeof JSONData !== 'object' ? JSON.parse(JSONData) : JSONData
       var CSV = ''
-      var index = ''
       CSV += ReportTitle + '\r\n\n'
       if (ShowLabel) {
         var row = ''
-        for (index in arrData[0]) {
+        for (var index in arrData[0]) {
           row += index + ','
         }
         row = row.slice(0, -1)
         CSV += row + '\r\n'
       }
       for (var i = 0; i < arrData.length; i++) {
-        // var row = ''
-        for (index in arrData[i]) {
+        let row = ''
+        for (let index in arrData[i]) {
           row += '"' + arrData[i][index] + '",'
         }
         row.slice(0, row.length - 1)
@@ -234,11 +233,10 @@ export default {
         alert('Invalid data')
         return
       }
-      // var fileName = ReportTitle.replace(/ /g, '_')
       var blobdata = new Blob([CSV], {type: 'text/csv'})
       var link = document.createElement('a')
       link.setAttribute('href', window.URL.createObjectURL(blobdata))
-      link.setAttribute('download', 'Data.csv')
+      link.setAttribute('download', 'ViewAttendance.csv')
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
