@@ -1,6 +1,6 @@
 <template>
   <div class="HOME PAGE-CONTENT">
-    <q-card class="bg-white card-styl">
+    <q-card class="bg-white card-styl width_typesss">
       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" align="center">
         <q-toolbar color="orange" class="toolgradientblue">
           <q-toolbar-title>
@@ -12,16 +12,17 @@
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
           <q-datetime color="blue" v-model="exam_date" type="date" float-label="EXAM DATE"/>
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6" v-if = "exam_date">
           <q-field>
             <q-select
               v-model="year_sem"
               :options="year_sem_options"
               float-label="YEAR / SEMESTER"
+              @input="getSubjectsData"
             />
           </q-field>
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6" v-if ="year_sem">
           <q-field>
             <q-select
               v-model="unit_exam"
@@ -30,24 +31,24 @@
             />
           </q-field>
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6" v-if="unit_exam">
           <q-field>
             <q-select
               v-model="subject"
-              :options="subject_options"
+              :options="subjectDropdownOpts"
               float-label="SUBJECT"
             />
           </q-field>
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6" v-if="subject">
           <q-field>
             <q-input  type="text" v-model="total_marks" float-label="TOTAL MARKS"/>
           </q-field>
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6" align="center">
-          <q-btn color="purple" icon-right="send" @click="get_student_details()" :disabled="btnLoading" style="background: linear-gradient(60deg, #66bb6a, #43a047) !important;">
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6" align="center" v-if="total_marks">
+          <q-btn color="purple" @click="get_student_details()" :disabled="btnLoading" style="background: linear-gradient(60deg, #66bb6a, #43a047) !important;">
             <q-spinner-hourglass v-if="btnLoading" class="on-left"/>
-            GET STUDENT DETAILS
+            Add Unit Marks
           </q-btn>
         </div>
       </div>
@@ -76,8 +77,8 @@
         </table>
       </div>
       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" align="center" style="padding-top: 15px;" v-if="alldivisionenable">
-        <q-btn color="light-blue-7" icon-right="send" @click="send_attendence_details()" :disabled="btnLoading" style="    background: linear-gradient(60deg, rgb(27, 98, 204), rgb(8, 149, 249)) !important;">
-          <q-spinner-hourglass v-if="btnLoading" class="on-left"/>
+        <q-btn color="light-blue-7" icon-right="send" @click="send_attendence_details()" :disabled="btnLoadings" style="    background: linear-gradient(60deg, rgb(27, 98, 204), rgb(8, 149, 249)) !important;">
+          <q-spinner-hourglass v-if="btnLoadings" class="on-left"/>
           CONFIRM
         </q-btn>
       </div>
@@ -137,11 +138,13 @@ export default {
       unit_exam: '',
       subject: '',
       total_marks: '',
-      year_sem_options: [{'label': '1YR', 'value': '1YR'},{'label': '2YR', 'value': '2YR'},{'label': '3SEM', 'value': '3SEM'},{'label': '4SEM', 'value': '4SEM'},{'label': '5SEM', 'value': '5SEM'},{'label': '6SEM', 'value': '6SEM'},{'label': '7SEM', 'value': '7SEM'}],
+      year_sem_options: [{'label': '1YR', 'value': '1YR'},{'label': '2YR', 'value': '2YR'},{'label': '3SEM', 'value': '3SEM'},{'label': '4SEM', 'value': '4SEM'},{'label': '5SEM', 'value': '5SEM'},{'label': '6SEM', 'value': '6SEM'},{'label': '7SEM', 'value': '7SEM'},{'label': '8SEM', 'value': '8SEM'}],
       unit_exam_options: [{'label': 'UNIT TEST ONE', 'value': 'UNIT TEST ONE'},{'label': 'UNIT TEST TWO', 'value': 'UNIT TEST TWO'},{'label': 'UNIT TEST THREE', 'value': 'UNIT TEST THREE'}],
       subject_options: [{'label': 'x', 'value': 'x'},{'label': 'y', 'value': 'y'}],
       btnLoading: false,
+      btnLoadings: false,
       student_unit_details: [],
+      subjectDropdownOpts: [],
       alldivisionenable : false,
     }
   },
@@ -149,6 +152,28 @@ export default {
     var that = this
   },
   methods: {
+    getSubjectsData () {
+      var that = this
+      that.subjectDropdownOpts = []
+      var sem_obj = {
+        'sem': that.year_sem
+      }
+      axios.post(baseUrlForBackend+'govweb/get_sem_subjects/', JSON.stringify(sem_obj))
+      .then(function(resp){
+        if (resp.data != 'Subject Details Not Available for this Semester' && resp.data) {
+          resp.data.forEach(function(item){
+            that.subjectDropdownOpts.push({
+              'label': item.subject,
+              'value' : item.subject,
+            })
+          });
+        } else if(resp.data == 'Subject Details Not Available for this Semester') {
+          that.showNotify(resp.data)
+        } else {
+          that.showNotify('something went Wrong !!!')
+        }
+      })
+    },
     get_student_details () {
       var that = this
       var unit_dict = {}
@@ -159,6 +184,7 @@ export default {
           unit_dict['subject'] = that.subject
           unit_dict['total_marks'] = that.total_marks
           that.alldivisionenable = true
+          that.btnLoading = true
           axios.post(baseUrlForBackend+'govweb/get_unit_marks/',JSON.stringify(unit_dict))
           .then(function(resp){
             that.student_unit_details = []
@@ -175,10 +201,12 @@ export default {
           })
       } else {
         that.$q.notify({color: 'negative', textColor: 'white', message: 'Please select the Required Fields', position: 'center', timeout: 1000 })
+        that.btnLoading = false
       }
     },
     send_attendence_details (){
       var that = this
+      that.btnLoadings = true,
       that.student_unit_details[0]['subject'] = that.subject
       that.student_unit_details[0]['unit_exam'] = that.unit_exam
       that.student_unit_details[0]['total_marks'] = that.total_marks
@@ -186,10 +214,21 @@ export default {
       axios.post(baseUrlForBackend+'govweb/unit_marks_update/',JSON.stringify(that.student_unit_details))
       .then(function(resp){
         let respdata = resp.data
+        that.btnLoadings = false,
         that.$q.notify({color: 'green', textColor: 'white', message:respdata, position: 'center', timeout: 1000})
         console.log(respdata)
       })
     },
+    showNotify (msg) {
+      let that = this
+      that.$q.notify({
+        color: 'negative',
+        textColor: 'white',
+        message: msg,
+        position: 'bottom-right',
+        timeout: 1000
+      })
+    }
   }
 }
 </script>

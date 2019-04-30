@@ -147,7 +147,7 @@ export default {
       year_sem: '',
       period: '',
       month_options: [{'label': 'January', 'value': 'January'}, {'label': 'February', 'value': 'February'}, {'label': 'March', 'value': 'March'}, {'label': 'April', 'value': 'April'}, {'label': 'May', 'value': 'May'}, {'label': 'June', 'value': 'June'}, {'label': 'July', 'value': 'July'}, {'label': 'August', 'value': 'August'}, {'label': 'September', 'value': 'September'}, {'label': 'October', 'value': 'October'}, {'label': 'November', 'value': 'November'}, {'label': 'December', 'value': 'December'}],
-      year_sem_options: [{'label': '1YR', 'value': '1YR'}, {'label': '2YR', 'value': '2YR'}, {'label': '3SEM', 'value': '3SEM'}, {'label': '4SEM', 'value': '4SEM'}, {'label': '5SEM', 'value': '5SEM'}, {'label': '6SEM', 'value': '6SEM'}, {'label': '7SEM', 'value': '7SEM'}],
+      year_sem_options: [{'label': '1YR', 'value': '1YR'}, {'label': '2YR', 'value': '2YR'}, {'label': '3SEM', 'value': '3SEM'}, {'label': '4SEM', 'value': '4SEM'}, {'label': '5SEM', 'value': '5SEM'}, {'label': '6SEM', 'value': '6SEM'}, {'label': '7SEM', 'value': '7SEM'}, {'label': '8SEM', 'value': '8SEM'}, {'label': 'PROJECT', 'value': 'PROJECT'}],
       period_options: [{'label': '1st to 15 Days', 'value': 'first_period'}, {'label': '16th to Month End', 'value': 'second_period'}, {'label': '1st to Month End', 'value': 'complete'}],
       btnLoading: false,
       student_attendance_details: [],
