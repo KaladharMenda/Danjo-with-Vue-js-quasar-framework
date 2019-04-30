@@ -2,19 +2,20 @@
   <div class="HOME PAGE-CONTENT">
     <q-card class="bg-white card-styl">
       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" align="center">
-        <q-toolbar color="orange" class="toolblue">
+        <q-toolbar color="orange" class="toolgradientred">
           <q-toolbar-title>
             <b>View Project Marks</b>
           </q-toolbar-title>
         </q-toolbar>
       </div>
       <div class="row gutter-sm" style="margin-top: 0px;">
-        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
           <q-field>
             <q-select
               v-model="year_sem"
               :options="year_sem_options"
               float-label="YEAR / SEMESTER"
+              @input="getSubjects_scheme_Data"
             />
           </q-field>
         </div>
@@ -22,25 +23,45 @@
           <q-field>
             <q-select
               v-model="scheme_code"
-              :options="scheme_code_options"
+              :options="schemeDropdownOpts"
               float-label="SCHEME CODE"
             />
           </q-field>
         </div>
-        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6" align="center">
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" align="center">
           <q-btn color="purple" @click="get_pm_details()" :disabled="btnLoading" style="background: linear-gradient(60deg, #66bb6a, #43a047) !important;">
             <q-spinner-hourglass v-if="btnLoading" class="on-left"/>
-            GET STUDENT DETAILS
+            View Project Marks
           </q-btn>
         </div>
       </div>
-      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" align="center">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" align="center" v-if="alldivisionenable" style="padding-top: 5px;">
         <q-btn color="purple" @click="downloadCsv('tableTitle')" :disabled="btnLoading" style="background: linear-gradient(60deg, rgb(95, 105, 96), rgb(113, 113, 113)) !important;">
             <img src="statics/excel.png" style="height: 25px;width: auto" class="on-left">
             Download CSV
         </q-btn>
       </div>
-      <div class="row">
+      <q-table
+         v-if="alldivisionenable"
+         :data="student_attendance_details"
+         :columns="columns"
+         color="black"
+         :filter="filter"
+         :separator="separator"
+         row-key="name"
+         :loading="loading"
+         >
+       <template slot="top-right" slot-scope="props">
+         <q-search class="col-12" v-model="filter" />
+       </template>
+
+       <q-tr slot="body" slot-scope="props" :props="props" class="cursor-pointer">
+         <q-td v-for="col in props.cols" :key="col.name" :props="props">
+           {{ col.value }}
+         </q-td>
+       </q-tr>
+      </q-table>
+      <!-- <div class="row">
         <table class="q-table responsive" style="width: 100%; text-align: center; border-color: white;">
           <thead>
             <tr>
@@ -65,7 +86,7 @@
             </tr>
           </tbody>
         </table>
-      </div>
+      </div> -->
     </q-card>
   </div>
 </template>
@@ -117,20 +138,61 @@ export default {
   },
   data () {
     return {
+      loading: false,
+      separator: 'cell',
+      filter: '',
       month: '',
       year_sem: '',
       period: '',
       scheme_code:'',
-      scheme_code_options: [{'label': 'C05', 'value': 'C05'},{'label': 'C09', 'value': 'C09'},{'label': 'C014', 'value': 'C014'},{'label': 'C016', 'value': 'C016'},{'label': 'ER91', 'value': 'ER91'}],
-      year_sem_options: [{'label': '1YR', 'value': '1YR'},{'label': '2YR', 'value': '2YR'},{'label': '3SEM', 'value': '3SEM'},{'label': '4SEM', 'value': '4SEM'},{'label': '5SEM', 'value': '5SEM'},{'label': '6SEM', 'value': '6SEM'},{'label': '7SEM', 'value': '7SEM'}],
+      year_sem_options: [{'label': '1YR', 'value': '1YR'},{'label': '2YR', 'value': '2YR'},{'label': '3SEM', 'value': '3SEM'},{'label': '4SEM', 'value': '4SEM'},{'label': '5SEM', 'value': '5SEM'},{'label': '6SEM', 'value': '6SEM'},{'label': '7SEM', 'value': '7SEM'},{'label': '8SEM', 'value': '8SEM'},{'label': 'PROJECT', 'value': 'PROJECT'}],
       btnLoading: false,
+      schemeDropdownOpts: [],
       student_attendance_details: [],
+      columns: [
+        {
+          name: 'Pin',
+          required: true,
+          label: 'PIN',
+          align: 'center',
+          field: 'Pin',
+          sortable: true,
+          descending: true
+        },
+        { name: 'StudentName', label: 'Student Name', align: 'center', field: 'StudentName', sortable: true },
+        { name: 'Year/Sem', label: 'year/ Sem', align: 'center', field: 'Year/Sem', sortable: true },
+        { name: 'projectName', label: 'Project Name', align: 'center', field: 'projectName', sortable: true },
+        { name: 'TotalMarks', label: 'Total Marks', align: 'center', field: 'TotalMarks', sortable: true },
+        { name: 'ObtainedMarks', label: 'Obtained Marks', align: 'center', field: 'ObtainedMarks', sortable: true }
+      ]
     }
   },
   created () {
     var that = this
   },
   methods: {
+    getSubjects_scheme_Data () {
+      var that = this
+      that.schemeDropdownOpts = []
+      var sem_obj = {
+        'sem': that.year_sem
+      }
+      axios.post(baseUrlForBackend+'govweb/get_sem_schemes/', JSON.stringify(sem_obj))
+      .then(function(resp){
+        if (resp.data != 'SchemeCode Details Not Available for this Semester' && resp.data) {
+          resp.data.forEach(function(item){
+            that.schemeDropdownOpts.push({
+              'label': item.scheme,
+              'value' : item.scheme,
+            })
+          });
+        } else if(resp.data == 'SchemeCode Details Not Available for this Semester') {
+          that.showNotify(resp.data)
+        } else {
+          that.showNotify('something went Wrong !!!')
+        }
+      })
+    },
     updateCreateCartonsDt () {
       var that = this
       that.tableData = []
@@ -151,6 +213,7 @@ export default {
     get_pm_details () {
       let that = this
       that.btnLoading = true
+      that.loading = true
       var pm_dict = {}
       that.student_attendance_details = []
       pm_dict ['year_sem'] = that.year_sem
@@ -167,22 +230,23 @@ export default {
             that.student_attendance_details.push({
               'Pin' : record.pin,
               'StudentName': record.student_name,
-              'year_sem':record.year_sem,
-              'project_name': record.project_name,
-              'obtained_marks': record.marks,
-              'total_marks': record.total_marks
+              'Year/Sem':record.year_sem,
+              'projectName': record.project_name,
+              'TotalMarks': record.total_marks,
+              'ObtainedMarks': record.marks,
             })
           })
+          that.loading = false
           that.btnLoading = false
-          console.log(that.student_attendance_details)
         })
       } else {
+        that.loading = false
         that.btnLoading = false
         that.$q.notify({color: 'negative', textColor: 'white', message: 'Please Select Required Fields', position: 'center', timeout: 1000})
       }
     },
     downloadCsv(title) {
-      this.JSONToCSVConvertor(this.student_attendance_details, 'okay', 1)
+      this.JSONToCSVConvertor(this.student_attendance_details, '', 1)
     },
     JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {
         var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
@@ -217,6 +281,16 @@ export default {
         link.click();
         document.body.removeChild(link);
     },
+    showNotify (msg) {
+      let that = this
+      that.$q.notify({
+        color: 'negative',
+        textColor: 'white',
+        message: msg,
+        position: 'bottom-right',
+        timeout: 1000
+      })
+    }
   }
 }
 </script>

@@ -135,14 +135,6 @@
               <img src="statics/qr-code.png" class="link-imgs">
               <div class="navigation-text header_fontS header_text">Decode</div>
             </q-item>
-            <q-item class="navlink childnav" :to="{ path: '/admin/detainedlist'}">
-              <img src="statics/delete.png" class="link-imgs">
-              <div class="navigation-text header_fontS header_text">Detained List</div>
-            </q-item>
-            <q-item class="navlink childnav" :to="{ path: '/admin/condonationlist'}">
-              <img src="statics/link.png" class="link-imgs">
-              <div class="navigation-text header_fontS header_text">Condonation List</div>
-            </q-item>
             </q-collapsible>
         </a>
         <a href="javascript:void(0)">
@@ -151,17 +143,23 @@
                 <img src="statics/reports.png" class="link-img" />
                 <div class="navigation-text header_fontM header_text">Reports</div>
               </template>
-            <q-collapsible class="box">
-              <template slot="header">
+              <!-- <template slot="header">
                 <img src="statics/studentsub.png" class="link-img" />
                 <div class="navigation-text header_fontS header_text">Student</div>
-              </template>
+              </template> -->
               <q-item class="navlink childnav" :to="{ path: '/admin/DeletedStudentsReport'}">
                 <img src="statics/arrow.png" class="link-imgs">
                 <div class="navigation-text header_fontC header_text">Deleted Students</div>
               </q-item>
-            </q-collapsible>
-            <q-collapsible class="box">
+              <q-item class="navlink childnav" :to="{ path: '/admin/detainedlist'}">
+                <img src="statics/delete.png" class="link-imgs">
+                <div class="navigation-text header_fontS header_text">Detained List</div>
+              </q-item>
+              <q-item class="navlink childnav" :to="{ path: '/admin/condonationlist'}">
+                <img src="statics/link.png" class="link-imgs">
+                <div class="navigation-text header_fontS header_text">Condonation List</div>
+              </q-item>
+            <!-- <q-collapsible class="box">
               <template slot="header">
                 <img src="statics/attend.png" class="link-img" />
                 <div class="navigation-text header_fontS header_text">Sm Marks</div>
@@ -180,7 +178,7 @@
                 <img src="statics/arrow.png" class="link-imgs">
                 <div class="navigation-text header_fontC header_text">Confirmed Report</div>
               </q-item>
-            </q-collapsible>
+            </q-collapsible> -->
           </q-collapsible>
             <!-- <END THE STUDENT Attendance DETAILS > -->
         </a>

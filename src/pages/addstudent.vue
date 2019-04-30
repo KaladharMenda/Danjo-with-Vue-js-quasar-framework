@@ -102,18 +102,19 @@
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
           <q-field>
             <q-select
-              v-model="studen_info.scheme_code"
-              :options="schemeOptions"
-              float-label="Scheme Code"
+              v-model="studen_info.year_sem"
+              :options="year_semOptions"
+              float-label="Year / Semester"
+              @input="getSubjects_scheme_Data"
             />
           </q-field>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
           <q-field>
             <q-select
-              v-model="studen_info.year_sem"
-              :options="year_semOptions"
-              float-label="Year / Semester"
+              v-model="studen_info.scheme_code"
+              :options="schemeDropdownOpts"
+              float-label="Scheme Code"
             />
           </q-field>
         </div>
@@ -277,10 +278,10 @@ export default {
       casteOptions: [{'label': 'OC', 'value': 'OC'},{'label': 'BC', 'value': 'BC'},{'label': 'SC', 'value': 'SC'},{'label': 'ST', 'value': 'ST'},{'label': 'OTHERS', 'value': 'OTHERS'}],
       qualificationOptions: [{'label': '10th Class', 'value': '10thClass'},{'label': 'Intermediate', 'value': 'Intermediate'},{'label': 'Inter(vocational)', 'value': 'Inter(vocational)'},{'label': 'Degree', 'value': 'Degree'},{'label': 'OTHERS', 'value': 'OTHERS'}],
       phOptions: [{'label': 'Yes', 'value': 'Yes'},{'label': 'No', 'value': 'No'}],
-      schemeOptions: [{'label': 'ER91', 'value': 'ER91'},{'label': 'C14', 'value': 'C14'},{'label': 'C16', 'value': 'C16'}],
-      year_semOptions: [{'label': '1YR', 'value': '1YR'},{'label': '2YR', 'value': '2YR'},{'label': '3SEM', 'value': '3SEM'},{'label': '4SEM', 'value': '4SEM'},{'label': '5SEM', 'value': '5SEM'},{'label': '6SEM', 'value': '6SEM'},{'label': '7SEM', 'value': '7SEM'}],
+      year_semOptions: [{'label': '1YR', 'value': '1YR'},{'label': '2YR', 'value': '2YR'},{'label': '3SEM', 'value': '3SEM'},{'label': '4SEM', 'value': '4SEM'},{'label': '5SEM', 'value': '5SEM'},{'label': '6SEM', 'value': '6SEM'},{'label': '7SEM', 'value': '7SEM'},{'label': '8SEM', 'value': '8SEM'}],
       shiftOptions: [{'label': '1', 'value': '1'},{'label': '2', 'value': '2'}],
       sectionOptions: [{'label': '1', 'value': '1'},{'label': '2', 'value': '2'}],
+      schemeDropdownOpts: [],
     }
   },
   mounted () {
@@ -293,6 +294,28 @@ export default {
     },200)
   },
   methods: {
+    getSubjects_scheme_Data () {
+      var that = this
+      that.schemeDropdownOpts = []
+      var sem_obj = {
+        'sem': that.studen_info.year_sem
+      }
+      axios.post(baseUrlForBackend+'govweb/get_sem_schemes/', JSON.stringify(sem_obj))
+      .then(function(resp){
+        if (resp.data != 'SchemeCode Details Not Available for this Semester' && resp.data) {
+          resp.data.forEach(function(item){
+            that.schemeDropdownOpts.push({
+              'label': item.scheme,
+              'value' : item.scheme,
+            })
+          });
+        } else if(resp.data == 'SchemeCode Details Not Available for this Semester') {
+          that.showNotify(resp.data)
+        } else {
+          that.showNotify('something went Wrong !!!')
+        }
+      })
+    },
     show (options) {
       this.$q.loading.show(options)
       // setTimeout(() => {
@@ -333,6 +356,16 @@ export default {
             that.getVendorLimit()
         },500)
       }
+    },
+    showNotify (msg) {
+      let that = this
+      that.$q.notify({
+        color: 'negative',
+        textColor: 'white',
+        message: msg,
+        position: 'bottom-right',
+        timeout: 1000
+      })
     },
     emtpyAllFields () {
       var that = this

@@ -1,8 +1,8 @@
 <template>
   <div class="HOME PAGE-CONTENT">
-    <q-card class="bg-white card-styl">
+    <q-card class="bg-white card-styl width_typesss">
       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" align="center">
-        <q-toolbar color="orange" class="toolgradientblue">
+        <q-toolbar color="orange" class="toolgradientred">
           <q-toolbar-title>
             <b>Add PM Marks For Students</b>
           </q-toolbar-title>
@@ -15,6 +15,7 @@
               v-model="year_sem"
               :options="year_sem_options"
               float-label="YEAR / SEMESTER"
+              @input="getSubjects_scheme_Data"
             />
           </q-field>
         </div>
@@ -22,7 +23,7 @@
           <q-field>
             <q-select
               v-model="scheme_code"
-              :options="scheme_code_options"
+              :options="schemeDropdownOpts"
               float-label="SCHEME CODE"
             />
           </q-field>
@@ -37,10 +38,10 @@
             <q-input  type="text" v-model="total_marks" float-label="TOTAL MARKS"/>
           </q-field>
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6" align="center">
-          <q-btn color="purple" icon-right="send" @click="get_student_details()" :disabled="btnLoading" style="background: linear-gradient(60deg, #66bb6a, #43a047) !important;">
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" align="center" style="padding-bottom: 5px;">
+          <q-btn color="purple" @click="get_student_details()" :disabled="btnLoading" style="background: linear-gradient(60deg, #66bb6a, #43a047) !important;">
             <q-spinner-hourglass v-if="btnLoading" class="on-left"/>
-            GET STUDENT DETAILS
+            Add Project Marks
           </q-btn>
         </div>
       </div>
@@ -69,8 +70,8 @@
         </table>
       </div>
       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" align="center" style="padding-top: 15px;" v-if="alldivisionenable">
-        <q-btn color="light-blue-7" icon-right="send" @click="send_pm_details()" :disabled="btnLoading" style="    background: linear-gradient(60deg, rgb(27, 98, 204), rgb(8, 149, 249)) !important;">
-          <q-spinner-hourglass v-if="btnLoading" class="on-left"/>
+        <q-btn color="light-blue-7" icon-right="send" @click="send_pm_details()" :disabled="btnLoadings" style="    background: linear-gradient(60deg, rgb(27, 98, 204), rgb(8, 149, 249)) !important;">
+          <q-spinner-hourglass v-if="btnLoadings" class="on-left"/>
           CONFIRM
         </q-btn>
       </div>
@@ -131,11 +132,11 @@ export default {
       project_title:'',
       subject: '',
       total_marks: '',
-      year_sem_options: [{'label': '1YR', 'value': '1YR'},{'label': '2YR', 'value': '2YR'},{'label': '3SEM', 'value': '3SEM'},{'label': '4SEM', 'value': '4SEM'},{'label': '5SEM', 'value': '5SEM'},{'label': '6SEM', 'value': '6SEM'},{'label': '7SEM', 'value': '7SEM'}],
+      year_sem_options: [{'label': '1YR', 'value': '1YR'},{'label': '2YR', 'value': '2YR'},{'label': '3SEM', 'value': '3SEM'},{'label': '4SEM', 'value': '4SEM'},{'label': '5SEM', 'value': '5SEM'},{'label': '6SEM', 'value': '6SEM'},{'label': '7SEM', 'value': '7SEM'},{'label': '8SEM', 'value': '8SEM'},{'label': 'PROJECT', 'value': 'PROJECT'}],
       unit_exam_options: [{'label': 'UNIT TEST ONE', 'value': 'UNIT TEST ONE'},{'label': 'UNIT TEST TWO', 'value': 'UNIT TEST TWO'},{'label': 'UNIT TEST THREE', 'value': 'UNIT TEST THREE'}],
-      subject_options: [{'label': 'x', 'value': 'x'},{'label': 'y', 'value': 'y'}],
-      scheme_code_options: [{'label': 'C05', 'value': 'C05'},{'label': 'C09', 'value': 'C09'},{'label': 'C014', 'value': 'C014'},{'label': 'C16', 'value': 'C016'},{'label': 'ER91', 'value': 'ER91'}],
       btnLoading: false,
+      btnLoadings: false,
+      schemeDropdownOpts: [],
       student_unit_details: [],
       alldivisionenable : false,
     }
@@ -144,6 +145,28 @@ export default {
     var that = this
   },
   methods: {
+    getSubjects_scheme_Data () {
+      var that = this
+      that.schemeDropdownOpts = []
+      var sem_obj = {
+        'sem': that.year_sem
+      }
+      axios.post(baseUrlForBackend+'govweb/get_sem_schemes/', JSON.stringify(sem_obj))
+      .then(function(resp){
+        if (resp.data != 'SchemeCode Details Not Available for this Semester' && resp.data) {
+          resp.data.forEach(function(item){
+            that.schemeDropdownOpts.push({
+              'label': item.scheme,
+              'value' : item.scheme,
+            })
+          });
+        } else if(resp.data == 'SchemeCode Details Not Available for this Semester') {
+          that.showNotify(resp.data)
+        } else {
+          that.showNotify('something went Wrong !!!')
+        }
+      })
+    },
     get_student_details () {
       var that = this
       var pm_dict = {}
@@ -153,6 +176,7 @@ export default {
           pm_dict['project_title'] = that.project_title
           pm_dict['total_marks'] = that.total_marks
           that.alldivisionenable = true
+          that.btnLoading = true
           axios.post(baseUrlForBackend+'govweb/get_pm_marks/',JSON.stringify(pm_dict))
           .then(function(resp){
             that.student_unit_details = []
@@ -165,14 +189,15 @@ export default {
               })
             })
             that.btnLoading = false
-            console.log(that.student_unit_details)
           })
       } else {
+        that.btnLoading = false
         that.$q.notify({color: 'negative', textColor: 'white', message: 'Please select the Required Fields', position: 'center', timeout: 1000 })
       }
     },
     send_pm_details (){
       var that = this
+      that.btnLoadings = true
       that.student_unit_details[0]['scheme_code'] = that.scheme_code
       that.student_unit_details[0]['project_title'] = that.project_title
       that.student_unit_details[0]['total_marks'] = that.total_marks
@@ -181,9 +206,19 @@ export default {
       .then(function(resp){
         let respdata = resp.data
         that.$q.notify({color: 'green', textColor: 'white', message:respdata, position: 'center', timeout: 1000})
-        console.log(respdata)
+        that.btnLoadings = false
       })
     },
+    showNotify (msg) {
+      let that = this
+      that.$q.notify({
+        color: 'negative',
+        textColor: 'white',
+        message: msg,
+        position: 'bottom-right',
+        timeout: 1000
+      })
+    }
   }
 }
 </script>
