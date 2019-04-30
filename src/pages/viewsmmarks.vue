@@ -48,8 +48,28 @@
             Download CSV
         </q-btn>
       </div>
-      <div class="row" v-if = "table_enable_flag">
-        <table class="q-table responsive" style="width: 100%; text-align: center; border-color: white;">
+      <q-table
+         v-if="table_enable_flag"
+         :data="final_semester_marks"
+         :columns="columns"
+         color="black"
+         :filter="filter"
+         :separator="separator"
+         row-key="name"
+         :loading="loading"
+         >
+       <template slot="top-right" slot-scope="props">
+         <q-search class="col-12" v-model="filter" />
+       </template>
+
+       <q-tr slot="body" slot-scope="props" :props="props" class="cursor-pointer">
+         <q-td v-for="col in props.cols" :key="col.name" :props="props">
+           {{ col.value }}
+         </q-td>
+       </q-tr>
+      </q-table>
+      <!-- <div class="row" v-if = "table_enable_flag"> -->
+        <!-- <table class="q-table responsive" style="width: 100%; text-align: center; border-color: white;">
           <thead>
             <tr>
               <th style="font-family: sans-serif;"><b>PIN</b></th>
@@ -70,8 +90,8 @@
               <td style="border-top: 1px solid rgb(236, 236, 236);" class="text-center" data-th="Marks">{{ data.marks }}</td>
             </tr>
           </tbody>
-        </table>
-      </div>
+        </table> -->
+      <!-- </div> -->
     </q-card>
   </div>
 </template>
@@ -123,6 +143,9 @@ export default {
   },
   data () {
     return {
+      loading: false,
+      separator: 'cell',
+      filter: '',
       year_sem: '',
       year_sem_options: [{'label': '1YR', 'value': '1YR'},{'label': '2YR', 'value': '2YR'},{'label': '3SEM', 'value': '3SEM'},{'label': '4SEM', 'value': '4SEM'},{'label': '5SEM', 'value': '5SEM'},{'label': '6SEM', 'value': '6SEM'},{'label': '7SEM', 'value': '7SEM'},{'label': '8SEM', 'value': '8SEM'}],
       btnLoading: false,
@@ -132,6 +155,22 @@ export default {
       subId: '',
       table_enable_flag : false,
       final_semester_marks: [],
+      columns: [
+        {
+          name: 'Pin',
+          required: true,
+          label: 'PIN',
+          align: 'center',
+          field: 'Pin',
+          sortable: true,
+          descending: true
+        },
+        { name: 'StudentName', label: 'Student Name', align: 'center', field: 'StudentName', sortable: true },
+        { name: 'Scheme', label: 'year/ Sem', align: 'center', field: 'Scheme', sortable: true },
+        { name: 'Subject', label: 'Subject', align: 'center', field: 'Subject', sortable: true },
+        { name: 'TotalMarks', label: 'Total Marks', align: 'center', field: 'TotalMarks', sortable: true },
+        { name: 'Marks', label: 'Obtained Marks', align: 'center', field: 'Marks', sortable: true }
+      ]
     }
   },
   created () {
@@ -140,6 +179,7 @@ export default {
   methods: {
     get_student_details () {
       var that = this
+      that.loading = true
       that.btnLoading = true
       that.table_enable_flag = true
       that.final_semester_marks = []
@@ -157,19 +197,22 @@ export default {
               that.final_semester_marks.push({
                 'Pin' : record.student_id,
                 'StudentName': record.student_name,
-                'scheme':record.scheme,
-                'subject': record.subject,
-                'total_marks': record.total_marks,
-                'marks': record.marks
+                'Scheme':record.scheme,
+                'Subject': record.subject,
+                'TotalMarks': record.total_marks,
+                'Marks': record.marks
               })
             })
             that.btnLoading = false
+            that.loading = false
           } else if(resp.data == 'No Data Found !!') {
             that.$q.notify({color: 'negative', textColor: 'white', message: resp.data, position: 'center', timeout: 1000 })
             that.btnLoading = false
+            that.loading = false
           } else {
             that.showNotify('something went Wrong !!!')
             that.btnLoading = false
+            that.loading = false
           }
         })
       } else {

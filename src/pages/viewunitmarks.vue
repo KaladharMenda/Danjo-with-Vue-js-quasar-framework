@@ -44,6 +44,12 @@
           </q-btn>
         </div>
       </div>
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" v-if="alldivisionenable" align="center">
+        <q-btn color="purple" @click="downloadCsv('tableTitle')" :disabled="btnLoading" style="background: linear-gradient(60deg, rgb(95, 105, 96), rgb(113, 113, 113)) !important;">
+            <img src="statics/excel.png" style="height: 25px;width: auto" class="on-left">
+            Download CSV
+        </q-btn>
+      </div>
       <q-table
          v-if="alldivisionenable"
          :data="student_unit_details"
@@ -157,18 +163,18 @@ export default {
       subjectDropdownOpts: [],
       columns: [
         {
-          name: 'pin',
+          name: 'PIN',
           required: true,
           label: 'PIN',
           align: 'center',
-          field: 'pin',
+          field: 'PIN',
           sortable: true,
           descending: true
         },
-        { name: 'student_name', label: 'Student Name', align: 'center', field: 'student_name', sortable: true },
-        { name: 'year_sem', label: 'year/ Sem', align: 'center', field: 'year_sem', sortable: true },
-        { name: 'total_marks', label: 'Total Marks', align: 'center', field: 'total_marks', sortable: true },
-        { name: 'marks', label: 'Obtained Marks', align: 'center', field: 'marks', sortable: true }
+        { name: 'StudentName', label: 'Student Name', align: 'center', field: 'StudentName', sortable: true },
+        { name: 'Year/Sem', label: 'year/ Sem', align: 'center', field: 'Year/Sem', sortable: true },
+        { name: 'TotalMarks', label: 'Total Marks', align: 'center', field: 'TotalMarks', sortable: true },
+        { name: 'ObtainedMarks', label: 'Obtained Marks', align: 'center', field: 'ObtainedMarks', sortable: true }
       ]
     }
   },
@@ -214,11 +220,11 @@ export default {
             that.student_unit_details = []
             resp.data.forEach(function(record){
               that.student_unit_details.push({
-                'pin' : record.pin,
-                'student_name': record.student_name,
-                'year_sem':record.year_sem,
-                'marks': record.marks,
-                'total_marks':record.total_marks,
+                'PIN' : record.pin,
+                'StudentName': record.student_name,
+                'Year/Sem':record.year_sem,
+                'TotalMarks':record.total_marks,
+                'ObtainedMarks': record.marks,
               })
             })
             that.btnLoading = false
@@ -239,6 +245,41 @@ export default {
         position: 'bottom-right',
         timeout: 1000
       })
+    },
+    downloadCsv (title) {
+      this.JSONToCSVConvertor(this.student_unit_details, '', 1)
+    },
+    JSONToCSVConvertor (JSONData, ReportTitle, ShowLabel) {
+      var arrData = typeof JSONData !== 'object' ? JSON.parse(JSONData) : JSONData
+      var CSV = ''
+      CSV += ReportTitle + '\r\n\n'
+      if (ShowLabel) {
+        var row = ''
+        for (var index in arrData[0]) {
+          row += index + ','
+        }
+        row = row.slice(0, -1)
+        CSV += row + '\r\n'
+      }
+      for (var i = 0; i < arrData.length; i++) {
+        let row = ''
+        for (let index in arrData[i]) {
+          row += '"' + arrData[i][index] + '",'
+        }
+        row.slice(0, row.length - 1)
+        CSV += row + '\r\n'
+      }
+      if (CSV === '') {
+        alert('Invalid data')
+        return
+      }
+      var blobdata = new Blob([CSV], {type: 'text/csv'})
+      var link = document.createElement('a')
+      link.setAttribute('href', window.URL.createObjectURL(blobdata))
+      link.setAttribute('download', 'ViewUnitMarks.csv')
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
     }
   }
 }
