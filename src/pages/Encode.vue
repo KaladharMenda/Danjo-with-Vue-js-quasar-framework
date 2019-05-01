@@ -134,9 +134,15 @@ export default {
   },
   created () {
     var that = this
-    setTimeout(function(){
-      that.$refs.totalmarks.focus()
-    }, 500)
+    that.user = localStorage.getItem('username')
+    that.flagShow = localStorage.getItem('flagShow')
+    if (!that.user) {
+      that.$router.push('/')
+    } else {
+      setTimeout(function(){
+        that.$refs.totalmarks.focus()
+      }, 500)
+    }
   },
   methods: {
     enableScanDiv () {

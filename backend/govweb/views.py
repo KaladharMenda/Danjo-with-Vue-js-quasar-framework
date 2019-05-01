@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
+from django.contrib.auth import authenticate
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from models import *
@@ -556,8 +557,8 @@ def get_semester_viewtable(request):
         if semester_markss.exists() :
             for sem in semester_markss:
                 student_dict ={}
-                student_dict ['student_id'] = sem.student_pin
-                student_dict ['student_name'] = sem.student_detail.student_name
+                student_dict['student_id'] = sem.student_pin
+                student_dict['student_name'] = sem.student_detail.student_name
                 student_dict['subject'] = sem.sem_subject
                 student_dict['scheme'] = sem.scheme_code
                 student_dict['total_marks'] = sem.total_marks
@@ -566,6 +567,26 @@ def get_semester_viewtable(request):
             return HttpResponse(json.dumps(student_details))
         else:
             return HttpResponse('No Data Found !!')
+    except Exception as e:
+        import traceback
+        return HttpResponse("Some thing went wrong")
+
+@csrf_exempt
+def login_check(request):
+    result_login = []
+    log_dict = {}
+    log_dicts = json.loads(request.POST.keys()[0])
+    user = authenticate(username=log_dicts['userid'], password=log_dicts['password'])
+    # import pdb; pdb.set_trace()
+    try:
+        if user:
+            log_dict['username'] = user.username
+            log_dict['active'] = user.is_active
+            log_dict['staff'] = user.is_staff
+            result_login.append(log_dict)
+            return HttpResponse(json.dumps(result_login))
+        else:
+            return HttpResponse('fail')
     except Exception as e:
         import traceback
         return HttpResponse("Some thing went wrong")

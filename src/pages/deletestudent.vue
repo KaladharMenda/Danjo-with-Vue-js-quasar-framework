@@ -333,9 +333,15 @@ export default {
   },
   created () {
     var that = this
-    setTimeout(function () {
-      that.$refs.firstpin.focus()
-    },200)
+    that.user = localStorage.getItem('username')
+    that.flagShow = localStorage.getItem('flagShow')
+    if (!that.user || that.flagShow == 'false') {
+      that.$router.push('/')
+    } else {
+      setTimeout(function () {
+        that.$refs.firstpin.focus()
+      },200)
+    }
   },
   methods: {
     getSubjects_scheme_Data () {

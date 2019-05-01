@@ -34,17 +34,17 @@
         link
         inset-delimiter
       >
-        <q-list-header>Essential links</q-list-header>
-        <q-item class="navlink" :to="{ path: '/admin/Usermanagement'}">
+        <q-list-header>{{user}}</q-list-header>
+        <!-- <q-item class="navlink" :to="{ path: '/admin/Usermanagement'}">
            <img src="statics/usermanagement.png" class="link-img">
            <div class="navigation-text header_fontM header_text">User Management</div>
-        </q-item>
-        <q-item class="navlink" :to="{ path: '/admin/encodedecode'}">
+        </q-item> -->
+        <q-item class="navlink" :to="{ path: '/admin/encodedecode'}" v-if="flagShow == 'true'">
            <img src="statics/usermanagement.png" class="link-img">
            <div class="navigation-text header_fontM header_text">Masters</div>
         </q-item>
         <a href="javascript:void(0)">
-          <q-collapsible class="box">
+          <q-collapsible class="box" v-if="flagShow == 'true'">
             <template slot="header">
               <img src="statics/student.png" class="link-img" />
               <div icon-right="send" class="navigation-text header_fontM header_text">Student Information</div>
@@ -127,18 +127,26 @@
                 <div class="navigation-text header_fontC header_text">View PM Marks</div>
               </q-item>
             </q-collapsible>
-            <q-item class="navlink childnav" :to="{ path: '/admin/Encode'}">
+            <!-- <q-item class="navlink childnav" :to="{ path: '/admin/Encode'}">
               <img src="statics/qr-code.png" class="link-imgs">
               <div class="navigation-text header_fontS header_text">Encode</div>
             </q-item>
             <q-item class="navlink childnav" :to="{ path: '/admin/Decode'}">
               <img src="statics/qr-code.png" class="link-imgs">
               <div class="navigation-text header_fontS header_text">Decode</div>
-            </q-item>
+            </q-item> -->
             </q-collapsible>
+            <q-item class="navlink childnav" :to="{ path: '/admin/Encode'}" v-if="flagShow == 'false' || flagShow == 'true'">
+              <img src="statics/qr-code.png" class="link-imgs">
+              <div class="navigation-text header_fontM header_text">Encode</div>
+            </q-item>
+            <q-item class="navlink childnav" :to="{ path: '/admin/Decode'}" v-if="flagShow == 'true'">
+              <img src="statics/qr-code.png" class="link-imgs">
+              <div class="navigation-text header_fontM header_text">Decode</div>
+            </q-item>
         </a>
         <a href="javascript:void(0)">
-            <q-collapsible class="box">
+            <q-collapsible class="box" v-if="flagShow == 'true'">
               <template slot="header">
                 <img src="statics/reports.png" class="link-img" />
                 <div class="navigation-text header_fontM header_text">Reports</div>
@@ -216,11 +224,14 @@ export default {
   },
   created () {
     let that = this
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (!user) {
-        that.$router.push('/')
-      }
-    })
+    that.user = localStorage.getItem('username')
+    that.flagShow = localStorage.getItem('flagShow')
+    console.log(that.flagShow)
+    if (!that.user) {
+      that.$router.push('/')
+    }
+    // firebase.auth().onAuthStateChanged(function(user) {
+    // })
    },
   methods: {
     logout (pageName) {
@@ -229,8 +240,8 @@ export default {
       if (pageName === 'logout') {
         firebase.auth().signOut().then(function() {
           that.$router.push('/')
-          that.$store.dispatch('example/fetchAdminKey', false)
-          localStorage.removeItem('usertype')
+          // that.$store.dispatch('example/fetchAdminKey', false)
+          // localStorage.removeItem('usertype')
           localStorage.removeItem('username')
         }).catch(function(error) {
           console.log(error)

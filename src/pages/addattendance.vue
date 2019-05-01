@@ -141,7 +141,13 @@ export default {
   },
   created () {
     var that = this
-    that.convertDate(new Date().getMonth())
+    that.user = localStorage.getItem('username')
+    that.flagShow = localStorage.getItem('flagShow')
+    if (!that.user || that.flagShow == 'false') {
+      that.$router.push('/')
+    } else {
+      that.convertDate(new Date().getMonth())
+    }
   },
   methods: {
     send_attendence_details () {

@@ -143,9 +143,16 @@ export default {
   },
   created () {
     var that = this
-    setTimeout(function(){
-      that.$refs.scannedItemDecode.focus()
-    }, 200)
+    that.user = localStorage.getItem('username')
+    that.flagShow = localStorage.getItem('flagShow')
+    console.log(that.flagShow)
+    if (!that.user || that.flagShow == 'false') {
+      that.$router.push('/')
+    } else {
+      setTimeout(function(){
+        that.$refs.scannedItemDecode.focus()
+      }, 200)
+    }
   },
   methods: {
     enableScanDiv () {
