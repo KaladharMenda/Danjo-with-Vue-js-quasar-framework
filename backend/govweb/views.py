@@ -17,7 +17,6 @@ def student_details(request):
     data_dict ={}
     data_dict = json.loads(request.POST.keys()[0])
     pin = data_dict['pin']
-    import pdb; pdb.set_trace()
     adding = data_dict.get('adding' ,'')
     if adding:
         del data_dict["adding"]
@@ -88,7 +87,7 @@ def get_attendence_names(request):
     attendence_dict = json.loads(request.POST.keys()[0])
     if attendence_dict['year_sem'] :
         existing_pin = []
-        attendence_obj = Attendence_details.objects.filter(year_sem = attendence_dict['year_sem'],period =attendence_dict['period'] ,month = attendence_dict['month'])
+        attendence_obj = Attendence_details.objects.filter(year_sem = attendence_dict['year_sem'],period =attendence_dict['period'] ,month = attendence_dict['month'],student_details__status = True)
         if attendence_obj.exists() :
             for student in attendence_obj:
                 student_dict ={}
@@ -135,7 +134,7 @@ def attendece_update(request):
             attendence_dict['year_sem'] = record.get('year_sem','')
             attendence_dict['month'] = record.get('month','')
             attendence_dict['period'] = record.get('period','')
-            student_obj = Student_details.objects.filter(pin = pin ,status = True)
+            student_obj = Student_details.objects.filter(pin = pin)
             if student_obj.exists():
                 attendence_dict['student_details'] = student_obj[0]
             else:
@@ -160,9 +159,9 @@ def all_attendence(request):
     attendence_dict = json.loads(request.POST.keys()[0])
     try:
         if attendence_dict['period'] == 'complete':
-            attendence_obj = Attendence_details.objects.filter(year_sem = attendence_dict['year_sem'],month = attendence_dict['month']).order_by('-student_details')
+            attendence_obj = Attendence_details.objects.filter(year_sem = attendence_dict['year_sem'],month = attendence_dict['month'],student_details__status = True).order_by('-student_details')
         else:
-            attendence_obj = Attendence_details.objects.filter(year_sem = attendence_dict['year_sem'],period =attendence_dict['period'] ,month = attendence_dict['month'])
+            attendence_obj = Attendence_details.objects.filter(year_sem = attendence_dict['year_sem'],period =attendence_dict['period'] ,month = attendence_dict['month'],student_details__status = True)
         if attendence_obj.exists() :
             for attendence in attendence_obj:
                 student_dict ={}
@@ -210,7 +209,7 @@ def get_unit_marks(request):
     student_details =[]
     unit_dict = json.loads(request.POST.keys()[0])
     existing_pin = []
-    unit_obj = Unit_marks.objects.filter(year_sem = unit_dict['year_sem'],subject =unit_dict['subject'],unit_exam = unit_dict['unit_exam'])
+    unit_obj = Unit_marks.objects.filter(year_sem = unit_dict['year_sem'],subject =unit_dict['subject'],unit_exam = unit_dict['unit_exam'],student_details__status = True)
     if unit_obj.exists() :
         for unit in unit_obj:
             student_dict ={}
@@ -252,7 +251,7 @@ def unit_marks_update(request):
             unit_dict = {}
             pin = record.get('pin','')
             unit_dict['year_sem'] = record.get('year_sem','')
-            student_obj = Student_details.objects.filter(pin = pin,status = True)
+            student_obj = Student_details.objects.filter(pin = pin)
             unit_dict['unit_exam'] = unit_exam
             unit_dict['subject'] = subject
             if student_obj.exists():
@@ -479,9 +478,9 @@ def get_pm_marks(request):
     view = False
     if pm_dict.get('view','') :
         view = True
-        pm_obj = Project_marks.objects.filter(year_sem = pm_dict['year_sem'],scheme_code =pm_dict['scheme_code'])
+        pm_obj = Project_marks.objects.filter(year_sem = pm_dict['year_sem'],scheme_code =pm_dict['scheme_code'],student_details__status = True)
     else:
-        pm_obj = Project_marks.objects.filter(year_sem = pm_dict['year_sem'],scheme_code =pm_dict['scheme_code'],project_title = pm_dict['project_title'])
+        pm_obj = Project_marks.objects.filter(year_sem = pm_dict['year_sem'],scheme_code =pm_dict['scheme_code'],project_title = pm_dict['project_title'],student_details__status = True)
     if pm_obj.exists() :
         for pm in pm_obj:
             student_dict ={}
@@ -523,7 +522,7 @@ def pm_marks_update(request):
             pm_dict = {}
             pin = record.get('pin','')
             pm_dict['year_sem'] = record.get('year_sem','')
-            student_obj = Student_details.objects.filter(pin = pin,status = True)
+            student_obj = Student_details.objects.filter(pin = pin)
             pm_dict['scheme_code'] = scheme_code
             if student_obj.exists():
                 pm_dict['student_details'] = student_obj[0]
