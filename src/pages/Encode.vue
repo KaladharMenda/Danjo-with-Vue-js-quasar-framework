@@ -168,13 +168,16 @@ export default {
             that.$q.notify({color: 'positive', textColor: 'white', message: resp.data, position: 'center', timeout: 1000 })
           } else if(resp.data == 'Already this barcode Available') {
             that.btnLoadings = false
+            that.scannedItem = ''
             that.$q.notify({color: 'negative', textColor: 'white', message: resp.data, position: 'center', timeout: 1000 })
           } else {
+            that.scannedItem = ''
             that.btnLoadings = false
             that.$q.notify({color: 'negative', textColor: 'white', message: resp.data, position: 'center', timeout: 1000 })
           }
         })
       } else {
+        that.scannedItem = ''
         that.btnLoadings = false
         that.$q.notify({color: 'negative', textColor: 'white', message: 'INPUT MISMATCH !!!', position: 'center', timeout: 1000 })
       }
