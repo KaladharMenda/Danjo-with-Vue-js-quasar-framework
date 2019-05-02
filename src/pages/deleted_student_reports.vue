@@ -10,8 +10,20 @@
        </q-toolbar>
      </div>
       <div class="row">
+        <div class="col-lg-4 col-md-4"></div>
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+          <q-field>
+            <q-select
+              v-model="year_sem"
+              :options="year_semOptions"
+              float-label="Year / Semester"
+              @input="getSubjects_scheme_Data"
+            />
+          </q-field>
+        </div>
       </div>
        <q-table
+         v-if = "enable_division"
          :data="tableData"
          title="Deleted Students List"
          :columns="columns"
@@ -29,15 +41,15 @@
          <q-td v-for="col in props.cols" :key="col.name" :props="props">
            {{ col.value }}
          </q-td>
-         <q-td>
+         <!-- <q-td>
            <q-btn color="green"  @click="editUserData(props.row)" class="q-mr-xs">
            <span class="otp_fs">RELEASE</span>
          </q-btn>
-         </q-td>
+         </q-td> -->
        </q-tr>
       </q-table>
 
-      <q-modal v-model="userModalAdd" no-backdrop-dismiss :content-css="{minWidth: '75vw'}">
+      <!-- <q-modal v-model="userModalAdd" no-backdrop-dismiss :content-css="{minWidth: '75vw'}">
         <q-modal-layout>
           <q-toolbar slot="header" class="bg-secondary">
             <q-toolbar-title v-if="addUserDiv">
@@ -85,14 +97,6 @@
                     </div>
                   </q-field>
                </div>
-                 <!-- <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                   <q-field>
-                     <q-input class="input-field inline_s" type="text" :readonly="readonly" v-model="emailId" float-label="EmailId *" />
-                     <div v-if="emailIdErrorMsg" class="first_s">
-                        Please Enter the Email Id.
-                     </div>
-                   </q-field>
-                 </div> -->
             </div>
             <div class="row justify-end q-mt-md">
               <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6" v-if="checkStatusForAdmin" style="padding-top: 4px;align-self: center;">
@@ -106,7 +110,7 @@
              </div>
           </div>
         </q-modal-layout>
-      </q-modal>
+      </q-modal> -->
     </q-card>
   </div>
 </template>
@@ -151,39 +155,22 @@ export default {
   },
   data () {
     return {
+      year_sem: '',
       name: '',
       usertype: '',
-      groupOptions: [{'label': 'G1 - Teachers', 'value': 'G1'},{'label': 'G2 - HOD & Principal', 'value': 'G2'}],
+      year_semOptions: [{'label': '1YR', 'value': '1YR'},{'label': '2YR', 'value': '2YR'},{'label': '3SEM', 'value': '3SEM'},{'label': '4SEM', 'value': '4SEM'},{'label': '5SEM', 'value': '5SEM'},{'label': '6SEM', 'value': '6SEM'},{'label': '7SEM', 'value': '7SEM'},{'label': '8SEM', 'value': '8SEM'}],
       btnLoading: false,
       LocationErrorMsg: false,
       tableData: [],
       loading: false,
       separator: 'cell',
       filter: '',
-      userModalAdd: false,
-      firstName: '',
-      firstNameErrorMsg: false,
-      emailId: '',
-      emailIdErrorMsg: false,
-      UserId: '',
-      UserIdErrorMsg: false,
-      Password: '',
-      passwordErrorMsg: false,
-      GroupId:'',
-      groupidErrorMsg : false,
-      readonly: false,
-      checkStatus: true,
-      checkStatusForAdmin: false,
-      dropDownRole: '',
-      roleErrorMsg: false,
-      disableSbtn: false,
-      addUserDiv: false,
-      editUserDiv: false,
       userKey: '',
       number: '',
       spinner: false,
       userId: '',
       editAdminInfo: true,
+      enable_division: false,
       columns: [
         {
           name: 'pin',
@@ -195,42 +182,23 @@ export default {
           descending: false
         },
         {
-          name: 'student_name',
+          name: 'username',
           required: true,
-          label: 'Name',
+          label: 'Student Name',
           align: 'center',
-          field: 'student_name',
+          field: 'username',
           sortable: true,
           descending: false
         },
         {
-          name: 'branch',
+          name: 'gender',
           required: true,
-          label: 'Branch',
+          label: 'Gender',
           align: 'center',
-          field: 'branch',
-          sortable: true,
-          descending: false
-        },
-        {
-          name: 'year_sem',
-          required: true,
-          label: 'Semester',
-          align: 'center',
-          field: 'year_sem',
-          sortable: true,
-          descending: false
-        },
-        {
-          name: 'scheme_code',
-          required: true,
-          label: 'Scheme',
-          align: 'center',
-          field: 'scheme_code',
+          field: 'gender',
           sortable: true,
           descending: false
         }
-
       ]
     }
   },
@@ -238,148 +206,33 @@ export default {
   },
   created () {
     var that = this
-    that.updateDataTable()
   },
   methods: {
-    updateDataTable () {
+    getSubjects_scheme_Data () {
       var that = this
       that.loading = true
-      that.tableData.length = 0
-      // axios.get( baseUrlForBackend+'/rest_api/app_shipment_info_data/?manifest_number=448983599/1').then(function(result){
-      //   console.log(result)
-      //   debugger
-      // })
-      firebase.database().ref('UserDetails').once('value', function(snapshot) {
-        snapshot.forEach(function(childSnapshot) {
-          if (childSnapshot.val().usertype != 'Admin') {
+      that.tableData = []
+      var sem_obj = {
+        'sem': that.year_sem
+      }
+      axios.post(baseUrlForBackend+'govweb/get_deleted_students/', JSON.stringify(sem_obj))
+      .then(function(resp){
+        if ((resp.data != 'fail' && resp.data != 'Some thing went wrong') && resp.data) {
+          resp.data.forEach(function(item){
+            that.enable_division = true
             that.tableData.push({
-              'userName': childSnapshot.val().name,
-              'role' : childSnapshot.val().usertype,
+              'pin': item.pin,
+              'username': item.username,
+              'gender': item.gender
             })
-          }
-        })
-        that.tableData.reverse()
+          });
+        } else if(resp.data == 'Some thing went wrong') {
+          that.showNotify(resp.data)
+        } else {
+          that.showNotify('No Records')
+        }
         that.loading = false
       })
-    },
-    getLocationID () {
-      var that = this
-      that.enterSelectOptions = []
-      let locationNames = firebase.database().ref('Locations');
-      locationNames.once('value', function (snapshot) {
-        that.enterSelectOptions = []
-        snapshot.forEach(function (child) {
-          var temp = child.key
-          that.allLocations[child.key] = child.val()
-          that.enterSelectOptions.push({
-            'label': child.val().name,
-            'value': temp
-          })
-        })
-      })
-    },
-    addUser () {
-      var that = this
-      that.addUserDiv = true
-      that.userModalAdd = true
-      setTimeout(function () {
-        that.$refs.firstName.focus()
-      }, 400)
-    },
-    editUserData (row) {
-      var that = this
-      that.readonly = true
-      that.editUserDiv = true
-      that.userModalAdd = true
-      var date = new Date().getTime()
-      firebase.database().ref('UserDetails/' + row.userName).once('value', function(childSnapshot) {
-        that.checkStatusForAdmin = true
-        that.firstName = childSnapshot.val().name
-        that.Password = childSnapshot.val().password
-        that.GroupId = childSnapshot.val().usertype
-        that.checkStatus = childSnapshot.val().is_active
-      })
-    },
-    submitUserData () {
-      var that = this
-      if (that.addUserDiv === true) {
-        that.addUserFunction()
-      }
-      if (that.editUserDiv === true) {
-        that.editUserFunction()
-      }
-    },
-    editUserFunction () {
-      var that = this
-      that.btnLoading = true
-      if (that.validationForUserData()) {
-        var userDataToInsert = {
-          'name': that.firstName,
-          'password': that.Password,
-          'usertype' : that.GroupId,
-          'is_active': that.checkStatus,
-          'created_at':new Date().getTime()
-        }
-        firebase.database().ref('UserDetails/' + that.firstName).update(userDataToInsert).then(function (){
-          that.userModalAdd = false
-          that.$q.notify({
-            color: 'green',
-            textColor: 'white',
-            message: "Data has been updated succussfully",
-            position: 'bottom-right',
-            timeout: 3000
-          })
-          that.updateDataTable()
-          that.emtpyAllFields()
-          that.btnLoading = false
-          }).catch(function (err){
-            that.$q.notify({
-              color: 'black',
-              textColor: 'white',
-              message: "Data couldn't be saved.Please try again later.",
-              position: 'bottom-left',
-              timeout: 3000
-            })
-          that.emtpyAllFields()
-          that.btnLoading = false
-        })
-      }
-      that.btnLoading = false
-    },
-    addUserFunction() {
-      var that = this
-      that.btnLoading = true
-      that.savedUId = ''
-      if (that.validationForUserData()) {
-        var name = that.firstName;
-        // var email = that.emailId;
-        var password = that.Password;
-        var usertype = that.GroupId;
-        var user_obj = {
-          'name': name,
-          'password': password,
-          'usertype' : usertype,
-          'is_active' : true,
-          'created_at':new Date().getTime()
-        }
-        if (user_obj) {
-          firebase.database().ref('UserDetails').child(name).set(user_obj).then(function(response){
-            that.btnLoading = false
-            that.showNotify("User added successfully.")
-            that.updateDataTable()
-            that.closePopUp()
-            that.btnLoading = false
-          }).catch(function(error) {
-            // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            that.showNotify(error.message)
-            that.btnLoading = false
-          });
-        }
-      } else{
-        that.btnLoading = false
-      }
     },
     closePopUp () {
       var that = this
@@ -405,33 +258,6 @@ export default {
       that.checkStatusForAdmin = false
       that.readonly = false
       that.disabled = false
-    },
-    validationForUserData () {
-      if (this.firstName === '') {
-        this.firstNameErrorMsg = true
-        return false
-      } else {
-        this.firstNameErrorMsg = false
-      }
-      // if (this.emailId === '') {
-      //   this.emailIdErrorMsg = true
-      //   return false
-      // } else {
-      //   this.emailIdErrorMsg = false
-      // }
-      if (this.Password === '') {
-        this.passwordErrorMsg = true
-        return false
-      } else {
-        this.passwordErrorMsg = false
-      }
-      if (this.GroupId === '') {
-        this.groupidErrorMsg = true
-        return false
-      } else {
-        this.groupidErrorMsg = false
-      }
-      return true
     },
     showNotify (msg) {
       let that = this

@@ -330,37 +330,26 @@ export default {
     },
     changeMessage () {
       var that = this
-      that.show({spinner: QSpinnerGears, spinnerColor: 'amber', message: 'Processing ....'})
-      this.studen_info['adding'] = true;
-      axios.post(baseUrlForBackend+'govweb/student_details/', JSON.stringify(this.studen_info))
-      .then(function(resp){
-        let respdata = resp.data
-        if (respdata == 'The Student PIN Already Exists'){
-          that.$q.loading.hide()
-          that.$q.notify({color: 'negative', textColor: 'white', message: respdata, position: 'center', timeout: 1000 })
-        } else if (respdata == 'Success') {
-          that.emtpyAllFields()
-          that.$q.loading.hide()
-          that.$q.notify({color: 'positive', textColor: 'white', message: respdata, position: 'center', timeout: 1000 })
-        } else {
-          that.$q.loading.hide()
-          that.$q.notify({color: 'negative', textColor: 'white', message: respdata, position: 'center', timeout: 1000 })
-        }
-      })
-    },
-    getVendorLimit () {
-      var that = this
-      if (that.$store.state.example.userName !== "") {
-        window.app2.database().ref('WareHouseSettings/VendorLimit').on('value', function(vendors) {
-          if (vendors.val()) {
-            that.VendorLimit = vendors.val()
+      if (that.studen_info.pin && that.studen_info.student_name && that.studen_info.gender && that.studen_info.date_of_birth) {
+        that.show({spinner: QSpinnerGears, spinnerColor: 'amber', message: 'Processing ....'})
+        this.studen_info['adding'] = true;
+        axios.post(baseUrlForBackend+'govweb/student_details/', JSON.stringify(this.studen_info))
+        .then(function(resp){
+          let respdata = resp.data
+          if (respdata == 'The Student PIN Already Exists'){
+            that.$q.loading.hide()
+            that.$q.notify({color: 'negative', textColor: 'white', message: respdata, position: 'center', timeout: 1000 })
+          } else if (respdata == 'Success') {
+            that.emtpyAllFields()
+            that.$q.loading.hide()
+            that.$q.notify({color: 'positive', textColor: 'white', message: respdata, position: 'center', timeout: 1000 })
+          } else {
+            that.$q.loading.hide()
+            that.$q.notify({color: 'negative', textColor: 'white', message: respdata, position: 'center', timeout: 1000 })
           }
-          that.getAVendors()
         })
       } else {
-        setTimeout(function(){
-            that.getVendorLimit()
-        },500)
+        that.showNotify('Please Enter Required Fields')
       }
     },
     showNotify (msg) {

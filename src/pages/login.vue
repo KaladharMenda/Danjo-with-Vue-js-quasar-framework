@@ -105,7 +105,7 @@ export default {
   methods: {
     submitOtp: function () {
       var that = this
-      // that.btnLoading = true
+      that.btnLoading = true
       if (that.pwd !== '' && that.userId !== '') {
         var log_obj = {
           'userid': that.userId,
@@ -120,15 +120,19 @@ export default {
           localStorage.setItem('flagShow', that.staff)
           if (that.status) {
             if (that.staff) {
+              that.btnLoading = false
               that.$router.push('/admin/encodedecode')
             } else {
+              that.btnLoading = false
               that.$router.push('/admin/Encode')
             }
           } else if (resp.data == 'fail') {
+            that.btnLoading = false
             that.showNotify('Wrong Credentials')
             that.pwd = ''
             that.userId = ''
           } else {
+            that.btnLoading = false
             that.showNotify('Inactive user, contact to Admin')
             that.pwd = ''
             that.userId = ''

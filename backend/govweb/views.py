@@ -576,7 +576,6 @@ def login_check(request):
     log_dict = {}
     log_dicts = json.loads(request.POST.keys()[0])
     user = authenticate(username=log_dicts['userid'], password=log_dicts['password'])
-    # import pdb; pdb.set_trace()
     try:
         if user:
             log_dict['username'] = user.username
@@ -584,6 +583,26 @@ def login_check(request):
             log_dict['staff'] = user.is_staff
             result_login.append(log_dict)
             return HttpResponse(json.dumps(result_login))
+        else:
+            return HttpResponse('fail')
+    except Exception as e:
+        import traceback
+        return HttpResponse("Some thing went wrong")
+
+@csrf_exempt
+def get_deleted_students(request):
+    result_login = []
+    log_dict = {}
+    log_dicts = json.loads(request.POST.keys()[0])
+    students_obj = Student_details.objects.filter(year_sem = log_dicts['sem'] ,status = False)
+    try:
+        if students_obj.exists():
+            for student in students_obj:
+                log_dict['pin'] = student.pin
+                log_dict['username'] = student.student_name
+                log_dict['gender'] = student.gender
+                result_login.append(log_dict)
+                return HttpResponse(json.dumps(result_login))
         else:
             return HttpResponse('fail')
     except Exception as e:

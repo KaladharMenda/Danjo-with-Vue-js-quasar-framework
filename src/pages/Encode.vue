@@ -60,7 +60,7 @@
         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12"></div>
         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" v-if = "semId && subId && studentIDs">
           <q-field>
-             <q-input type="text" id="scanFocus" ref="scannedItem" v-model="scannedItem" v-on:keyup.enter="checkBinType" float-label="Scan Sem Paper BarCode *"/>
+             <q-input type="text" id="scanFocus" ref="scannedItem" v-model="scannedItem" v-on:keyup.enter="checkBinType" :disabled="btnLoadings" float-label="Scan Sem Paper BarCode *"/>
           </q-field>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12"></div>
@@ -114,6 +114,7 @@ export default {
   },
   data () {
     return {
+      btnLoadings: false,
       semId: '',
       subId: '',
       schemeCode: '',
@@ -153,6 +154,7 @@ export default {
     },
     checkBinType (e) {
       let that = this
+      that.btnLoadings = true
       if (that.totalmarks && that.semId && that.schemeCode && that.subId && that.studentIDs && that.scannedItem) {
         var sem_obj = {
           'total_marks': that.totalmarks, 'sem': that.semId, 'scheme': that.schemeCode,
@@ -162,14 +164,18 @@ export default {
         .then(function(resp){
           if (resp.data == 'Success') {
             that.scannedItem = ''
+            that.btnLoadings = false
             that.$q.notify({color: 'positive', textColor: 'white', message: resp.data, position: 'center', timeout: 1000 })
           } else if(resp.data == 'Already this barcode Available') {
+            that.btnLoadings = false
             that.$q.notify({color: 'negative', textColor: 'white', message: resp.data, position: 'center', timeout: 1000 })
           } else {
+            that.btnLoadings = false
             that.$q.notify({color: 'negative', textColor: 'white', message: resp.data, position: 'center', timeout: 1000 })
           }
         })
       } else {
+        that.btnLoadings = false
         that.$q.notify({color: 'negative', textColor: 'white', message: 'INPUT MISMATCH !!!', position: 'center', timeout: 1000 })
       }
     },
