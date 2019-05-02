@@ -412,7 +412,7 @@ def update_semester_marks(request):
     data_dict = json.loads(request.POST.keys()[0])
     sem_marks = {'total_marks': data_dict.get('total_marks', ''), 'year_sem': data_dict.get('sem' ,''), 'scheme_code': data_dict.get('scheme', ''),
                 'sem_subject': data_dict.get('subject', ''), 'student_pin': data_dict.get('student', ''), 'paper_barcode': data_dict.get('barcode', '')}
-    sem_obj = semester_marks.objects.filter(student_pin= data_dict.get('student'), paper_barcode = data_dict.get('barcode'), year_sem=data_dict.get('sem'), scheme_code=data_dict.get('scheme'), sem_subject=data_dict.get('subject'))
+    sem_obj = semester_marks.objects.filter(student_pin= data_dict.get('student'), year_sem=data_dict.get('sem'), scheme_code=data_dict.get('scheme'), sem_subject=data_dict.get('subject'))
     try:
         if not sem_obj:
             student_obj = Student_details.objects.filter(pin = data_dict.get('student', ''),status = True)
