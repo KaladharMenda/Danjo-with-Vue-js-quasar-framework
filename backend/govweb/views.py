@@ -161,7 +161,7 @@ def all_attendence(request):
         if attendence_dict['period'] == 'complete':
             attendence_obj = Attendence_details.objects.filter(year_sem = attendence_dict['year_sem'],month = attendence_dict['month'],student_details__status = True).order_by('-student_details')
         else:
-            attendence_obj = Attendence_details.objects.filter(year_sem = attendence_dict['year_sem'],period =attendence_dict['period'] ,month = attendence_dict['month'],student_details__status = True)
+            attendence_obj = Attendence_details.objects.filter(year_sem = attendence_dict['year_sem'],period =attendence_dict['period'] ,month = attendence_dict['month'],student_details__status = True).order_by('-student_details')
         if attendence_obj.exists() :
             for attendence in attendence_obj:
                 student_dict ={}
@@ -209,7 +209,7 @@ def get_unit_marks(request):
     student_details =[]
     unit_dict = json.loads(request.POST.keys()[0])
     existing_pin = []
-    unit_obj = Unit_marks.objects.filter(year_sem = unit_dict['year_sem'],subject =unit_dict['subject'],unit_exam = unit_dict['unit_exam'],student_details__status = True)
+    unit_obj = Unit_marks.objects.filter(year_sem = unit_dict['year_sem'],subject =unit_dict['subject'],unit_exam = unit_dict['unit_exam'],student_details__status = True).order_by('-student_details')
     if unit_obj.exists() :
         for unit in unit_obj:
             student_dict ={}
@@ -478,9 +478,9 @@ def get_pm_marks(request):
     view = False
     if pm_dict.get('view','') :
         view = True
-        pm_obj = Project_marks.objects.filter(year_sem = pm_dict['year_sem'],scheme_code =pm_dict['scheme_code'],student_details__status = True)
+        pm_obj = Project_marks.objects.filter(year_sem = pm_dict['year_sem'],scheme_code =pm_dict['scheme_code'],student_details__status = True).order_by('-student_details')
     else:
-        pm_obj = Project_marks.objects.filter(year_sem = pm_dict['year_sem'],scheme_code =pm_dict['scheme_code'],project_title = pm_dict['project_title'],student_details__status = True)
+        pm_obj = Project_marks.objects.filter(year_sem = pm_dict['year_sem'],scheme_code =pm_dict['scheme_code'],project_title = pm_dict['project_title'],student_details__status = True).order_by('-student_details')
     if pm_obj.exists() :
         for pm in pm_obj:
             student_dict ={}
