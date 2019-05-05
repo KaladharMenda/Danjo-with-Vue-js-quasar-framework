@@ -185,8 +185,10 @@ export default {
               that.total_marks = resp.data[0].totalmarks
               that.users = localStorage.getItem('username')
             } else if(resp.data == 'Scanned Barcode Not Exists') {
+              that.scannedItemDecode = ''
               that.showNotify(resp.data)
             } else {
+              that.scannedItemDecode = ''
               that.showNotify('something went Wrong !!!')
             }
           })

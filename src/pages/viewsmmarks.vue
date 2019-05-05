@@ -36,7 +36,7 @@
           />
         </div>
         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6" v-if="subId">
-          <q-btn color="purple" icon-right="send" @click="get_student_details()" :disabled="btnLoading" style="background: #ff9e10 !important;">
+          <q-btn color="purple" @click="get_student_details()" :disabled="btnLoading" style="background: #ff9e10 !important;">
             <q-spinner-hourglass v-if="btnLoading" class="on-left"/>
             VIEW SM MARKS
           </q-btn>

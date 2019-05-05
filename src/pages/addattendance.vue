@@ -34,7 +34,7 @@
         </div>
         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
           <q-field>
-            <q-input  type="text" v-model="working_days" float-label="TOTAL COLLEGE WORKING DAYS"/>
+            <q-input  type="text" v-model="working_days" float-label="TOTAL WORKING DAYS"/>
           </q-field>
         </div>
       </div>
