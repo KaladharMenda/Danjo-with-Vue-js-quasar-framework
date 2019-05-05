@@ -1,6 +1,6 @@
 <template>
   <div class="HOME PAGE-CONTENT">
-    <q-card class="bg-white card-styl width_typesss">
+    <q-card class="bg-white card-styl">
       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" align="center">
         <q-toolbar color="orange" class="toolgradientgreen">
           <q-toolbar-title>
