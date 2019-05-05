@@ -5,6 +5,7 @@ from views import *
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
+    url(r'^login_check/$', login_check),
     url(r'^student_details/$', student_details),
     url(r'^get_student_details/$', get_student_details),
     url(r'^get_attendence_names/$', get_attendence_names),
@@ -26,4 +27,5 @@ urlpatterns = [
     url(r'^get_pm_marks/$', get_pm_marks),
     url(r'^pm_marks_update/$', pm_marks_update),
     url(r'^get_semester_viewtable/$', get_semester_viewtable),
+    url(r'^get_deleted_students/$', get_deleted_students),
 ]

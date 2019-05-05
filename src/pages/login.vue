@@ -104,40 +104,73 @@ export default {
   },
   methods: {
     submitOtp: function () {
-      let that = this
+      var that = this
       that.btnLoading = true
       if (that.pwd !== '' && that.userId !== '') {
-        firebase.auth().signInAnonymously().then(suc =>{
-          firebase.database().ref('UserDetails/' + that.userId).once('value', function(doc) {
-            if (doc.val().is_active || doc.val().usertype == 'Admin') {
-              if (doc.val() && that.userId == doc.val().name && that.pwd == doc.val().password) {
-                localStorage.setItem('usertype', doc.val().usertype)
-                localStorage.setItem('username', doc.val().name)
-                if (doc.val().usertype == 'Admin') {
-                  that.$router.push('/admin/Usermanagement')
-                } else if (doc.val().usertype == 'G1') {
-                  that.$router.push('/admin/Usermanagement')
-                } else if (doc.val().usertype == 'G2') {
-                  that.$router.push('/admin/Usermanagement')
-                }
-              } else {
-                that.showNotify('Please enter your valid credentials')
-                that.$refs.userId.focus()
-                that.btnLoading = false
-                that.$router.push('/')
-                that.userId = ''
-                that.pwd = ''
-              }
-            } else {
-              that.showNotify('Your Account is InActive, Please contact to ADMIN !')
-              that.$refs.userId.focus()
+        var log_obj = {
+          'userid': that.userId,
+          'password' : that.pwd
+        }
+        axios.post(baseUrlForBackend+'govweb/login_check/', JSON.stringify(log_obj))
+       .then(function(resp){
+          that.username = resp.data[0].username
+          that.status = resp.data[0].active
+          that.staff = resp.data[0].staff
+          localStorage.setItem('username', that.username)
+          localStorage.setItem('flagShow', that.staff)
+          if (that.status) {
+            if (that.staff) {
               that.btnLoading = false
-              that.$router.push('/')
-              that.userId = ''
-              that.pwd = ''
+              that.$router.push('/admin/encodedecode')
+            } else {
+              that.btnLoading = false
+              that.$router.push('/admin/Encode')
             }
-          })
+          } else if (resp.data == 'fail') {
+            that.btnLoading = false
+            that.showNotify('Wrong Credentials')
+            that.pwd = ''
+            that.userId = ''
+          } else {
+            that.btnLoading = false
+            that.showNotify('Inactive user, contact to Admin')
+            that.pwd = ''
+            that.userId = ''
+          }
+           // that.$q.notify({color: 'green', textColor: 'white', message:resp.data, position: 'center', timeout: 1000})
+           // that.btnLoading = false
         })
+        // firebase.auth().signInAnonymously().then(suc =>{
+        //   firebase.database().ref('UserDetails/' + that.userId).once('value', function(doc) {
+        //     if (doc.val().is_active || doc.val().usertype == 'Admin') {
+        //       if (doc.val() && that.userId == doc.val().name && that.pwd == doc.val().password) {
+        //         localStorage.setItem('usertype', doc.val().usertype)
+        //         localStorage.setItem('username', doc.val().name)
+        //         if (doc.val().usertype == 'Admin') {
+        //           that.$router.push('/admin/Usermanagement')
+        //         } else if (doc.val().usertype == 'G1') {
+        //           that.$router.push('/admin/Usermanagement')
+        //         } else if (doc.val().usertype == 'G2') {
+        //           that.$router.push('/admin/Usermanagement')
+        //         }
+        //       } else {
+        //         that.showNotify('Please enter your valid credentials')
+        //         that.$refs.userId.focus()
+        //         that.btnLoading = false
+        //         that.$router.push('/')
+        //         that.userId = ''
+        //         that.pwd = ''
+        //       }
+        //     } else {
+        //       that.showNotify('Your Account is InActive, Please contact to ADMIN !')
+        //       that.$refs.userId.focus()
+        //       that.btnLoading = false
+        //       that.$router.push('/')
+        //       that.userId = ''
+        //       that.pwd = ''
+        //     }
+        //   })
+        // })
       } else {
         that.showNotify('Please enter your valid credentials')
         that.$refs.userId.focus()

@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
+from django.contrib.auth import authenticate
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from models import *
@@ -411,7 +412,7 @@ def update_semester_marks(request):
     data_dict = json.loads(request.POST.keys()[0])
     sem_marks = {'total_marks': data_dict.get('total_marks', ''), 'year_sem': data_dict.get('sem' ,''), 'scheme_code': data_dict.get('scheme', ''),
                 'sem_subject': data_dict.get('subject', ''), 'student_pin': data_dict.get('student', ''), 'paper_barcode': data_dict.get('barcode', '')}
-    sem_obj = semester_marks.objects.filter(paper_barcode = data_dict.get('barcode'))
+    sem_obj = semester_marks.objects.filter(student_pin= data_dict.get('student'), year_sem=data_dict.get('sem'), scheme_code=data_dict.get('scheme'), sem_subject=data_dict.get('subject'))
     try:
         if not sem_obj:
             student_obj = Student_details.objects.filter(pin = data_dict.get('student', ''),status = True)
@@ -555,8 +556,8 @@ def get_semester_viewtable(request):
         if semester_markss.exists() :
             for sem in semester_markss:
                 student_dict ={}
-                student_dict ['student_id'] = sem.student_pin
-                student_dict ['student_name'] = sem.student_detail.student_name
+                student_dict['student_id'] = sem.student_pin
+                student_dict['student_name'] = sem.student_detail.student_name
                 student_dict['subject'] = sem.sem_subject
                 student_dict['scheme'] = sem.scheme_code
                 student_dict['total_marks'] = sem.total_marks
@@ -565,6 +566,45 @@ def get_semester_viewtable(request):
             return HttpResponse(json.dumps(student_details))
         else:
             return HttpResponse('No Data Found !!')
+    except Exception as e:
+        import traceback
+        return HttpResponse("Some thing went wrong")
+
+@csrf_exempt
+def login_check(request):
+    result_login = []
+    log_dict = {}
+    log_dicts = json.loads(request.POST.keys()[0])
+    user = authenticate(username=log_dicts['userid'], password=log_dicts['password'])
+    try:
+        if user:
+            log_dict['username'] = user.username
+            log_dict['active'] = user.is_active
+            log_dict['staff'] = user.is_staff
+            result_login.append(log_dict)
+            return HttpResponse(json.dumps(result_login))
+        else:
+            return HttpResponse('fail')
+    except Exception as e:
+        import traceback
+        return HttpResponse("Some thing went wrong")
+
+@csrf_exempt
+def get_deleted_students(request):
+    result_login = []
+    log_dict = {}
+    log_dicts = json.loads(request.POST.keys()[0])
+    students_obj = Student_details.objects.filter(year_sem = log_dicts['sem'] ,status = False)
+    try:
+        if students_obj.exists():
+            for student in students_obj:
+                log_dict['pin'] = student.pin
+                log_dict['username'] = student.student_name
+                log_dict['gender'] = student.gender
+                result_login.append(log_dict)
+                return HttpResponse(json.dumps(result_login))
+        else:
+            return HttpResponse('fail')
     except Exception as e:
         import traceback
         return HttpResponse("Some thing went wrong")

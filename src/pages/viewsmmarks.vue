@@ -175,6 +175,11 @@ export default {
   },
   created () {
     var that = this
+    that.user = localStorage.getItem('username')
+    that.flagShow = localStorage.getItem('flagShow')
+    if (!that.user || that.flagShow == 'false') {
+      that.$router.push('/')
+    }
   },
   methods: {
     get_student_details () {
