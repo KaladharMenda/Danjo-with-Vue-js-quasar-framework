@@ -46,7 +46,7 @@ def student_details(request):
 @csrf_exempt
 def get_student_details(request):
     pin = json.loads(request.POST.keys()[0])
-    student_details = Student_details.objects.filter(pin = pin,status = True)
+    student_details = Student_details.objects.filter(pin = pin,status = True).order_by('-pin')
     if student_details.exists():
         student_details = student_details[0]
         if not student_details.status :
@@ -99,7 +99,7 @@ def get_attendence_names(request):
                 student_dict['attended_days'] = student.attended_days
                 student_details.append(student_dict)
                 existing_pin.append(student_dict['pin'])
-        students_obj = Student_details.objects.filter(year_sem = attendence_dict['year_sem'],status = True)
+        students_obj = Student_details.objects.filter(year_sem = attendence_dict['year_sem'],status = True).order_by('-pin')
         if students_obj.exists():
             for student in students_obj :
                 if student.pin not in existing_pin :
@@ -157,6 +157,7 @@ def attendece_update(request):
 def all_attendence(request):
     attendence_dict ={}
     student_details = []
+    import pdb; pdb.set_trace()
     attendence_dict = json.loads(request.POST.keys()[0])
     try:
         if attendence_dict['period'] == 'complete':
@@ -194,7 +195,7 @@ def get_sm_marks(request):
     subject = sm_marks_dict['subject']
     year_sem = sm_marks_dict['year_sem']
     schemecode = sm_marks_dict['scheme_code']
-    students_obj = Student_details.objects.filter(year_sem = sm_marks_dict['year_sem'],scheme_code =sm_marks_dict['scheme_code'],status = True)
+    students_obj = Student_details.objects.filter(year_sem = sm_marks_dict['year_sem'],scheme_code =sm_marks_dict['scheme_code'],status = True).order_by('-pin')
     if students_obj.exists():
         for student in students_obj :
             student_dict ={}
@@ -222,7 +223,7 @@ def get_unit_marks(request):
             student_details.append(student_dict)
             existing_pin.append(student_dict['pin'])
     if not unit_dict.get('view','') :
-        students_obj = Student_details.objects.filter(year_sem = unit_dict['year_sem'],status = True)
+        students_obj = Student_details.objects.filter(year_sem = unit_dict['year_sem'],status = True).order_by('-pin')
         if students_obj.exists():
             for student in students_obj :
                 if student.pin not in existing_pin :
@@ -494,7 +495,7 @@ def get_pm_marks(request):
             student_details.append(student_dict)
             existing_pin.append(student_dict['pin'])
     if not view :
-        students_obj = Student_details.objects.filter(year_sem = pm_dict['year_sem'] ,scheme_code = pm_dict['scheme_code'],status = True)
+        students_obj = Student_details.objects.filter(year_sem = pm_dict['year_sem'] ,scheme_code = pm_dict['scheme_code'],status = True).order_by('-pin')
         if students_obj.exists():
             for student in students_obj :
                 if student.pin not in existing_pin :
