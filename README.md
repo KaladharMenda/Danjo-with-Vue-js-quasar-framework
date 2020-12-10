@@ -1,1 +1,1 @@
-# desgin an saving & tracking the students marks semester wise. 
+# desgin, saving & tracking the students marks semester wise. 
